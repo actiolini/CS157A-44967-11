@@ -1,4 +1,4 @@
-package moviebuddy;
+package moviebuddy.servlet;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+
+import moviebuddy.dao.MovieScheduleDAO;
+import moviebuddy.model.Movie;
 
 @WebServlet("/Home")
 public class HomeSevlet extends HttpServlet {

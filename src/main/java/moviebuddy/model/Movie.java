@@ -1,4 +1,4 @@
-package moviebuddy;
+package moviebuddy.model;
 
 import java.util.List;
 import java.time.LocalDate;

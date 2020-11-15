@@ -1,4 +1,4 @@
-package moviebuddy;
+package moviebuddy.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.time.LocalDate;
 import java.time.LocalTime;
+
+import moviebuddy.model.*;
 
 public class MovieScheduleDAO {
     public List<Movie> getMovieSchedule() throws ClassNotFoundException {
