@@ -1,7 +1,6 @@
 package moviebuddy.dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,12 +22,10 @@ public class MovieScheduleDAO {
         String QUERY_MOVIE_INFO = "SELECT title, duration, release_date, description FROM movie WHERE movie_id = ?";
 
         List<Movie> movies = new ArrayList<>();
-        Class.forName("com.mysql.cj.jdbc.Driver");
         try {
-            Connection con = DriverManager.getConnection(MyDB.driver, MyDB.user, MyDB.pass);
-
+            Connection conn = DBConnection.connect();
             Map<Integer, Map<LocalDate, Schedule>> schedules = new HashMap<>();
-            PreparedStatement preparedStatement = con.prepareStatement(QUERY_MOVIE_SCHEDULE);
+            PreparedStatement preparedStatement = conn.prepareStatement(QUERY_MOVIE_SCHEDULE);
             preparedStatement.setInt(1, 1);// theatre_id = 1
             ResultSet res = preparedStatement.executeQuery();
             while (res.next()) {
@@ -44,7 +41,7 @@ public class MovieScheduleDAO {
                 scheduleByDate.get(showDate).getShowTimes().add(LocalTime.parse(res.getString("show_time")));
             }
 
-            preparedStatement = con.prepareStatement(QUERY_MOVIE_INFO);
+            preparedStatement = conn.prepareStatement(QUERY_MOVIE_INFO);
             Iterator<Integer> iter = schedules.keySet().iterator();
             while (iter.hasNext()) {
                 int movieId = iter.next();
@@ -65,7 +62,7 @@ public class MovieScheduleDAO {
                             scheduleList));
                 }
             }
-            con.close();
+            conn.close();
         } catch (SQLException e) {
             printSQLException(e);
         }
