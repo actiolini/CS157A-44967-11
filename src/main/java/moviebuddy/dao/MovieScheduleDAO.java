@@ -13,7 +13,8 @@ import java.util.Iterator;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import moviebuddy.model.*;
+import moviebuddy.model.Movie;
+import moviebuddy.model.Schedule;
 
 public class MovieScheduleDAO {
     public List<Movie> getMovieSchedule() throws ClassNotFoundException {
@@ -22,9 +23,12 @@ public class MovieScheduleDAO {
         String QUERY_MOVIE_INFO = "SELECT title, duration, release_date, description FROM movie WHERE movie_id = ?";
 
         List<Movie> movies = new ArrayList<>();
+        Map<Integer, Map<LocalDate, Schedule>> schedules = new HashMap<>();
         try {
+            // Initiate connection
             Connection conn = DBConnection.connect();
-            Map<Integer, Map<LocalDate, Schedule>> schedules = new HashMap<>();
+
+            // Query for all schedules
             PreparedStatement preparedStatement = conn.prepareStatement(QUERY_MOVIE_SCHEDULE);
             preparedStatement.setInt(1, 1);// theatre_id = 1
             ResultSet res = preparedStatement.executeQuery();
@@ -38,9 +42,11 @@ public class MovieScheduleDAO {
                 if (!scheduleByDate.containsKey(showDate)) {
                     scheduleByDate.put(showDate, new Schedule(res.getInt("schedule_id"), movieId, showDate));
                 }
-                scheduleByDate.get(showDate).getShowTimes().add(LocalTime.parse(res.getString("show_time")));
+                LocalTime showTime = LocalTime.parse(res.getString("show_time"));
+                scheduleByDate.get(showDate).getShowTimes().add(showTime);
             }
 
+            // Query for movie information that are scheduled
             preparedStatement = conn.prepareStatement(QUERY_MOVIE_INFO);
             Iterator<Integer> iter = schedules.keySet().iterator();
             while (iter.hasNext()) {
@@ -57,9 +63,13 @@ public class MovieScheduleDAO {
                 preparedStatement.setInt(1, movieId);
                 res = preparedStatement.executeQuery();
                 while (res.next()) {
-                    movies.add(new Movie(movieId, res.getString("title"), res.getInt("duration"),
-                            LocalDate.parse(res.getString("release_date")), res.getString("description"),
-                            scheduleList));
+                    Movie movie = new Movie(movieId);
+                    movie.setTitle(res.getString("title"));
+                    movie.setDuration(res.getInt("duration"));
+                    movie.setReleaseDate(LocalDate.parse(res.getString("release_date")));
+                    movie.setDescription(res.getString("description"));
+                    movie.setSchedule(scheduleList);
+                    movies.add(movie);
                 }
             }
             conn.close();
