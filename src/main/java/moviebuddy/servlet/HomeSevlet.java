@@ -1,20 +1,21 @@
 package moviebuddy.servlet;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.RequestDispatcher;
+
 import java.io.IOException;
 import java.util.List;
 
 import moviebuddy.dao.MovieScheduleDAO;
 import moviebuddy.model.Movie;
 
-@WebServlet("/Home")
+@WebServlet("/home")
 public class HomeSevlet extends HttpServlet {
-    private static final long serialVersionUID = 156345443434387L;
+    private static final long serialVersionUID = -6348435627089485693L;
     private MovieScheduleDAO movieScheduleDao;
 
     public void init() {
@@ -29,8 +30,8 @@ public class HomeSevlet extends HttpServlet {
             RequestDispatcher rd = request.getRequestDispatcher("home.jsp");
             rd.forward(request, response);
         } catch (Exception e) {
-            e.printStackTrace();
             response.sendRedirect("error.jsp");
+            e.printStackTrace();
         }
     }
 }
