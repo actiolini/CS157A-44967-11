@@ -28,7 +28,7 @@ public class SignUpServlet extends HttpServlet {
             String userName = sanitize(request, "username");
             String email = sanitize(request, "email");
             String pass = sanitize(request, "password");
-            String rePass = sanitize(request, "re-password");
+            String rePass = sanitize(request, "re_password");
             String message = authDAO.signUp(userName, email, pass, rePass);
             if (message.isEmpty()) {
                 response.sendRedirect("home.jsp");

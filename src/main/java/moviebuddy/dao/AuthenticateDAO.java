@@ -33,17 +33,17 @@ public class AuthenticateDAO {
         if (username.isEmpty()) {
             return "Username field cannot be empty\n";
         }
+        if (!username.matches("(.*[a-zA-Z0-9].*)")) {
+            return "Username must contain only letters and numbers\n";
+        }
+        if (!username.matches("(^[a-zA-Z].*)")) {
+            return "Username must a letter as first character\n";
+        }
         if (username.length() < USERNAME_MIN_LENGTH) {
             return "Username must contain at least " + USERNAME_MIN_LENGTH + " characters\n";
         }
         if (username.length() > USERNAME_MAX_LENGTH) {
             return "Username must not contain more than " + USERNAME_MAX_LENGTH + " characters\n";
-        }
-        if (!username.matches("(.*[a-zA-Z].*)")) {
-            return "Username must contain at least a letter\n";
-        }
-        if (!username.matches("(.*[a-zA-Z0-9].*)")) {
-            return "Username must only contain at least letters and numbers\n";
         }
         return "";
     }
@@ -70,9 +70,6 @@ public class AuthenticateDAO {
         }
         if (!pass.matches("(.*[0-9].*)")) {
             return "Passwords must contain at least a number\n";
-        }
-        if (!pass.matches("(.*\\S.*)")) {
-            return "Passwords must not contain any whitespace\n";
         }
         if (pass.length() < PASSWORD_MIN_LENGTH) {
             return "Passwords must be at least " + PASSWORD_MIN_LENGTH + " characters\n";
