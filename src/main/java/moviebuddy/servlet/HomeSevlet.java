@@ -26,8 +26,8 @@ public class HomeSevlet extends HttpServlet {
         try {
             List<Movie> movies = movieScheduleDao.getMovieSchedule();
             request.setAttribute("movies", movies);
-            RequestDispatcher rd = request.getRequestDispatcher("home.jsp");
-            rd.forward(request, response);
+            // RequestDispatcher rd = request.getRequestDispatcher("home.jsp");
+            // rd.forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("error.jsp");
