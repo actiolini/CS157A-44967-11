@@ -1,4 +1,4 @@
-package moviebuddy.dao;
+package moviebuddy.util;
 
 import java.io.FileInputStream;
 import java.sql.Connection;
@@ -6,6 +6,10 @@ import java.sql.DriverManager;
 import java.util.Properties;
 
 public class DBConnection {
+
+    private DBConnection() {
+    }
+
     public static Connection connect() throws Exception {
         Connection conn = null;
         String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();

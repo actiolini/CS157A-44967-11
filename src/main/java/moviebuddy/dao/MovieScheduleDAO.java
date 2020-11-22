@@ -14,6 +14,7 @@ import java.time.LocalTime;
 
 import moviebuddy.model.Movie;
 import moviebuddy.model.Schedule;
+import moviebuddy.util.DBConnection;
 
 public class MovieScheduleDAO {
     public List<Movie> getMovieSchedule() throws Exception {
