@@ -23,27 +23,30 @@ public class SignUpServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            // Sanitize user inputs
             String userName = Validation.sanitize(request.getParameter("userName"));
             String email = Validation.sanitize(request.getParameter("email"));
             String password = Validation.sanitize(request.getParameter("password"));
             String rePassword = Validation.sanitize(request.getParameter("rePassword"));
 
+            // Validate user inputs
             String invalidUserName = Validation.validateUserName(userName);
             String invalidEmail = Validation.validateEmail(email);
-            if (invalidEmail.isEmpty() && userDAO.getRegisterdUser(email) != null) {
+            if (invalidEmail.isEmpty() && userDAO.getRegisteredUser(email) != null) {
                 invalidEmail = "Email is already registered";
             }
             String invalidPassword = Validation.validatePassword(password);
             String invalidRePassword = Validation.validateRePassword(password, rePassword);
 
             String message = invalidUserName + invalidEmail + invalidPassword + invalidRePassword;
-            if (message.isEmpty() && userDAO.signUp(userName, email, password, rePassword)) {
+            if (message.isEmpty() && userDAO.signUp(userName, email, password)) {
+                // Sign up successfully
+
+                // Session will be added here
                 response.sendRedirect("home.jsp");
             } else {
-                // request.setAttribute("", );
-                // request.setAttribute("", );
-                // request.setAttribute("", );
-                // request.setAttribute("", );
+                request.setAttribute("userName", request.getParameter("userName"));
+                request.setAttribute("email", request.getParameter("email"));
                 request.setAttribute("userNameError", invalidUserName);
                 request.setAttribute("emailError", invalidEmail);
                 request.setAttribute("passwordError", invalidPassword);

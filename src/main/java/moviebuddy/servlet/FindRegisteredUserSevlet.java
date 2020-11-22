@@ -12,7 +12,7 @@ import moviebuddy.dao.UserDAO;
 import moviebuddy.model.User;
 import moviebuddy.util.Validation;
 
-@WebServlet("/FindRegisterUser")
+@WebServlet("/FindRegisteredUser")
 public class FindRegisteredUserSevlet extends HttpServlet {
     private static final long serialVersionUID = 5105192454349691062L;
     private UserDAO userDAO;
@@ -25,14 +25,14 @@ public class FindRegisteredUserSevlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             String email = Validation.sanitize(request.getParameter("email"));
-            User user = userDAO.getRegisterdUser(email);
+            User user = userDAO.getRegisteredUser(email);
             response.setContentType("text/plain");
             response.setCharacterEncoding("UTF-8");
             PrintWriter out = response.getWriter();
-            if (user != null) {
-                out.print("Email is already registered");
-            } else {
+            if (user == null) {
                 out.print("");
+            } else {
+                out.print("Email is already registered");
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -8,13 +8,14 @@
     <title>Movie Buddy | Sign Up</title>
 </head>
 
-<body>
+<body onload="refillSignUp('${userName}', '${email}')">
     <h2>Sign Up</h2>
     <form id="signUpForm" action="SignUp" method="POST" onsubmit="return validate(this)">
-        <input type="text" name="userName" placeholder="Enter your name" onkeyup="checkName(this, 'userNameError')">
+        <input id="userName" type="text" name="userName" placeholder="Enter your name"
+            onkeyup="checkName(this, 'userNameError')">
         <span id="userNameError">${userNameError}</span><br>
 
-        <input type="text" name="email" placeholder="Enter email" onkeyup="checkEmail(this, 'emailError')">
+        <input id="email" type="text" name="email" placeholder="Enter email" onkeyup="checkEmail(this, 'emailError')">
         <span id="emailError">${emailError}</span><br>
 
         <input type="password" name="password" placeholder="Enter password"
@@ -28,6 +29,7 @@
         <input type="submit" value="Sign Up">
     </form>
     <script src="./JS/validation.js"></script>
+    <script src="./JS/functions.js"></script>
 </body>
 
 </html>

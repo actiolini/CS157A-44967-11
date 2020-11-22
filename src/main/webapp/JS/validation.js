@@ -52,7 +52,7 @@ async function checkEmail(elementId, errorId) {
 function findRegisteredEmail(args) {
     return new Promise((resolve) => {
         var xhttp = new XMLHttpRequest();
-        xhttp.open("POST", "FindRegisterUser");
+        xhttp.open("POST", "FindRegisteredUser");
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send(args);
         xhttp.onreadystatechange = function () {
