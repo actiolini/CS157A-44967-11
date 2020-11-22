@@ -3,35 +3,56 @@ const username_max_length = 20;
 const password_min_length = 8;
 
 function validate(form) {
-    checkName(form.userName, "userNameError");
-    checkEmail(form.email, "emailError");
-    checkPassword(form.password, "passwordError");
-    checkRePassword(form.id, "rePasswordError");
-    fail = document.getElementById('userNameError').innerHTML;
-    fail += document.getElementById('emailError').innerHTML;
-    fail += document.getElementById('passwordError').innerHTML;
-    fail += document.getElementById('rePasswordError').innerHTML;
-    console.log("fail: " + fail);
-    return fail == "";
+    fail = "";
+
+    invalidUserName = validateUserName(form.userName.value);
+    document.getElementById("userNameError").innerHTML = invalidUserName;
+
+    invalidPassword = validatePassword(form.password.value);
+    document.getElementById("passwordError").innerHTML = invalidPassword;
+
+    invalidRePassword = validateRePassword(form.password.value, form.rePassword.value);
+    document.getElementById("rePasswordError").innerHTML = invalidRePassword;
+
+    invalidEmail = validateEmail(form.email.value);
+    document.getElementById('emailError').innerHTML = invalidEmail;
+    if (invalidEmail == "") {
+        findRegisteredEmail(form.email.name + "=" + form.email.value).then((result => {
+            document.getElementById('emailError').innerHTML = result;
+            fail += result;
+            console.log(fail);
+            if (fail == "") {
+                document.getElementById(form.id).submit();
+            }
+        }));
+    }
+
+    fail += invalidUserName;
+    fail += invalidEmail;
+    fail += invalidPassword;
+    fail += invalidRePassword;
+    return false;
 }
 
 function checkName(elementId, errorId) {
-    document.getElementById(errorId).innerHTML = validateUserName(elementId.value);
+    invalidUserName = validateUserName(elementId.value)
+    document.getElementById(errorId).innerHTML = invalidUserName;
+    return invalidUserName;
 }
 
 async function checkEmail(elementId, errorId) {
-    console.log(elementId.value);
     invalidEmail = validateEmail(elementId.value);
     if (invalidEmail == "") {
         invalidEmail = await findRegisteredEmail(elementId.name + "=" + elementId.value);
     }
     document.getElementById(errorId).innerHTML = invalidEmail;
+    return invalidEmail;
 }
 
 function findRegisteredEmail(args) {
     return new Promise((resolve) => {
         var xhttp = new XMLHttpRequest();
-        xhttp.open("POST", "FindRegisterUser", true);
+        xhttp.open("POST", "FindRegisterUser");
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send(args);
         xhttp.onreadystatechange = function () {
@@ -43,12 +64,16 @@ function findRegisteredEmail(args) {
 }
 
 function checkPassword(elementId, errorId) {
-    document.getElementById(errorId).innerHTML = validatePassword(elementId.value);
+    invalidPassword = validatePassword(elementId.value)
+    document.getElementById(errorId).innerHTML = invalidPassword;
+    return invalidPassword;
 }
 
 function checkRePassword(formId, errorId) {
     form = document.getElementById(formId);
-    document.getElementById(errorId).innerHTML = validateRePassword(form.password.value, form.rePassword.value);
+    invalidRePassword = validateRePassword(form.password.value, form.rePassword.value);
+    document.getElementById(errorId).innerHTML = invalidRePassword;
+    return invalidRePassword;
 }
 
 function validateUserName(userName) {
