@@ -79,7 +79,7 @@ function checkRePassword(formId, errorId) {
 function validateUserName(userName) {
     if (userName == "") return "Username field cannot be empty\n";
     if (/[^a-zA-Z0-9]/.test(userName)) return "Username must contain only letters and numbers\n";
-    if (!/^[a-zA-Z]/.test(userName)) return "Username must a letter as first character\n";
+    if (!/^[a-zA-Z]/.test(userName)) return "Username must contain a letter as first character\n";
     if (userName.length < username_min_length) return "Username must contain at least " + username_min_length + " characters\n";
     if (userName.length > username_max_length) return "Username must not contain more than " + username_max_length + " characters\n";
     return "";

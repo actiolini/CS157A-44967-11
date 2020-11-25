@@ -1,14 +1,16 @@
 package moviebuddy.servlet;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import moviebuddy.dao.UserDAO;
+import moviebuddy.model.User;
+import moviebuddy.util.Passwords;
 import moviebuddy.util.Validation;
 
 @WebServlet("/SignUp")
@@ -41,18 +43,24 @@ public class SignUpServlet extends HttpServlet {
             String message = invalidUserName + invalidEmail + invalidPassword + invalidRePassword;
             if (message.isEmpty() && userDAO.signUp(userName, email, password)) {
                 // Sign up successfully
-
-                // Session will be added here
+                User user = userDAO.signIn(email, password);
+                HttpSession session = request.getSession();
+                session.setAttribute("accountId", user.getAccountId());
+                session.setAttribute("userName", user.getUserName());
+                session.setAttribute("email", user.getEmail());
+                session.setAttribute("zip", user.getZip());
+                session.setAttribute("currentSession",
+                        Passwords.applySHA256(session.getId() + request.getRemoteAddr()));
                 response.sendRedirect("home.jsp");
             } else {
-                request.setAttribute("userName", request.getParameter("userName"));
-                request.setAttribute("email", request.getParameter("email"));
-                request.setAttribute("userNameError", invalidUserName);
-                request.setAttribute("emailError", invalidEmail);
-                request.setAttribute("passwordError", invalidPassword);
-                request.setAttribute("rePasswordError", invalidRePassword);
-                RequestDispatcher rd = request.getRequestDispatcher("signup.jsp");
-                rd.forward(request, response);
+                HttpSession session = request.getSession();
+                session.setAttribute("signupUserName", request.getParameter("userName"));
+                session.setAttribute("signupEmail", request.getParameter("email"));
+                session.setAttribute("userNameError", invalidUserName);
+                session.setAttribute("emailError", invalidEmail);
+                session.setAttribute("passwordError", invalidPassword);
+                session.setAttribute("rePasswordError", invalidRePassword);
+                response.sendRedirect("signin.jsp");
             }
         } catch (Exception e) {
             e.printStackTrace();

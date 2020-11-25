@@ -43,12 +43,13 @@ public class UserDAO {
         return true;
     }
 
-    public boolean signIn(String email, String password) throws Exception {
+    public User signIn(String email, String password) throws Exception {
         User user = getRegisteredUser(email);
-        if (user == null) {
-            return false;
+        if (user != null
+                && Passwords.isExpectedPassword(password.toCharArray(), user.getSalt(), user.getHashPassword())) {
+            return user;
         }
-        return Passwords.isExpectedPassword(password.toCharArray(), user.getSalt(), user.getHashPassword());
+        return null;
     }
 
     public User getRegisteredUser(String email) throws Exception {

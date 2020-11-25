@@ -1,7 +1,32 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page import="moviebuddy.util.Passwords" %>
 <jsp:include page="/Home" />
+<%
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+    response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+    response.setHeader("Expires", "0"); // Proxies
 
+    session = request.getSession();
+    if (session.getAttribute("sessionId") == null) {
+        session.setAttribute("sessionId", Passwords.applySHA256(session.getId()));
+    }
+    if (session.getAttribute("count") == null) {
+        session.setAttribute("count", 0);
+    } else {
+        int count = (int) session.getAttribute("count");
+        session.setAttribute("count", count + 1);
+    }
+    request.setAttribute("signedOut", "");
+    request.setAttribute("signedIn", "hidden");
+    if(session.getAttribute("email") != null && session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr()))){
+        request.setAttribute("signedOut", "hidden");
+        request.setAttribute("signedIn", "");
+        request.setAttribute("accountId", session.getAttribute("accountId"));
+        request.setAttribute("userName", session.getAttribute("userName"));
+        request.setAttribute("zip", session.getAttribute("zip"));
+    }
+%>
 <!doctype html>
 <html lang="en">
 
@@ -45,8 +70,18 @@
                     </form>
                 </li>
             </ul>
-            <a class="nav-link " href="./signin.jsp">Sign In</a>
-            <a class="nav-link " href="./signup.jsp">Sign Up</a>
+            <form action="./signin.jsp" method="POST">
+                <input ${signedOut} type="submit" value="Sign In">
+            </form>
+            <form action="./signup.jsp" method="POST">
+                <input ${signedOut} type="submit" value="Sign Up">
+            </form>
+            <form action="" method="POST">
+                <input ${signedIn} id="${accountId}" type="submit" value="${userName}">
+            </form>
+            <form action="./SignOut" method="POST">
+                <input ${signedIn} type="submit" value="Sign Out">
+            </form>
         </div>
     </nav>
     <div class="container">

@@ -1,5 +1,37 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page import="moviebuddy.util.Passwords" %>
+<%
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+    response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+    response.setHeader("Expires", "0"); // Proxies
+
+    session = request.getSession();
+    if (session.getAttribute("sessionId") == null) {
+        session.setAttribute("sessionId", Passwords.applySHA256(session.getId()));
+    }
+    if (session.getAttribute("count") == null) {
+        session.setAttribute("count", 0);
+    } else {
+        int count = (int) session.getAttribute("count");
+        session.setAttribute("count", count + 1);
+    }
+    if(session.getAttribute("email") != null && session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr()))){
+        response.sendRedirect("home.jsp");
+    }
+    request.setAttribute("userName", session.getAttribute("signupUserName"));
+    request.setAttribute("email", session.getAttribute("signupEmail"));
+    request.setAttribute("userNameError", session.getAttribute("userNameError"));
+    request.setAttribute("emailError", session.getAttribute("emailError"));
+    request.setAttribute("passwordError", session.getAttribute("passwordError"));
+    request.setAttribute("rePasswordError", session.getAttribute("rePasswordError"));
+    session.removeAttribute("signupUserName");
+    session.removeAttribute("signupEmail");
+    session.removeAttribute("userNameError");
+    session.removeAttribute("emailError");
+    session.removeAttribute("passwordError");
+    session.removeAttribute("rePasswordError");
+%>
 <html lang="en">
 
 <head>
@@ -28,8 +60,8 @@
 
         <input type="submit" value="Sign Up">
     </form>
-    <script src="./JS/validation.js"></script>
-    <script src="./JS/functions.js"></script>
+    <script src="./js/validation.js"></script>
+    <script src="./js/functions.js"></script>
 </body>
 
 </html>

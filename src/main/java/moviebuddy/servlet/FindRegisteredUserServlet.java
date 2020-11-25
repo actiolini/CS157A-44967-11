@@ -13,7 +13,7 @@ import moviebuddy.model.User;
 import moviebuddy.util.Validation;
 
 @WebServlet("/FindRegisteredUser")
-public class FindRegisteredUserSevlet extends HttpServlet {
+public class FindRegisteredUserServlet extends HttpServlet {
     private static final long serialVersionUID = 5105192454349691062L;
     private UserDAO userDAO;
 
