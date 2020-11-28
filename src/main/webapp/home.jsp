@@ -1,5 +1,32 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page import="moviebuddy.util.Passwords" %>
+<jsp:include page="/Home" />
+<%
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+    response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+    response.setHeader("Expires", "0"); // Proxies
+
+    session = request.getSession();
+    if (session.getAttribute("sessionId") == null) {
+        session.setAttribute("sessionId", Passwords.applySHA256(session.getId()));
+    }
+    if (session.getAttribute("count") == null) {
+        session.setAttribute("count", 0);
+    } else {
+        int count = (int) session.getAttribute("count");
+        session.setAttribute("count", count + 1);
+    }
+    request.setAttribute("signedOut", "");
+    request.setAttribute("signedIn", "hidden");
+    if(session.getAttribute("email") != null && session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr()))){
+        request.setAttribute("signedOut", "hidden");
+        request.setAttribute("signedIn", "");
+        request.setAttribute("accountId", session.getAttribute("accountId"));
+        request.setAttribute("userName", session.getAttribute("userName"));
+        request.setAttribute("zip", session.getAttribute("zip"));
+    }
+%>
 <!doctype html>
 <html lang="en">
 
@@ -20,7 +47,7 @@
             aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="./Home">Movie Buddy</a>
+        <a class="navbar-brand" href="./home.jsp">Movie Buddy</a>
 
         <div class="collapse navbar-collapse" id="navbarToggler">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
@@ -43,7 +70,18 @@
                     </form>
                 </li>
             </ul>
-            <a class="nav-link " href="#">Sign In / Register</a>
+            <form action="./signin.jsp" method="POST">
+                <input ${signedOut} type="submit" value="Sign In">
+            </form>
+            <form action="./signup.jsp" method="POST">
+                <input ${signedOut} type="submit" value="Sign Up">
+            </form>
+            <form action="" method="POST">
+                <input ${signedIn} id="${accountId}" type="submit" value="${userName}">
+            </form>
+            <form action="./SignOut" method="POST">
+                <input ${signedIn} type="submit" value="Sign Out">
+            </form>
         </div>
     </nav>
     <div class="container">
@@ -109,28 +147,31 @@
                             <nav>
                                 <div class="nav nav-tabs" id="nav-tab${movie.getId()}" role="tablist">
                                     <!-- Load Date -->
-                                    <c:set var="count" value="${0}"/>
+                                    <c:set var="count" value="${0}" />
                                     <c:forEach items="${movie.getSchedule()}" var="schedule">
                                         <c:set var="dateId" value="${movie.getId()}-${schedule.getShowDate()}" />
                                         <c:if test="${count < 1}">
-                                            <a class="nav-link active" id="${dateId}-tab" data-toggle="tab" href="#${dateId}" role="tab" aria-controls="${dateId}"
+                                            <a class="nav-link active" id="${dateId}-tab" data-toggle="tab"
+                                                href="#${dateId}" role="tab" aria-controls="${dateId}"
                                                 aria-selected="true">${schedule.getFormattedDate()}</a>
                                         </c:if>
                                         <c:if test="${count >= 1}">
-                                            <a class="nav-link" id="${dateId}-tab" data-toggle="tab" href="#${dateId}" role="tab" aria-controls="${dateId}"
+                                            <a class="nav-link" id="${dateId}-tab" data-toggle="tab" href="#${dateId}"
+                                                role="tab" aria-controls="${dateId}"
                                                 aria-selected="false">${schedule.getFormattedDate()}</a>
                                         </c:if>
-                                        <c:set var="count" value ="${count+1}"/>
+                                        <c:set var="count" value="${count+1}" />
                                     </c:forEach>
                                 </div>
                             </nav>
                             <div class="tab-content" id="nav-tabContent${movie.getId()}">
                                 <!-- Load Time -->
-                                <c:set var="count" value="${0}"/>
+                                <c:set var="count" value="${0}" />
                                 <c:forEach items="${movie.getSchedule()}" var="schedule">
-                                    <c:set var="dateId" value="${movie.getId()}-${schedule.getShowDate()}"/>
+                                    <c:set var="dateId" value="${movie.getId()}-${schedule.getShowDate()}" />
                                     <c:if test="${count < 1}">
-                                        <div class="tab-pane fade show active" id="${dateId}" role="tabpanel" aria-labelledby="${dateId}-tab">
+                                        <div class="tab-pane fade show active" id="${dateId}" role="tabpanel"
+                                            aria-labelledby="${dateId}-tab">
                                             <br>
                                             <div class="container">
                                                 <c:forEach items="${schedule.getShowTimes()}" var="time">
@@ -138,21 +179,22 @@
                                                 </c:forEach>
                                             </div>
                                         </div>
-                                        
+
                                     </c:if>
                                     <c:if test="${count >= 1}">
-                                        <div class="tab-pane fade" id="${dateId}" role="tabpanel" aria-labelledby="${dateId}-tab">
+                                        <div class="tab-pane fade" id="${dateId}" role="tabpanel"
+                                            aria-labelledby="${dateId}-tab">
                                             <br>
                                             <div class="container">
                                                 <c:forEach items="${schedule.getShowTimes()}" var="time">
                                                     <a href="#" class="card-link">${time}</a>
                                                 </c:forEach>
                                             </div>
-                                            
+
                                         </div>
                                     </c:if>
                                     <c:set var="count" value="${count+1}" />
-                                    
+
                                 </c:forEach>
                             </div>
                         </div>
