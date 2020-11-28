@@ -1,4 +1,4 @@
-package moviebuddy;
+package moviebuddy.model;
 
 import java.util.List;
 import java.time.LocalDate;
@@ -11,13 +11,27 @@ public class Movie {
     private String description;
     private List<Schedule> schedule;
 
-    public Movie(int id, String title, int duration, LocalDate releaseDate, String description,
-            List<Schedule> schedule) {
+    public Movie(int id) {
         this.id = id;
+    }
+
+    public void setTitle(String title) {
         this.title = title;
+    }
+
+    public void setDuration(int duration) {
         this.duration = duration;
+    }
+
+    public void setReleaseDate(LocalDate releaseDate) {
         this.releaseDate = releaseDate;
+    }
+
+    public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void setSchedule(List<Schedule> schedule) {
         this.schedule = schedule;
     }
 

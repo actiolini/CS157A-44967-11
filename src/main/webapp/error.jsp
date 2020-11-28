@@ -29,7 +29,7 @@
         <div class='textbox'>
             <p class='errMsg'>Oops!!!</p>
             It seems like something just went wrong.<br>
-            Please <a href="index.jsp">click here</a> and try again.
+            Please <a href="home.jsp">click here</a> and try again.
         </div>
     </div>
 </body>
