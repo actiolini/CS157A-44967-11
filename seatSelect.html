@@ -45,8 +45,11 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Movie Name</h5>
+                            <p>Movie name</p>
                             <h5 class="card-title">Movie Time</h5>
+                            <p>11:50am</p>
                             <h5 class="card-title">Selected:</h5>
+                            <p id="selectNum">0</p>
                         </div>
                     </div>
 
@@ -57,215 +60,50 @@
                         Screen
                     </div>
                     <div class="text-center">
-                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                            <label class="btn btn btn-outline-info">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                                <label class="form-check-label" for="defaultCheck1">
-                                    Seat
+                        <form id="seatSelect" action="" onclick="checkboxes()">
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <label class="btn btn btn-outline-info">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                    <label class="form-check-label" for="defaultCheck1">
+                                        Seat
+                                    </label>
                                 </label>
-                            </label>
-                            <label class="btn btn btn-outline-info">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                                <label class="form-check-label" for="defaultCheck2">
-                                    Seat
+                                <label class="btn btn btn-outline-info">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
+                                    <label class="form-check-label" for="defaultCheck2">
+                                        Seat
+                                    </label>
                                 </label>
-                            </label>
-                            <label class="btn btn btn-outline-info">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck3">
-                                <label class="form-check-label" for="defaultCheck3">
-                                    Seat
+                                <label class="btn btn btn-outline-info">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck3">
+                                    <label class="form-check-label" for="defaultCheck3">
+                                        Seat
+                                    </label>
                                 </label>
-                            </label>
-                            <label class="btn btn btn-outline-info">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck4">
-                                <label class="form-check-label" for="defaultCheck4">
-                                    Seat
+                                <label class="btn btn btn-outline-info">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck4">
+                                    <label class="form-check-label" for="defaultCheck4">
+                                        Seat
+                                    </label>
                                 </label>
-                            </label>
-                            <label class="btn btn btn-outline-info">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck5">
-                                <label class="form-check-label" for="defaultCheck5">
-                                    Seat
+                                <label class="btn btn btn-outline-info">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck5">
+                                    <label class="form-check-label" for="defaultCheck5">
+                                        Seat
+                                    </label>
                                 </label>
-                            </label>
-                            <label class="btn btn btn-outline-info">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck6">
-                                <label class="form-check-label" for="defaultCheck6">
-                                    Seat
+                                <label class="btn btn btn-outline-info">
+                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck6">
+                                    <label class="form-check-label" for="defaultCheck6">
+                                        Seat
+                                    </label>
                                 </label>
-                            </label>
-                            <label class="btn btn btn-outline-info">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck7">
-                                <label class="form-check-label" for="defaultCheck7">
-                                    Seat
-                                </label>
-                            </label>
-                            <label class="btn btn btn-outline-info">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck8">
-                                <label class="form-check-label" for="defaultCheck8">
-                                    Seat
-                                </label>
-                            </label>
-                            <label class="btn btn btn-outline-info">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck9">
-                                <label class="form-check-label" for="defaultCheck9">
-                                    Seat
-                                </label>
-                            </label>
-                            <label class="btn btn btn-outline-info">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck10">
-                                <label class="form-check-label" for="defaultCheck10">
-                                    Seat
-                                </label>
-                            </label>
-                            <label class="btn btn btn-outline-info">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck11">
-                                <label class="form-check-label" for="defaultCheck11">
-                                    Seat
-                                </label>
-                            </label>
-                        </div>
-                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                            <label class="btn btn btn-outline-info">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                                <label class="form-check-label" for="defaultCheck1">
-                                    Seat
-                                </label>
-                            </label>
-                            <label class="btn btn btn-outline-info">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                                <label class="form-check-label" for="defaultCheck2">
-                                    Seat
-                                </label>
-                            </label>
-                            <label class="btn btn btn-outline-info">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                                <label class="form-check-label" for="defaultCheck2">
-                                    Seat
-                                </label>
-                            </label>
-                            <label class="btn btn btn-outline-info">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                                <label class="form-check-label" for="defaultCheck2">
-                                    Seat
-                                </label>
-                            </label>
-                            <label class="btn btn btn-outline-info">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                                <label class="form-check-label" for="defaultCheck2">
-                                    Seat
-                                </label>
-                            </label>
-                            <label class="btn btn btn-outline-info">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                                <label class="form-check-label" for="defaultCheck2">
-                                    Seat
-                                </label>
-                            </label>
-                            <label class="btn btn btn-outline-info">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                                <label class="form-check-label" for="defaultCheck2">
-                                    Seat
-                                </label>
-                            </label>
-                            <label class="btn btn btn-outline-info">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                                <label class="form-check-label" for="defaultCheck2">
-                                    Seat
-                                </label>
-                            </label>
-                            <label class="btn btn btn-outline-info">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                                <label class="form-check-label" for="defaultCheck2">
-                                    Seat
-                                </label>
-                            </label>
-                            <label class="btn btn btn-outline-info">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                                <label class="form-check-label" for="defaultCheck2">
-                                    Seat
-                                </label>
-                            </label>
-                            <label class="btn btn btn-outline-info">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                                <label class="form-check-label" for="defaultCheck2">
-                                    Seat
-                                </label>
-                            </label>
-                        </div>
-                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                            <label class="btn btn btn-outline-info">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                                <label class="form-check-label" for="defaultCheck1">
-                                    Seat
-                                </label>
-                            </label>
-                            <label class="btn btn btn-outline-info">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                                <label class="form-check-label" for="defaultCheck2">
-                                    Seat
-                                </label>
-                            </label>
-                            <label class="btn btn btn-outline-info">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                                <label class="form-check-label" for="defaultCheck2">
-                                    Seat
-                                </label>
-                            </label>
-                            <label class="btn btn btn-outline-info">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                                <label class="form-check-label" for="defaultCheck2">
-                                    Seat
-                                </label>
-                            </label>
-                            <label class="btn btn btn-outline-info">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                                <label class="form-check-label" for="defaultCheck2">
-                                    Seat
-                                </label>
-                            </label>
-                            <label class="btn btn btn-outline-info">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                                <label class="form-check-label" for="defaultCheck2">
-                                    Seat
-                                </label>
-                            </label>
-                            <label class="btn btn btn-outline-info">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                                <label class="form-check-label" for="defaultCheck2">
-                                    Seat
-                                </label>
-                            </label>
-                            <label class="btn btn btn-outline-info">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                                <label class="form-check-label" for="defaultCheck2">
-                                    Seat
-                                </label>
-                            </label>
-                            <label class="btn btn btn-outline-info">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                                <label class="form-check-label" for="defaultCheck2">
-                                    Seat
-                                </label>
-                            </label>
-                            <label class="btn btn btn-outline-info">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                                <label class="form-check-label" for="defaultCheck2">
-                                    Seat
-                                </label>
-                            </label>
-                            <label class="btn btn btn-outline-info">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
-                                <label class="form-check-label" for="defaultCheck2">
-                                    Seat
-                                </label>
-                            </label>
-                        </div>
+                            </div>
+                        </form>
                         <br>
                         <br>
-                        <button type="button" class="btn btn-success">Purchase</button>
+                        <button type="submit" class="btn btn-success">Purchase</button>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -278,6 +116,11 @@
 
     <!-- Optional JavaScript -->
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+    <script>
+        function checkboxes(){
+            document.getElementById("selectNum").innerHTML = document.querySelectorAll('input[type="checkbox"]:checked').length;
+        }
+    </script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>
