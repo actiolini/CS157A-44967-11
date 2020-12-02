@@ -20,7 +20,6 @@ function validate(form) {
         findRegisteredEmail(form.email.name + "=" + form.email.value).then((result => {
             document.getElementById('emailError').innerHTML = result;
             fail += result;
-            console.log(fail);
             if (fail == "") {
                 document.getElementById(form.id).submit();
             }
@@ -104,4 +103,58 @@ function validateRePassword(password, rePassword) {
     if (rePassword == "") return "Re-enter passwords field cannot be empty\n";
     if (password != rePassword) return "Passwords are not matched\n";
     return "";
+}
+
+function validateStaffSignUp(form) {
+    fail = "";
+
+    invalidUserName = validateUserName(form.userName.value);
+    document.getElementById("userNameError").innerHTML = invalidUserName;
+
+    invalidPassword = validatePassword(form.password.value);
+    document.getElementById("passwordError").innerHTML = invalidPassword;
+
+    invalidEmail = validateEmail(form.email.value);
+    document.getElementById('emailError').innerHTML = invalidEmail;
+    if (invalidEmail == "") {
+        findRegisteredEmail(form.email.name + "=" + form.email.value).then((result => {
+            document.getElementById('emailError').innerHTML = result;
+            fail += result;
+            if (fail == "") {
+                document.getElementById(form.id).submit();
+            }
+        }));
+    }
+
+    fail += invalidUserName;
+    fail += invalidEmail;
+    fail += invalidPassword;
+    return false;
+}
+
+
+function validateSignIn(form) {
+    fail = "";
+    if (window.location.href.includes("staffsignin.jsp")) {
+        fail += checkSignInInput(form.staffId, "staffIdError");
+    } else if (window.location.href.includes("signin.jsp")) {
+        fail += checkSignInInput(form.email, "emailError");
+    }
+    fail += checkSignInInput(form.password, "passwordError");
+    return fail == "";
+}
+
+function checkSignInInput(elementId, errorId) {
+    invalidInput = "";
+    if (elementId.value == "") {
+        if (elementId.name == "email") {
+            invalidInput = "Please enter an email"
+        } else if (elementId.name == "password") {
+            invalidInput = "Please enter a password"
+        } else if (elementId.name == "staffId") {
+            invalidInput = "Please enter a staff ID number"
+        }
+    }
+    document.getElementById(errorId).innerHTML = invalidInput;
+    return invalidInput;
 }

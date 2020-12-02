@@ -7,6 +7,7 @@ public class Validation {
     private static final int USERNAME_MIN_LENGTH = 2;
     private static final int USERNAME_MAX_LENGTH = 20;
     private static final int PASSWORD_MIN_LENGTH = 8;
+    private static final int STAFF_ID_LENGTH = 6;
 
     private Validation() {
     }
@@ -69,6 +70,13 @@ public class Validation {
         }
         if (!password.equals(rePassword)) {
             return "Passwords are not matched\n";
+        }
+        return "";
+    }
+
+    public static String validateStaffId(String staffId) {
+        if (staffId.length() != STAFF_ID_LENGTH || !staffId.matches("[0-9]+")) {
+            return "Incorrect staff ID number format";
         }
         return "";
     }

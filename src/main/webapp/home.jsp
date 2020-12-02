@@ -77,7 +77,6 @@
                 </ul>
                 <a ${signedOut} class="nav-link" href="./signin.jsp">Sign In</a>
                 <a ${signedOut} class="nav-link" href="./signup.jsp">Sign Up</a>
-
                 <form action="" method="POST">
                     <input class="submitLink" ${signedIn} id="${accountId}" type="submit" value="${userName}">
                 </form>
