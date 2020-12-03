@@ -20,6 +20,22 @@
             text-align: center;
             font-size: 40px;
         }
+
+        .submitLink {
+            background-color: transparent;
+            border: none;
+            color: #007bff;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .submitLink:hover {
+            color: #0056b3;
+        }
+
+        .submitLink:focus {
+            outline: none;
+        }
     </style>
 </head>
 
@@ -29,7 +45,7 @@
         <div class='textbox'>
             <p class='errMsg'>Oops!!!</p>
             It seems like something just went wrong.<br>
-            Please <a href="home.jsp">click here</a> and try again.
+            Please <a class="submitLink" href="home.jsp">click here</a> and try again.
         </div>
     </div>
 </body>

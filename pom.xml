@@ -49,6 +49,19 @@
       <version>1.13.1</version>
     </dependency>
 
+    <!-- aws-sdk-java-v1 -->
+    <dependency>
+      <groupId>com.amazonaws</groupId>
+      <artifactId>aws-java-sdk</artifactId>
+      <version>1.11.896</version>
+    </dependency>
+
+    <!-- jaxb-api -->
+    <dependency>
+      <groupId>javax.xml.bind</groupId>
+      <artifactId>jaxb-api</artifactId>
+      <version>2.4.0-b180830.0359</version>
+    </dependency>
 
     <dependency>
       <groupId>junit</groupId>

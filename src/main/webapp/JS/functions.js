@@ -6,3 +6,7 @@ function refillSignUp(userName, email) {
 function refillSignIn(email) {
     document.getElementById("email").setAttribute('value', email);
 }
+
+function refillStaffId(staffId) {
+    document.getElementById("staffId").setAttribute('value', staffId);
+}

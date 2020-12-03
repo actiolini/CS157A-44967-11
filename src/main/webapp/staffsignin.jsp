@@ -19,9 +19,9 @@
     if(session.getAttribute("email") != null && session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr()))){
         response.sendRedirect("home.jsp");
     }
-    request.setAttribute("email", session.getAttribute("signinEmail"));
+    request.setAttribute("staffId", session.getAttribute("signinStaffId"));
     request.setAttribute("message", session.getAttribute("signinMessage"));
-    session.removeAttribute("signinEmail");
+    session.removeAttribute("signinStaffId");
     session.removeAttribute("signinMessage");
 %>
 <html lang="en">
@@ -43,7 +43,7 @@
     </style>
 </head>
 
-<body style="height: 100%; display: flex; flex-direction: column;" onload="refillSignIn('${email}')">
+<body style="height: 100%; display: flex; flex-direction: column;" onload="refillStaffId('${staffId}')">
     <div style="flex: 1 0 auto;">
         <nav id="movieBuddyNavBar" class="navbar navbar-expand-lg navbar-light bg-light">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler"
@@ -53,11 +53,10 @@
             <a class="navbar-brand" href="./home.jsp">Movie Buddy</a>
             <div class="collapse navbar-collapse" id="navbarToggler">
                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0"></ul>
-                <a id="signup-link" class="nav-link" href="./signup.jsp">Sign Up</a>
             </div>
         </nav>
         <div class="container">
-            <h1 class="display-3 text-center">Sign In</h1>
+            <h1 class="display-3 text-center">Sign In as Faculty</h1>
             <hr>
             <br>
             <div class="row">
@@ -65,13 +64,14 @@
                 <div class="col-sm">
                     <div class="card">
                         <div class="card-body ">
-                            <form action="SignIn" method="POST" onsubmit="return validateSignIn(this)">
+                            <form action="SignInStaff" method="POST" onsubmit="return validateSignIn(this)">
                                 <div class="form-group ">
-                                    <label>Email address</label><br>
-                                    <input id="email" class="inputbox" type="text" name="email"
-                                        placeholder="Enter email" onkeyup="checkSignInInput(this, 'emailError')">
+                                    <label>Staff ID Number</label><br>
+                                    <input id="staffId" class="inputbox" type="text" name="staffId"
+                                        placeholder="Enter staff ID number"
+                                        onkeyup="checkSignInInput(this, 'staffIdError')">
                                     <br>
-                                    <span id="emailError" class="errormessage"></span>
+                                    <span id="staffIdError" class="errormessage"></span>
                                 </div>
                                 <div class="form-group">
                                     <label>Password</label><br>
@@ -85,9 +85,7 @@
                                 </div>
                             </form>
                             <p id="signInError" class="errormessage">${message}</p>
-                            <a href="./signup.jsp">Create an account</a>
-                            <hr>
-                            <a href="./staffsignin.jsp">One of us? Sign in as faculty</a>
+                            <a href="./signin.jsp">Not a faculty? Sign in as customer here</a>
                         </div>
                     </div>
                 </div>
