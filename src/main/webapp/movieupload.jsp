@@ -16,25 +16,23 @@
         int count = (int) session.getAttribute("count");
         session.setAttribute("count", count + 1);
     }
-    request.setAttribute("isProvider", "hidden");
-    request.setAttribute("isAdmin", "hidden");
-    if(session.getAttribute("staffId") != null && (session.getAttribute("role").equals("admin") || session.getAttribute("role").equals("manager")) && session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr()))){
-        request.setAttribute("isProvider", "");
-        if(session.getAttribute("role").equals("admin")){
-            request.setAttribute("isAdmin", "");
-        }
-    }else{
+    
+    if(session.getAttribute("staffId") == null || !session.getAttribute("role").equals("admin") || !session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr()))){
         response.sendRedirect("home.jsp");
     }
+    request.setAttribute("message", session.getAttribute("message"));
 %>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <title>Movie Buddy | Manage Movie</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
-        integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <style>
         .inputbox {
             width: 100%;
@@ -84,7 +82,7 @@
                         </div>
                     </li>
                 </ul>
-                <form action="" method="POST">
+                <form action="UploadMovie" method="POST" enctype="multipart/form-data">
                     <input class="submitLink" type="submit" value="${userName}">
                 </form>
                 <form action="./SignOut" method="POST">
@@ -94,55 +92,45 @@
         </nav>
 
         <div class="container">
+            <h1 class="display-3 text-center">Upload Movie Information</h1>
             <hr>
             <div class="row">
                 <div class="col"></div>
-                <div class="col-6 text-center">
-                    <a href="./movieupload.jsp">
-                        <button type="button" class="btn btn-outline-info">Upload Movie</button>
-                    </a>
+                <div class="col-6">
+                    <form id="uploadMovieForm" action="UploadMovie" method="POST" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label>Title</label><br>
+                            <input class="inputbox" name="title" type="text" placeholder="Enter title">
+                        </div>
+                        <div class="form-group">
+                            <label>Release Date</label><br>
+                            <input class="inputbox" name="releaseDate" type="date" />
+                        </div>
+                        <div class="form-group">
+                            <label>Duration</label><br>
+                            <input class="inputbox" name="duration" type="number"
+                                placeholder="Enter duration in minutes" />
+                        </div>
+                        <div class="form-group">
+                            <label>Trailer Source</label><br>
+                            <input class="inputbox" name="trailer" type="text" placeholder="Enter trailer source..." />
+                        </div>
+                        <div class="form-group">
+                            <label>Poster</label><br>
+                            <input class="inputbox" name="poster" type="file" />
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label><br>
+                            <textarea class="inputbox" name="description" cols="60" rows="5" maxlength="1000"
+                                placeholder="Enter movie description..."></textarea>
+                        </div>
+                        <div class="text-center">
+                            <input type="submit" class="btn btn-primary" value="Upload">
+                        </div>
+                    </form>
+                    <p>${message}</p>
                 </div>
                 <div class="col"></div>
-            </div>
-            <hr>
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col col-lg-5">
-                            <div class="text-center">
-                                <img src="https://moviebuddy-157-001-011.s3.us-west-1.amazonaws.com/posters/1"
-                                    class="rounded mx-auto w-75" alt="poster">
-                            </div>
-                        </div>
-                        <div class="col">
-                            <ul class="list-inline">
-                                <li class="list-inline-item">
-                                    <h1>Movie 1</h1>
-                                </li>
-                                <li class="list-inline-item">
-                                    <p class="">Length: 00:00</p>
-                                </li>
-                            </ul>
-                            <hr>
-                            <h3>Trailer</h3>
-                            <div class="embed-responsive embed-responsive-16by9">
-                                <iframe class="embed-responsive-item"
-                                    src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0" allowfullscreen></iframe>
-                            </div>
-                            <hr>
-                            <h3>Description</h3>
-                            <p>Description</p>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col">
-                            <div class="container">
-                                <button type="button" class="btn btn-outline-info">00:00 am</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

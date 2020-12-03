@@ -83,7 +83,20 @@
             </button>
             <a class="navbar-brand" href="./home.jsp">Movie Buddy</a>
             <div class="collapse navbar-collapse" id="navbarToggler">
-                <ul class="navbar-nav mr-auto mt-2 mt-lg-0"></ul>
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li ${isProvider} class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            Manage
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="./managetheatre.jsp">Theatre</a>
+                            <a class="dropdown-item" href="./managemovie.jsp">Movie</a>
+                            <a class="dropdown-item" href="./manageschedule.jsp">Schedule</a>
+                            <a class="dropdown-item" href="./managestaff.jsp">Staff</a>
+                        </div>
+                    </li>
+                </ul>
                 <li ${isProvider} class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">

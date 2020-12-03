@@ -78,7 +78,7 @@
                             Manage
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="#">Theatre</a>
+                            <a class="dropdown-item" href="./managetheatre.jsp">Theatre</a>
                             <a class="dropdown-item" href="./managemovie.jsp">Movie</a>
                             <a class="dropdown-item" href="./manageschedule.jsp">Schedule</a>
                             <a class="dropdown-item" href="./managestaff.jsp">Staff</a>
@@ -93,6 +93,10 @@
                 </form>
             </div>
         </nav>
+
+        <div class="container">
+            <a href="./staffsignup.jsp">Create Faculty Account</a>
+        </div>
     </div>
     <div style="flex-shrink: 0;">
         <hr>
