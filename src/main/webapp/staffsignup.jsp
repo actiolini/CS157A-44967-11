@@ -16,8 +16,10 @@
         int count = (int) session.getAttribute("count");
         session.setAttribute("count", count + 1);
     }
+    request.setAttribute("isProvider", "hidden");
     request.setAttribute("isAdmin", "hidden");
     if(session.getAttribute("staffId") != null && (session.getAttribute("role").equals("admin") || session.getAttribute("role").equals("manager")) && session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr()))){
+        request.setAttribute("isProvider", "");
         if(session.getAttribute("role").equals("admin")){
             request.setAttribute("isAdmin", "");
         }
@@ -82,8 +84,20 @@
             <a class="navbar-brand" href="./home.jsp">Movie Buddy</a>
             <div class="collapse navbar-collapse" id="navbarToggler">
                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0"></ul>
+                <li ${isProvider} class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        Manage
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="#">Theatre</a>
+                        <a class="dropdown-item" href="./managemovie.jsp">Movie</a>
+                        <a class="dropdown-item" href="./manageschedule.jsp">Schedule</a>
+                        <a class="dropdown-item" href="./managestaff.jsp">Staff</a>
+                    </div>
+                </li>
                 <form action="" method="POST">
-                    <input class="submitLink" id="${accountId}" type="submit" value="${userName}">
+                    <input class="submitLink" type="submit" value="${userName}">
                 </form>
                 <form action="./SignOut" method="POST">
                     <input class="submitLink" type="submit" value="Sign Out">
