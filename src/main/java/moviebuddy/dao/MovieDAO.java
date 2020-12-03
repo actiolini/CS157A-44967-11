@@ -7,11 +7,15 @@ import java.sql.SQLException;
 import java.sql.Date;
 
 import java.io.InputStream;
+import java.util.List;
+import java.util.ArrayList;
+import java.time.LocalDate;
 
+import moviebuddy.model.Movie;
 import moviebuddy.util.DBConnection;
 
 public class MovieDAO {
-    public String upload(String title, String releaseDate, String duration, String trailer, InputStream poster,
+    public String uploadMovieInfo(String title, String releaseDate, String duration, String trailer, InputStream poster,
             long posterSize, String description) throws Exception {
         String INSERT_MOVIE_INFO = "INSERT INTO movie (title, release_date, duration, trailer, description) VALUES (?,?,?,?,?)";
         String QUERY_MOVIE_ID = "SELECT LAST_INSERT_ID() as id";
@@ -56,5 +60,26 @@ public class MovieDAO {
             conn.setAutoCommit(true);
         }
         return "";
+    }
+
+    public List<Movie> getMoviesInfo() throws Exception {
+        String QUERY_MOVIE_INFO = "SELECT movie_id, title, release_date, duration, poster, trailer, description FROM movie ORDER BY release_date DESC;";
+        Connection conn = DBConnection.connect();
+        PreparedStatement queryMoviesInfo = conn.prepareStatement(QUERY_MOVIE_INFO);
+        ResultSet res = queryMoviesInfo.executeQuery();
+        List<Movie> movies = new ArrayList<>();
+        while (res.next()) {
+            Movie movie = new Movie(res.getInt("movie_id"));
+            movie.setTitle(res.getString("title"));
+            movie.setReleaseDate(LocalDate.parse(res.getString("release_date")));
+            movie.setDuration(res.getInt("duration"));
+            movie.setPoster(res.getString("poster"));
+            movie.setTrailer(res.getString("trailer"));
+            movie.setDescription(res.getString("description"));
+            movies.add(movie);
+        }
+        queryMoviesInfo.close();
+        conn.close();
+        return movies;
     }
 }

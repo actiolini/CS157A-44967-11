@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="moviebuddy.util.Passwords" %>
+<jsp:include page="/GetMovie" />
 <%
     response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
     response.setHeader("Pragma", "no-cache"); // HTTP 1.0
@@ -58,6 +59,10 @@
         .submitLink:focus {
             outline: none;
         }
+
+        .button {
+            display: inline-block;
+        }
     </style>
 </head>
 
@@ -87,7 +92,7 @@
                 <form action="" method="POST">
                     <input class="submitLink" type="submit" value="${userName}">
                 </form>
-                <form action="./SignOut" method="POST">
+                <form action="SignOut" method="POST">
                     <input class="submitLink" type="submit" value="Sign Out">
                 </form>
             </div>
@@ -105,44 +110,54 @@
                 <div class="col"></div>
             </div>
             <hr>
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col col-lg-5">
-                            <div class="text-center">
-                                <img src=".images/Iron Man.jpg" class="rounded mx-auto w-75" alt="poster">
+
+            <c:forEach items="${movies}" var="movie">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col col-lg-5">
+                                <div class="text-center">
+                                    <img src=${movie.getPoster()} class="rounded mx-auto w-100" alt="poster">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <ul class="list-inline">
+                                    <li class="list-inline-item">
+                                        <h1>${movie.getTitle()}</h1>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <p class="">Length: ${movie.getDuration()} minutes</p>
+                                    </li>
+                                </ul>
+                                <hr>
+                                <h3>Trailer</h3>
+                                <div class="embed-responsive embed-responsive-16by9">
+                                    <!-- ${movie.getTrailer()} -->
+                                </div>
+                                <hr>
+                                <h3>Description</h3>
+                                <p>${movie.getDescription()}</p>
                             </div>
                         </div>
-                        <div class="col">
-                            <ul class="list-inline">
-                                <li class="list-inline-item">
-                                    <h1>Movie 1</h1>
-                                </li>
-                                <li class="list-inline-item">
-                                    <p class="">Length: 00:00</p>
-                                </li>
-                            </ul>
-                            <hr>
-                            <h3>Trailer</h3>
-                            <div class="embed-responsive embed-responsive-16by9">
-                                <iframe class="embed-responsive-item"
-                                    src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0" allowfullscreen></iframe>
-                            </div>
-                            <hr>
-                            <h3>Description</h3>
-                            <p>Description</p>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col">
-                            <div class="container">
-                                <button type="button" class="btn btn-outline-info">00:00 am</button>
+                        <hr>
+                        <div class="row">
+                            <div class="col">
+                                <div class="container">
+                                    <form action="EditMovie" method="POST" class="button">
+                                        <input type="hidden" name="movieId" value=${movie.getId()} />
+                                        <input type="submit" class="btn btn-primary" value="Edit" />
+                                    </form>
+                                    <form action="DeleteMovie" method="POST" class="button">
+                                        <input type="hidden" name="movieId" value=${movie.getId()} />
+                                        <input type="submit" class="btn btn-primary" value="Delete" />
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                <br>
+            </c:forEach>
         </div>
     </div>
     <div style="flex-shrink: 0;">

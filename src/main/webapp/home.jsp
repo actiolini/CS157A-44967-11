@@ -95,7 +95,7 @@
                 <form action="" method="POST">
                     <input class="submitLink" ${signedIn} type="submit" value="${userName}">
                 </form>
-                <form action="./SignOut" method="POST">
+                <form action="SignOut" method="POST">
                     <input class="submitLink" ${signedIn} type="submit" value="Sign Out">
                 </form>
             </div>

@@ -38,7 +38,7 @@ public class UploadMovieSevlet extends HttpServlet {
             String description = request.getParameter("description");
             String errorMessage = Validation.validateNumber(duration);
             if (errorMessage.isEmpty()) {
-                errorMessage = movieDAO.upload(title, releaseDate, duration, trailer, streamPoster, posterSize,
+                errorMessage = movieDAO.uploadMovieInfo(title, releaseDate, duration, trailer, streamPoster, posterSize,
                         description);
             }
             HttpSession session = request.getSession();
