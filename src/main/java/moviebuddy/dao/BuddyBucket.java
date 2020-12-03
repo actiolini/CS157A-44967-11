@@ -17,7 +17,7 @@ public class BuddyBucket {
     private static final String BUCKET = "moviebuddy-157-001-011";
     private static final String POSTER = "posters/";
 
-    public static String uploadPoster(int posterId, InputStream posterContent) {
+    public static String uploadPoster(int posterId, InputStream posterContent, long posterSize) {
         try {
             AWSCredentials credentials = new ProfileCredentialsProvider("default").getCredentials();
             AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
@@ -26,6 +26,7 @@ public class BuddyBucket {
 
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentType("image/jpeg");
+            metadata.setContentLength(posterSize);
             PutObjectRequest request = new PutObjectRequest(BUCKET, POSTER + posterId, posterContent, metadata);
             s3Client.putObject(request);
             return s3Client.getUrl(BUCKET, POSTER + posterId).toString();

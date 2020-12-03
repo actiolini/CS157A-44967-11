@@ -110,8 +110,7 @@
                     <div class="row">
                         <div class="col col-lg-5">
                             <div class="text-center">
-                                <img src="https://moviebuddy-157-001-011.s3.us-west-1.amazonaws.com/posters/1"
-                                    class="rounded mx-auto w-75" alt="poster">
+                                <img src=".images/Iron Man.jpg" class="rounded mx-auto w-75" alt="poster">
                             </div>
                         </div>
                         <div class="col">

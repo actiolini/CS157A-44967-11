@@ -97,18 +97,6 @@
                         </div>
                     </li>
                 </ul>
-                <li ${isProvider} class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                        Manage
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">Theatre</a>
-                        <a class="dropdown-item" href="./managemovie.jsp">Movie</a>
-                        <a class="dropdown-item" href="./manageschedule.jsp">Schedule</a>
-                        <a class="dropdown-item" href="./managestaff.jsp">Staff</a>
-                    </div>
-                </li>
                 <form action="" method="POST">
                     <input class="submitLink" type="submit" value="${userName}">
                 </form>

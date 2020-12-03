@@ -20,7 +20,10 @@
     if(session.getAttribute("staffId") == null || !session.getAttribute("role").equals("admin") || !session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr()))){
         response.sendRedirect("home.jsp");
     }
-    request.setAttribute("message", session.getAttribute("message"));
+    request.setAttribute("errorMessage", session.getAttribute("errorMessage"));
+    request.setAttribute("goodMessage", session.getAttribute("goodMessage"));
+    session.removeAttribute("errorMessage");
+    session.removeAttribute("goodMessage");
 %>
 <!doctype html>
 <html lang="en">
@@ -36,6 +39,10 @@
     <style>
         .inputbox {
             width: 100%;
+        }
+
+        .goodmessage {
+            color: green;
         }
 
         .errormessage {
@@ -97,7 +104,10 @@
             <div class="row">
                 <div class="col"></div>
                 <div class="col-6">
-                    <form id="uploadMovieForm" action="UploadMovie" method="POST" enctype="multipart/form-data">
+                    <p class="text-center goodmessage">${goodMessage}</p>
+                    <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
+                    <form id="uploadMovieForm" action="UploadMovie" method="POST" enctype="multipart/form-data"
+                        onsubmit="return validateMovieUpload(this)">
                         <div class="form-group">
                             <label>Title</label><br>
                             <input class="inputbox" name="title" type="text" placeholder="Enter title">
@@ -108,7 +118,7 @@
                         </div>
                         <div class="form-group">
                             <label>Duration</label><br>
-                            <input class="inputbox" name="duration" type="number"
+                            <input class="inputbox" name="duration" type="text"
                                 placeholder="Enter duration in minutes" />
                         </div>
                         <div class="form-group">
@@ -128,7 +138,6 @@
                             <input type="submit" class="btn btn-primary" value="Upload">
                         </div>
                     </form>
-                    <p>${message}</p>
                 </div>
                 <div class="col"></div>
             </div>

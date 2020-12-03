@@ -80,4 +80,11 @@ public class Validation {
         }
         return "";
     }
+
+    public static String validateNumber(String number) {
+        if (!number.matches("[0-9]+")) {
+            return "Invalid number input";
+        }
+        return "";
+    }
 }

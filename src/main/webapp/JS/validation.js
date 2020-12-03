@@ -132,7 +132,6 @@ function validateStaffSignUp(form) {
     return false;
 }
 
-
 function validateSignIn(form) {
     fail = "";
     if (window.location.href.includes("staffsignin.jsp")) {
@@ -157,4 +156,23 @@ function checkSignInInput(elementId, errorId) {
     }
     document.getElementById(errorId).innerHTML = invalidInput;
     return invalidInput;
+}
+
+function validateMovieUpload(form) {
+    title = form.title.value;
+    releaseDate = form.releaseDate.value;
+    duration = form.duration.value;
+    trailer = form.trailer.value;
+    poster = form.poster.value;
+    description = form.description.value
+    errorId = document.getElementById("errorMessage");
+    if (title == "" || releaseDate == "" || duration == "" || trailer == "" || poster == "" || description == "") {
+        errorId.innerHTML = "One or more fields are empty";
+        return false;
+    }
+    if (!/^\d+$/.test(duration)) {
+        errorId.innerHTML = "Duration can only be number"
+        return false;
+    }
+    return true;
 }

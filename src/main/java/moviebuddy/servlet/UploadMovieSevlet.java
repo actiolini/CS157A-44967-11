@@ -7,11 +7,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 import moviebuddy.dao.MovieDAO;
+import moviebuddy.util.Validation;
 
 @WebServlet("/UploadMovie")
 @MultipartConfig
@@ -30,13 +32,22 @@ public class UploadMovieSevlet extends HttpServlet {
             String releaseDate = request.getParameter("releaseDate");
             String duration = request.getParameter("duration");
             String trailer = request.getParameter("trailer");
-            InputStream poster = request.getPart("poster").getInputStream();
+            Part partPoster = request.getPart("poster");
+            InputStream streamPoster = partPoster.getInputStream();
+            long posterSize = partPoster.getSize();
             String description = request.getParameter("description");
-            String message = movieDAO.upload(title, releaseDate, duration, trailer, poster, description);
+            String errorMessage = Validation.validateNumber(duration);
+            if (errorMessage.isEmpty()) {
+                errorMessage = movieDAO.upload(title, releaseDate, duration, trailer, streamPoster, posterSize,
+                        description);
+            }
             HttpSession session = request.getSession();
-            session.setAttribute("message", message);
+            session.setAttribute("errorMessage", errorMessage);
+            if (errorMessage.isEmpty()) {
+                session.setAttribute("goodMessage", "Upload Successfully");
+            }
             response.sendRedirect("movieupload.jsp");
-        } catch (IOException e) {
+        } catch (Exception e) {
             response.sendRedirect("error.jsp");
             e.printStackTrace();
         }
