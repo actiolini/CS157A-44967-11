@@ -63,9 +63,9 @@ public class MovieDAO {
     }
 
     public List<Movie> getMoviesInfo() throws Exception {
-        String QUERY_MOVIE_INFO = "SELECT movie_id, title, release_date, duration, poster, trailer, description FROM movie ORDER BY release_date DESC;";
+        String QUERY_MOVIES_INFO = "SELECT movie_id, title, release_date, duration, poster, trailer, description FROM movie ORDER BY release_date DESC;";
         Connection conn = DBConnection.connect();
-        PreparedStatement queryMoviesInfo = conn.prepareStatement(QUERY_MOVIE_INFO);
+        PreparedStatement queryMoviesInfo = conn.prepareStatement(QUERY_MOVIES_INFO);
         ResultSet res = queryMoviesInfo.executeQuery();
         List<Movie> movies = new ArrayList<>();
         while (res.next()) {
@@ -81,5 +81,78 @@ public class MovieDAO {
         queryMoviesInfo.close();
         conn.close();
         return movies;
+    }
+
+    public Movie getMovieInfo(int movieId) throws Exception {
+        String QUERY_MOVIE_INFO = "SELECT title, release_date, duration, trailer, description FROM movie WHERE movie_id=?;";
+        Connection conn = DBConnection.connect();
+        PreparedStatement queryMovieInfo = conn.prepareStatement(QUERY_MOVIE_INFO);
+        queryMovieInfo.setInt(1, movieId);
+        ResultSet res = queryMovieInfo.executeQuery();
+        Movie movie = new Movie(movieId);
+        while (res.next()) {
+            movie.setTitle(res.getString("title"));
+            movie.setReleaseDate(LocalDate.parse(res.getString("release_date")));
+            movie.setDuration(res.getInt("duration"));
+            movie.setTrailer(res.getString("trailer"));
+            movie.setDescription(res.getString("description"));
+        }
+        queryMovieInfo.close();
+        conn.close();
+        return movie;
+    }
+
+    public void updateMovieInfo(String movieId, String title, String releaseDate, String duration, String trailer,
+            InputStream poster, long posterSize, String description) throws Exception {
+        String UPDATE_MOVIE_INFO = "UPDATE movie SET title=?, release_date=?, duration=?, trailer=?, description=? WHERE movie_id = ?;";
+        int id = Integer.parseInt(movieId);
+        Connection conn = DBConnection.connect();
+        conn.setAutoCommit(false);
+        try {
+            BuddyBucket.uploadPoster(id, poster, posterSize);
+            PreparedStatement updateMovieInfo = conn.prepareStatement(UPDATE_MOVIE_INFO);
+            updateMovieInfo.setString(1, title);
+            updateMovieInfo.setDate(2, Date.valueOf(releaseDate));
+            updateMovieInfo.setInt(3, Integer.parseInt(duration));
+            updateMovieInfo.setString(4, trailer);
+            updateMovieInfo.setString(5, description);
+            updateMovieInfo.setInt(6, id);
+            updateMovieInfo.executeUpdate();
+            conn.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            try {
+                System.out.println("Transaction is being rolled back");
+                conn.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        } finally {
+            conn.setAutoCommit(true);
+        }
+    }
+
+    public void deleteMovieInfo(String movieId) throws Exception {
+        String DELETE_MOVIE_INFO = "DELETE FROM movie WHERE movie_id=?";
+        int id = Integer.parseInt(movieId);
+        Connection conn = DBConnection.connect();
+        conn.setAutoCommit(false);
+        try {
+            PreparedStatement updateMovieInfo = conn.prepareStatement(DELETE_MOVIE_INFO);
+            updateMovieInfo.setInt(1, id);
+            updateMovieInfo.executeUpdate();
+            conn.commit();
+            BuddyBucket.deletePoster(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            try {
+                System.out.println("Transaction is being rolled back");
+                conn.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        } finally {
+            conn.setAutoCommit(true);
+        }
     }
 }

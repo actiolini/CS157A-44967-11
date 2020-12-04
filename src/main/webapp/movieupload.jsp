@@ -20,12 +20,12 @@
     if(session.getAttribute("staffId") == null || !session.getAttribute("role").equals("admin") || !session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr()))){
         response.sendRedirect("home.jsp");
     }
+
     request.setAttribute("errorMessage", session.getAttribute("errorMessage"));
     request.setAttribute("goodMessage", session.getAttribute("goodMessage"));
     session.removeAttribute("errorMessage");
     session.removeAttribute("goodMessage");
 %>
-<!doctype html>
 <html lang="en">
 
 <head>
@@ -89,7 +89,7 @@
                         </div>
                     </li>
                 </ul>
-                <form action="UploadMovie" method="POST" enctype="multipart/form-data">
+                <form action="" method="POST" enctype="multipart/form-data">
                     <input class="submitLink" type="submit" value="${userName}">
                 </form>
                 <form action="SignOut" method="POST">
@@ -110,7 +110,7 @@
                         onsubmit="return validateMovieUpload(this)">
                         <div class="form-group">
                             <label>Title</label><br>
-                            <input class="inputbox" name="title" type="text" placeholder="Enter title">
+                            <input class="inputbox" name="title" type="text" placeholder="Enter title" />
                         </div>
                         <div class="form-group">
                             <label>Release Date</label><br>

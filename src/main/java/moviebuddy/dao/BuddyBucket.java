@@ -15,7 +15,7 @@ import java.io.InputStream;
 
 public class BuddyBucket {
     private static final String BUCKET = "moviebuddy-157-001-011";
-    private static final String POSTER = "posters/";
+    private static final String DIRECTORY = "posters/";
 
     public static String uploadPoster(int posterId, InputStream posterContent, long posterSize) {
         try {
@@ -27,15 +27,30 @@ public class BuddyBucket {
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentType("image/jpeg");
             metadata.setContentLength(posterSize);
-            PutObjectRequest request = new PutObjectRequest(BUCKET, POSTER + posterId, posterContent, metadata);
+            PutObjectRequest request = new PutObjectRequest(BUCKET, DIRECTORY + posterId, posterContent, metadata);
             s3Client.putObject(request);
-            return s3Client.getUrl(BUCKET, POSTER + posterId).toString();
+            return s3Client.getUrl(BUCKET, DIRECTORY + posterId).toString();
         } catch (AmazonServiceException ase) {
             serverExceptionMessage(ase);
         } catch (AmazonClientException ace) {
             clientExceptionMessage(ace);
         }
         return "";
+    }
+
+    public static void deletePoster(int posterId) {
+        try {
+            AWSCredentials credentials = new ProfileCredentialsProvider("default").getCredentials();
+            AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
+                    .withCredentials(new AWSStaticCredentialsProvider(credentials)).withRegion(Regions.US_WEST_1)
+                    .build();
+
+            s3Client.deleteObject(BUCKET, DIRECTORY + posterId);
+        } catch (AmazonServiceException ase) {
+            serverExceptionMessage(ase);
+        } catch (AmazonClientException ace) {
+            clientExceptionMessage(ace);
+        }
     }
 
     private static void serverExceptionMessage(AmazonServiceException ase) {
