@@ -17,6 +17,7 @@
         int count = (int) session.getAttribute("count");
         session.setAttribute("count", count + 1);
     }
+    
     request.setAttribute("isProvider", "hidden");
     request.setAttribute("signedOut", "");
     request.setAttribute("signedIn", "hidden");

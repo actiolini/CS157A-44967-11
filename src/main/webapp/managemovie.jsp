@@ -17,6 +17,7 @@
         int count = (int) session.getAttribute("count");
         session.setAttribute("count", count + 1);
     }
+    
     request.setAttribute("isProvider", "hidden");
     request.setAttribute("isAdmin", "hidden");
     if(session.getAttribute("staffId") != null && (session.getAttribute("role").equals("admin") || session.getAttribute("role").equals("manager")) && session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr()))){
@@ -132,7 +133,9 @@
                                 <hr>
                                 <h3>Trailer</h3>
                                 <div class="embed-responsive embed-responsive-16by9">
-                                    <!-- ${movie.getTrailer()} -->
+                                    <iframe width="907" height="510" src="${movie.getTrailer()}" frameborder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowfullscreen></iframe>
                                 </div>
                                 <hr>
                                 <h3>Description</h3>
@@ -143,7 +146,7 @@
                         <div class="row">
                             <div class="col">
                                 <div class="container">
-                                    <form action="EditMovie" method="POST" class="button">
+                                    <form action="LoadMovie" method="POST" class="button">
                                         <input type="hidden" name="movieId" value=${movie.getId()} />
                                         <input type="submit" class="btn btn-primary" value="Edit" />
                                     </form>
