@@ -20,9 +20,17 @@
     if(session.getAttribute("staffId") == null || !session.getAttribute("role").equals("admin") || !session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr()))){
         response.sendRedirect("home.jsp");
     }
+    request.setAttribute("movieId", session.getAttribute("editMovieId"));
+    request.setAttribute("title", session.getAttribute("editTitle"));
+    request.setAttribute("releaseDate", session.getAttribute("editReleaseDate"));
+    request.setAttribute("duration", session.getAttribute("editDuration"));
+    request.setAttribute("trailer", session.getAttribute("editTrailer"));
+    request.setAttribute("description", session.getAttribute("editDescription"));
 
     request.setAttribute("errorMessage", session.getAttribute("errorMessage"));
+    request.setAttribute("goodMessage", session.getAttribute("goodMessage"));
     session.removeAttribute("errorMessage");
+    session.removeAttribute("goodMessage");
 %>
 <html lang="en">
 
@@ -37,6 +45,10 @@
     <style>
         .inputbox {
             width: 100%;
+        }
+
+        .goodmessage {
+            color: green;
         }
 
         .errormessage {
@@ -56,6 +68,10 @@
 
         .submitLink:focus {
             outline: none;
+        }
+
+        .button {
+            display: inline-block;
         }
     </style>
 </head>
@@ -98,25 +114,34 @@
             <div class="row">
                 <div class="col"></div>
                 <div class="col-6">
+                    <p class="text-center goodmessage">${goodMessage}</p>
                     <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
-                    <form id="uploadMovieForm" action="UploadMovie" method="POST" enctype="multipart/form-data"
+                    <form id="editMovieForm" action="EditMovie" method="POST" enctype="multipart/form-data"
                         onsubmit="return validateMovieUpload(this)">
                         <div class="form-group">
+                            <input type="hidden" name="action" value="save" />
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" name="movieId" value="${movieId}" />
+                        </div>
+                        <div class="form-group">
                             <label>Title</label><br>
-                            <input class="inputbox" name="title" type="text" placeholder="Enter title" />
+                            <input class="inputbox" name="title" type="text" placeholder="Enter title"
+                                value="${title}" />
                         </div>
                         <div class="form-group">
                             <label>Release Date</label><br>
-                            <input class="inputbox" name="releaseDate" type="date" />
+                            <input class="inputbox" name="releaseDate" type="date" value="${releaseDate}" />
                         </div>
                         <div class="form-group">
                             <label>Duration</label><br>
-                            <input class="inputbox" name="duration" type="text"
-                                placeholder="Enter duration in minutes" />
+                            <input class="inputbox" name="duration" type="text" placeholder="Enter duration in minutes"
+                                value="${duration}" />
                         </div>
                         <div class="form-group">
                             <label>Trailer Source</label><br>
-                            <input class="inputbox" name="trailer" type="text" placeholder="Enter trailer source..." />
+                            <input class="inputbox" name="trailer" type="text" placeholder="Enter trailer source..."
+                                value="${trailer}" />
                         </div>
                         <div class="form-group">
                             <label>Poster</label><br>
@@ -125,12 +150,22 @@
                         <div class="form-group">
                             <label>Description</label><br>
                             <textarea class="inputbox" name="description" cols="60" rows="5" maxlength="1000"
-                                placeholder="Enter movie description..."></textarea>
-                        </div>
-                        <div class="text-center">
-                            <input type="submit" class="btn btn-primary" value="Upload">
+                                placeholder="Enter movie description...">${description}</textarea>
                         </div>
                     </form>
+                    <form id="cancelMovieForm" action="EditMovie" method="POST">
+                        <div class="form-group">
+                            <input type="hidden" name="action" value="cancel" />
+                        </div>
+                    </form>
+                    <div class="text-center">
+                        <div class="button">
+                            <input form="editMovieForm" type="submit" class="btn btn-primary" value="Save">
+                        </div>
+                        <div class="button">
+                            <input form="cancelMovieForm" type="submit" class="btn btn-primary" value="Cancel" />
+                        </div>
+                    </div>
                 </div>
                 <div class="col"></div>
             </div>
@@ -148,6 +183,7 @@
         integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
         crossorigin="anonymous"></script>
 
+    <script src="./JS/functions.js"></script>
     <script src="./JS/validation.js"></script>
 </body>
 

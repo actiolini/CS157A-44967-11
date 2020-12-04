@@ -16,6 +16,7 @@
         int count = (int) session.getAttribute("count");
         session.setAttribute("count", count + 1);
     }
+    
     request.setAttribute("isProvider", "hidden");
     request.setAttribute("isAdmin", "hidden");
     if(session.getAttribute("staffId") != null && (session.getAttribute("role").equals("admin") || session.getAttribute("role").equals("manager")) && session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr()))){
@@ -88,7 +89,7 @@
                 <form action="" method="POST">
                     <input class="submitLink" type="submit" value="${userName}">
                 </form>
-                <form action="./SignOut" method="POST">
+                <form action="SignOut" method="POST">
                     <input class="submitLink" type="submit" value="Sign Out">
                 </form>
             </div>

@@ -16,6 +16,7 @@
         int count = (int) session.getAttribute("count");
         session.setAttribute("count", count + 1);
     }
+    
     if(session.getAttribute("email") != null && session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr()))){
         response.sendRedirect("home.jsp");
     }
@@ -43,7 +44,7 @@
     </style>
 </head>
 
-<body style="height: 100%; display: flex; flex-direction: column;" onload="refillSignIn('${email}')">
+<body style="height: 100%; display: flex; flex-direction: column;">
     <div style="flex: 1 0 auto;">
         <nav id="movieBuddyNavBar" class="navbar navbar-expand-lg navbar-light bg-light">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler"
@@ -69,7 +70,8 @@
                                 <div class="form-group ">
                                     <label>Email address</label><br>
                                     <input id="email" class="inputbox" type="text" name="email"
-                                        placeholder="Enter email" onkeyup="checkSignInInput(this, 'emailError')">
+                                        placeholder="Enter email" onkeyup="checkSignInInput(this, 'emailError')"
+                                        value="${email}">
                                     <br>
                                     <span id="emailError" class="errormessage"></span>
                                 </div>
@@ -107,7 +109,6 @@
         integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
         crossorigin="anonymous"></script>
 
-    <script src="./JS/functions.js"></script>
     <script src="./JS/validation.js"></script>
 </body>
 

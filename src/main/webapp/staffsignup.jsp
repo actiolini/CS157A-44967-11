@@ -16,6 +16,7 @@
         int count = (int) session.getAttribute("count");
         session.setAttribute("count", count + 1);
     }
+
     request.setAttribute("isProvider", "hidden");
     request.setAttribute("isAdmin", "hidden");
     if(session.getAttribute("staffId") != null && (session.getAttribute("role").equals("admin") || session.getAttribute("role").equals("manager")) && session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr()))){
@@ -26,15 +27,31 @@
     }else{
         response.sendRedirect("home.jsp");
     }
+
     request.setAttribute("signupStaffId", session.getAttribute("signupStaffId"));
+    session.removeAttribute("signupStaffId");
+
+    String role = (String) session.getAttribute("signupRole");
+    if(role != null && role.equals("admin")){
+        request.setAttribute("adminSelected", "selected");
+    } else if(role != null && role.equals("manager")){
+        request.setAttribute("managerSelected", "selected");
+    } else if(role != null && role.equals("faculty")){
+        request.setAttribute("facultySelected", "selected");
+    } else {
+        request.setAttribute("defaultSelected", "selected");
+    }
     request.setAttribute("signupUserName", session.getAttribute("signupUserName"));
     request.setAttribute("signupEmail", session.getAttribute("signupEmail"));
+
+    request.setAttribute("roleError", session.getAttribute("roleError"));
     request.setAttribute("userNameError", session.getAttribute("userNameError"));
     request.setAttribute("emailError", session.getAttribute("emailError"));
     request.setAttribute("passwordError", session.getAttribute("passwordError"));
-    session.removeAttribute("signupStaffId");
+    session.removeAttribute("signupRole");
     session.removeAttribute("signupUserName");
     session.removeAttribute("signupEmail");
+    session.removeAttribute("roleError");
     session.removeAttribute("userNameError");
     session.removeAttribute("emailError");
     session.removeAttribute("passwordError");
@@ -73,8 +90,7 @@
     </style>
 </head>
 
-<body style="height: 100%; display: flex; flex-direction: column;"
-    onload="refillSignUp('${signupUserName}', '${signupEmail}')">
+<body style="height: 100%; display: flex; flex-direction: column;">
     <div style="flex: 1 0 auto;">
         <nav id="movieBuddyNavBar" class="navbar navbar-expand-lg navbar-light bg-light">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler"
@@ -97,22 +113,10 @@
                         </div>
                     </li>
                 </ul>
-                <li ${isProvider} class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                        Manage
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">Theatre</a>
-                        <a class="dropdown-item" href="./managemovie.jsp">Movie</a>
-                        <a class="dropdown-item" href="./manageschedule.jsp">Schedule</a>
-                        <a class="dropdown-item" href="./managestaff.jsp">Staff</a>
-                    </div>
-                </li>
                 <form action="" method="POST">
                     <input class="submitLink" type="submit" value="${userName}">
                 </form>
-                <form action="./SignOut" method="POST">
+                <form action="SignOut" method="POST">
                     <input class="submitLink" type="submit" value="Sign Out">
                 </form>
             </div>
@@ -127,24 +131,26 @@
                         onsubmit="return validateStaffSignUp(this)">
                         <div class="form-group">
                             <label>Role</label><br>
-                            <select id="role" class="inputbox" name="role" form="signUpForm">
-                                <option value="none" selected disabled hidden>Select a role</option>
-                                <option ${isAdmin} value="admin">Admin</option>
-                                <option ${isAdmin} value="manager">Manager</option>
-                                <option value="faculty">Faculty</option>
+                            <select id="role" class="inputbox" name="role" form="signUpForm"
+                                onchange="checkRole(this, 'roleError')">
+                                <option hidden ${defaultSelected} value="none">Select a role</option>
+                                <option ${isAdmin} ${adminSelected} value="admin">Admin</option>
+                                <option ${isAdmin} ${managerSelected} value="manager">Manager</option>
+                                <option ${facultySelected} value="faculty">Faculty</option>
                             </select>
+                            <span id="roleError" class="errormessage">${roleError}</span>
                         </div>
                         <div class="form-group">
                             <label>Name</label><br>
-                            <input id="userName" class="inputbox" type="text" name="userName"
-                                placeholder="Enter your name" onkeyup="checkName(this, 'userNameError')">
+                            <input class="inputbox" type="text" name="userName" placeholder="Enter your name"
+                                onkeyup="checkName(this, 'userNameError')" value="${signupUserName}">
                             <br>
                             <span id="userNameError" class="errormessage">${userNameError}</span>
                         </div>
                         <div class="form-group">
                             <label>Email</label><br>
-                            <input id="email" name="email" class="inputbox" type="text" placeholder="Enter email"
-                                onkeyup="checkEmail(this, 'emailError')">
+                            <input name="email" class="inputbox" type="text" placeholder="Enter email"
+                                onkeyup="checkEmail(this, 'emailError')" value="${signupEmail}">
                             <br>
                             <span id="emailError" class="errormessage">${emailError}</span>
                         </div>
@@ -177,7 +183,6 @@
         integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
         crossorigin="anonymous"></script>
 
-    <script src="./JS/functions.js"></script>
     <script src="./JS/validation.js"></script>
 </body>
 

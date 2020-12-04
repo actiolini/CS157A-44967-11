@@ -108,6 +108,9 @@ function validateRePassword(password, rePassword) {
 function validateStaffSignUp(form) {
     fail = "";
 
+    invalidRole = validateRole(form.role.value);
+    document.getElementById("roleError").innerHTML = invalidRole;
+
     invalidUserName = validateUserName(form.userName.value);
     document.getElementById("userNameError").innerHTML = invalidUserName;
 
@@ -126,12 +129,28 @@ function validateStaffSignUp(form) {
         }));
     }
 
+    fail += invalidRole;
     fail += invalidUserName;
     fail += invalidEmail;
     fail += invalidPassword;
     return false;
 }
 
+function checkRole(elementId, errorId) {
+    invalidRole = validateRole(elementId.value)
+    document.getElementById(errorId).innerHTML = invalidRole;
+    return invalidRole;
+}
+
+function validateRole(role) {
+    if (role == "none") {
+        return "Please select a role\n";
+    }
+    if (!(role == "admin" || role == "manager" || role == faculty)) {
+        return "Invalid selected role\n";
+    }
+    return "";
+}
 
 function validateSignIn(form) {
     fail = "";
@@ -157,4 +176,22 @@ function checkSignInInput(elementId, errorId) {
     }
     document.getElementById(errorId).innerHTML = invalidInput;
     return invalidInput;
+}
+
+function validateMovieUpload(form) {
+    title = form.title.value;
+    releaseDate = form.releaseDate.value;
+    duration = form.duration.value;
+    trailer = form.trailer.value;
+    description = form.description.value
+    errorId = document.getElementById("errorMessage");
+    if (title == "" || releaseDate == "" || duration == "" || trailer == "" || description == "") {
+        errorId.innerHTML = "One or more fields are empty";
+        return false;
+    }
+    if (!/^\d+$/.test(duration)) {
+        errorId.innerHTML = "Duration can only be number"
+        return false;
+    }
+    return true;
 }

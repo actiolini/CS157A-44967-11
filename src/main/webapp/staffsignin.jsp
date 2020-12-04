@@ -16,6 +16,7 @@
         int count = (int) session.getAttribute("count");
         session.setAttribute("count", count + 1);
     }
+    
     if(session.getAttribute("email") != null && session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr()))){
         response.sendRedirect("home.jsp");
     }
@@ -43,7 +44,7 @@
     </style>
 </head>
 
-<body style="height: 100%; display: flex; flex-direction: column;" onload="refillStaffId('${staffId}')">
+<body style="height: 100%; display: flex; flex-direction: column;">
     <div style="flex: 1 0 auto;">
         <nav id="movieBuddyNavBar" class="navbar navbar-expand-lg navbar-light bg-light">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler"
@@ -67,9 +68,9 @@
                             <form action="SignInStaff" method="POST" onsubmit="return validateSignIn(this)">
                                 <div class="form-group ">
                                     <label>Staff ID Number</label><br>
-                                    <input id="staffId" class="inputbox" type="text" name="staffId"
+                                    <input class="inputbox" type="text" name="staffId"
                                         placeholder="Enter staff ID number"
-                                        onkeyup="checkSignInInput(this, 'staffIdError')">
+                                        onkeyup="checkSignInInput(this, 'staffIdError')" value="${staffId}">
                                     <br>
                                     <span id="staffIdError" class="errormessage"></span>
                                 </div>
@@ -105,7 +106,6 @@
         integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
         crossorigin="anonymous"></script>
 
-    <script src="./JS/functions.js"></script>
     <script src="./JS/validation.js"></script>
 </body>
 

@@ -14,7 +14,7 @@ public class UserDAO {
 
     public boolean signUp(String userName, String email, String password) throws Exception {
         String INSERT_USER = "INSERT INTO user(type) VALUES('registered');";
-        String INSERT_REGISTERED_USER = "INSERT INTO registered_user(account_id, name, email, hashpw, salt) VALUES ((SELECT LAST_INSERT_ID()), ?, ?, ?, ?);";
+        String INSERT_REGISTERED_USER = "INSERT INTO registered_user(account_id, name, email, hashpw, salt) VALUES (LAST_INSERT_ID(), ?, ?, ?, ?);";
         Connection conn = DBConnection.connect();
         conn.setAutoCommit(false);
         try {
@@ -76,10 +76,10 @@ public class UserDAO {
 
     public int createStaff(String role, String userName, String email, String password) throws Exception {
         String INSERT_USER = "INSERT INTO user(type) VALUES('registered');";
-        String INSERT_REGISTERED_USER = "INSERT INTO registered_user(account_id, name, email, hashpw, salt) VALUES ((SELECT LAST_INSERT_ID()), ?, ?, ?, ?);";
-        String INSERT_MEMBERSHIP_USER = "INSERT INTO membership(account_id, auto_renew) VALUES ((SELECT LAST_INSERT_ID()), ?);";
-        String INSERT_STAFF = "INSERT INTO provider(account_id, role_id) VALUES ((SELECT LAST_INSERT_ID()), (SELECT role_id FROM role WHERE title=?));";
-        String QUERY_STAFF_ID = "SELECT LAST_INSERT_ID()";
+        String INSERT_REGISTERED_USER = "INSERT INTO registered_user(account_id, name, email, hashpw, salt) VALUES (LAST_INSERT_ID(), ?, ?, ?, ?);";
+        String INSERT_MEMBERSHIP_USER = "INSERT INTO membership(account_id, auto_renew) VALUES (LAST_INSERT_ID(), ?);";
+        String INSERT_STAFF = "INSERT INTO provider(account_id, role_id) VALUES (LAST_INSERT_ID(), (SELECT role_id FROM role WHERE title=?));";
+        String QUERY_STAFF_ID = "SELECT LAST_INSERT_ID() as id";
         int AUTO_RENEW = 1;
         int staffId = -1;
         Connection conn = DBConnection.connect();
@@ -104,7 +104,7 @@ public class UserDAO {
             PreparedStatement getStaffId = conn.prepareStatement(QUERY_STAFF_ID);
             ResultSet res = getStaffId.executeQuery();
             while (res.next()) {
-                staffId = res.getInt("LAST_INSERT_ID()");
+                staffId = res.getInt("id");
             }
             conn.commit();
         } catch (SQLException e) {
