@@ -16,6 +16,7 @@
         int count = (int) session.getAttribute("count");
         session.setAttribute("count", count + 1);
     }
+    
     if(session.getAttribute("email") != null && session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr()))){
         response.sendRedirect("home.jsp");
     }
@@ -51,7 +52,7 @@
     </style>
 </head>
 
-<body style="height: 100%; display: flex; flex-direction: column;" onload="refillSignUp('${userName}', '${email}')">
+<body style="height: 100%; display: flex; flex-direction: column;">
     <div style="flex: 1 0 auto;">
         <nav id="movieBuddyNavBar" class="navbar navbar-expand-lg navbar-light bg-light">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler"
@@ -73,15 +74,15 @@
                     <form id="signUpForm" action="SignUp" method="POST" onsubmit="return validate(this)">
                         <div class="form-group">
                             <label>Name</label><br>
-                            <input id="userName" class="inputbox" type="text" name="userName"
-                                placeholder="Enter your name" onkeyup="checkName(this, 'userNameError')">
+                            <input class="inputbox" type="text" name="userName" placeholder="Enter your name"
+                                onkeyup="checkName(this, 'userNameError')" value="${userName}">
                             <br>
                             <span id="userNameError" class="errormessage">${userNameError}</span>
                         </div>
                         <div class="form-group">
                             <label>Email</label><br>
-                            <input id="email" class="inputbox" type="text" name="email" placeholder="Enter email"
-                                onkeyup="checkEmail(this, 'emailError')">
+                            <input class="inputbox" type="text" name="email" placeholder="Enter email"
+                                onkeyup="checkEmail(this, 'emailError')" value="${email}">
                             <br>
                             <span id="emailError" class="errormessage">${emailError}</span>
                         </div>

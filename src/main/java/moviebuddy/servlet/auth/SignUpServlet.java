@@ -1,4 +1,4 @@
-package moviebuddy.servlet;
+package moviebuddy.servlet.auth;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,11 +9,12 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import moviebuddy.dao.UserDAO;
+import moviebuddy.model.User;
 import moviebuddy.util.Passwords;
 import moviebuddy.util.Validation;
 
-@WebServlet("/SignUpStaff")
-public class SignUpStaffServlet extends HttpServlet {
+@WebServlet("/SignUp")
+public class SignUpServlet extends HttpServlet {
     private static final long serialVersionUID = 6851275245718964069L;
     private UserDAO userDAO;
 
@@ -24,13 +25,11 @@ public class SignUpStaffServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            int staffId = -1;
-
             // Sanitize user inputs
-            String role = Validation.sanitize(request.getParameter("role"));
             String userName = Validation.sanitize(request.getParameter("userName"));
             String email = Validation.sanitize(request.getParameter("email"));
             String password = Validation.sanitize(request.getParameter("password"));
+            String rePassword = Validation.sanitize(request.getParameter("rePassword"));
 
             // Validate user inputs
             String invalidUserName = Validation.validateUserName(userName);
@@ -39,23 +38,30 @@ public class SignUpStaffServlet extends HttpServlet {
                 invalidEmail = "Email is already registered";
             }
             String invalidPassword = Validation.validatePassword(password);
-            String message = invalidUserName + invalidEmail + invalidPassword;
-            if (message.isEmpty()) {
-                staffId = userDAO.createStaff(role, userName, email, password);
-            }
-            HttpSession session = request.getSession();
-            if (staffId > -1) {
-                session.setAttribute("signupStaffId", staffId);
+            String invalidRePassword = Validation.validateRePassword(password, rePassword);
+
+            String message = invalidUserName + invalidEmail + invalidPassword + invalidRePassword;
+            if (message.isEmpty() && userDAO.signUp(userName, email, password)) {
+                // Sign up successfully
+                User user = userDAO.signIn(email, password);
+                HttpSession session = request.getSession();
+                session.setAttribute("accountId", user.getAccountId());
+                session.setAttribute("userName", user.getUserName());
+                session.setAttribute("email", user.getEmail());
+                session.setAttribute("zip", user.getZip());
                 session.setAttribute("currentSession",
                         Passwords.applySHA256(session.getId() + request.getRemoteAddr()));
+                response.sendRedirect("home.jsp");
             } else {
+                HttpSession session = request.getSession();
                 session.setAttribute("signupUserName", request.getParameter("userName"));
                 session.setAttribute("signupEmail", request.getParameter("email"));
                 session.setAttribute("userNameError", invalidUserName);
                 session.setAttribute("emailError", invalidEmail);
                 session.setAttribute("passwordError", invalidPassword);
+                session.setAttribute("rePasswordError", invalidRePassword);
+                response.sendRedirect("signup.jsp");
             }
-            response.sendRedirect("staffsignup.jsp");
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("error.jsp");
