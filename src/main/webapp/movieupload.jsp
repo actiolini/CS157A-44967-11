@@ -16,8 +16,8 @@
         int count = (int) session.getAttribute("count");
         session.setAttribute("count", count + 1);
     }
-    
-    if(session.getAttribute("staffId") == null || !session.getAttribute("role").equals("admin") || !session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr()))){
+
+    if(session.getAttribute("email") == null || !session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr())) || session.getAttribute("staffId") == null || !(session.getAttribute("role").equals("admin") || session.getAttribute("role").equals("manager"))){
         response.sendRedirect("home.jsp");
     }
 
@@ -33,65 +33,16 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/style.css">
     <title>Movie Buddy | Manage Movie</title>
-    <style>
-        .inputbox {
-            width: 100%;
-        }
-
-        .errormessage {
-            color: red;
-        }
-
-        .submitLink {
-            background-color: transparent;
-            border: none;
-            color: #007bff;
-            cursor: pointer;
-        }
-
-        .submitLink:hover {
-            color: #0056b3;
-        }
-
-        .submitLink:focus {
-            outline: none;
-        }
-    </style>
 </head>
 
 <body style="height: 100%; display: flex; flex-direction: column;">
     <div style="flex: 1 0 auto;">
-        <nav id="movieBuddyNavBar" class="navbar navbar-expand-lg navbar-light bg-light">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler"
-                aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <a class="navbar-brand" href="./home.jsp">Movie Buddy</a>
-            <div class="collapse navbar-collapse" id="navbarToggler">
-                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                    <li ${isProvider} class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                            Manage
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="./managetheatre.jsp">Theatre</a>
-                            <a class="dropdown-item" href="./managemovie.jsp">Movie</a>
-                            <a class="dropdown-item" href="./manageschedule.jsp">Schedule</a>
-                            <a class="dropdown-item" href="./managestaff.jsp">Staff</a>
-                        </div>
-                    </li>
-                </ul>
-                <form action="" method="POST" enctype="multipart/form-data">
-                    <input class="submitLink" type="submit" value="${userName}">
-                </form>
-                <form action="SignOut" method="POST">
-                    <input class="submitLink" type="submit" value="Sign Out">
-                </form>
-            </div>
-        </nav>
+        <!-- Navigation bar -->
+        <jsp:include page="/navbar.jsp" />
 
+        <!-- Page Content -->
         <div class="container">
             <h1 class="display-3 text-center">Upload Movie Information</h1>
             <hr>

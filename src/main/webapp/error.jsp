@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <link rel="stylesheet" href="./css/style.css">
     <title>Movie Buddy | Error</title>
     <style>
         .container {
@@ -20,33 +21,16 @@
             text-align: center;
             font-size: 40px;
         }
-
-        .submitLink {
-            background-color: transparent;
-            border: none;
-            color: #007bff;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .submitLink:hover {
-            color: #0056b3;
-        }
-
-        .submitLink:focus {
-            outline: none;
-        }
     </style>
 </head>
 
 <body>
-    <p>${path}</p>
     <div class='container'>
         <img style='width: 50%;' src='./images/error.png' alt='saitama'>
         <div class='textbox'>
             <p class='errMsg'>Oops!!!</p>
             It seems like something just went wrong.<br>
-            Please <a class="submitLink" href="home.jsp">click here</a> to return to our home page.
+            Please <a class="asLink" href="home.jsp">click here</a> to return to our home page.
         </div>
     </div>
 </body>
