@@ -16,15 +16,8 @@
         int count = (int) session.getAttribute("count");
         session.setAttribute("count", count + 1);
     }
-    
-    request.setAttribute("isProvider", "hidden");
-    request.setAttribute("isAdmin", "hidden");
-    if(session.getAttribute("staffId") != null && (session.getAttribute("role").equals("admin") || session.getAttribute("role").equals("manager")) && session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr()))){
-        request.setAttribute("isProvider", "");
-        if(session.getAttribute("role").equals("admin")){
-            request.setAttribute("isAdmin", "");
-        }
-    }else{
+
+    if(session.getAttribute("email") == null || !session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr())) || session.getAttribute("staffId") == null || !(session.getAttribute("role").equals("admin") || session.getAttribute("role").equals("manager"))){
         response.sendRedirect("home.jsp");
     }
 %>
@@ -33,68 +26,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movie Buddy | Create Faculty Account</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
         integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-    <style>
-        .inputbox {
-            width: 100%;
-        }
-
-        .errormessage {
-            color: red;
-        }
-
-        .submitLink {
-            background-color: transparent;
-            border: none;
-            color: #007bff;
-            cursor: pointer;
-        }
-
-        .submitLink:hover {
-            color: #0056b3;
-        }
-
-        .submitLink:focus {
-            outline: none;
-        }
-    </style>
+    <link rel="stylesheet" href="./css/style.css">
+    <title>Movie Buddy | Manage Schedule</title>
 </head>
 
 <body style="height: 100%; display: flex; flex-direction: column;"
     onload="refillSignUp('${signupUserName}', '${signupEmail}')">
     <div style="flex: 1 0 auto;">
-        <nav id="movieBuddyNavBar" class="navbar navbar-expand-lg navbar-light bg-light">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler"
-                aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <a class="navbar-brand" href="./home.jsp">Movie Buddy</a>
-            <div class="collapse navbar-collapse" id="navbarToggler">
-                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                    <li ${isProvider} class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                            Manage
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="./managetheatre.jsp">Theatre</a>
-                            <a class="dropdown-item" href="./managemovie.jsp">Movie</a>
-                            <a class="dropdown-item" href="./manageschedule.jsp">Schedule</a>
-                            <a class="dropdown-item" href="./managestaff.jsp">Staff</a>
-                        </div>
-                    </li>
-                </ul>
-                <form action="" method="POST">
-                    <input class="submitLink" type="submit" value="${userName}">
-                </form>
-                <form action="SignOut" method="POST">
-                    <input class="submitLink" type="submit" value="Sign Out">
-                </form>
-            </div>
-        </nav>
+        <!-- Navigation bar -->
+        <jsp:include page="/navbar.jsp" />
 
+        <!-- Page Content -->
         <div class="container">
 
         </div>

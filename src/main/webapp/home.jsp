@@ -1,108 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ page import="moviebuddy.util.Passwords" %>
 <jsp:include page="/Home" />
-<%
-    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
-    response.setHeader("Pragma", "no-cache"); // HTTP 1.0
-    response.setHeader("Expires", "0"); // Proxies
-
-    session = request.getSession();
-    if (session.getAttribute("sessionId") == null) {
-        session.setAttribute("sessionId", Passwords.applySHA256(session.getId()));
-    }
-    if (session.getAttribute("count") == null) {
-        session.setAttribute("count", 0);
-    } else {
-        int count = (int) session.getAttribute("count");
-        session.setAttribute("count", count + 1);
-    }
-    
-    request.setAttribute("isProvider", "hidden");
-    request.setAttribute("signedOut", "");
-    request.setAttribute("signedIn", "hidden");
-    if(session.getAttribute("email") != null && session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr()))){
-        request.setAttribute("signedOut", "hidden");
-        request.setAttribute("signedIn", "");
-        request.setAttribute("userName", session.getAttribute("userName"));
-        request.setAttribute("zip", session.getAttribute("zip"));
-        if(session.getAttribute("staffId") != null && (session.getAttribute("role").equals("admin") || session.getAttribute("role").equals("manager"))){
-            request.setAttribute("isProvider", "");
-        }
-    }
-%>
 <html lang="en">
 
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
         integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/style.css">
     <title>Movie Buddy | Home</title>
-    <style>
-        .submitLink {
-            background-color: transparent;
-            border: none;
-            color: #007bff;
-            cursor: pointer;
-        }
-
-        .submitLink:hover {
-            color: #0056b3;
-        }
-
-        .submitLink:focus {
-            outline: none;
-        }
-    </style>
 </head>
 
 <body style="height: 100%; display: flex; flex-direction: column;">
     <div style="flex: 1 0 auto;">
         <!-- Navigation bar -->
-        <nav id="movieBuddyNavBar" class="navbar navbar-expand-lg navbar-light bg-light">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler"
-                aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <a class="navbar-brand" href="./home.jsp">Movie Buddy</a>
-            <div class="collapse navbar-collapse" id="navbarToggler">
-                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                    <li ${isProvider} class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                            Manage
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="./managetheatre.jsp">Theatre</a>
-                            <a class="dropdown-item" href="./managemovie.jsp">Movie</a>
-                            <a class="dropdown-item" href="./manageschedule.jsp">Schedule</a>
-                            <a class="dropdown-item" href="./managestaff.jsp">Staff</a>
-                        </div>
-                    </li>
-                    <li class="nav-item active">
-                        <form class="form-inline my-2 my-lg-0">
-                            <label for="theatreName" class="mx-2 navbar-brand">Theatre Name</label>
-                            <input class="form-control mr-sm-2" type="search" placeholder="Zipcode">
-                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Enter</button>
-                        </form>
-                    </li>
-                </ul>
-                <a ${signedOut} class="nav-link" href="./signin.jsp">Sign In</a>
-                <a ${signedOut} class="nav-link" href="./signup.jsp">Sign Up</a>
-                <form action="" method="POST">
-                    <input class="submitLink" ${signedIn} type="submit" value="${userName}">
-                </form>
-                <form action="SignOut" method="POST">
-                    <input class="submitLink" ${signedIn} type="submit" value="Sign Out">
-                </form>
-            </div>
-        </nav>
+        <jsp:include page="/navbar.jsp" />
 
-        <!-- Movie Schedules -->
+        <!-- Page Content -->
         <div class="container">
             <h1 class="display-4">Showtimes</h1>
             <c:forEach items="${movies}" var="movie">

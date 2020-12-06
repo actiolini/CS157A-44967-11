@@ -104,19 +104,20 @@ public class MovieDAO {
 
     public void updateMovieInfo(String movieId, String title, String releaseDate, String duration, String trailer,
             InputStream poster, long posterSize, String description) throws Exception {
-        String UPDATE_MOVIE_INFO = "UPDATE movie SET title=?, release_date=?, duration=?, trailer=?, description=? WHERE movie_id = ?;";
+        String UPDATE_MOVIE_INFO = "UPDATE movie SET title=?, release_date=?, duration=?, trailer=?,poster=?, description=? WHERE movie_id = ?;";
         int id = Integer.parseInt(movieId);
         Connection conn = DBConnection.connect();
         conn.setAutoCommit(false);
         try {
-            BuddyBucket.uploadPoster(id, poster, posterSize);
+            String posterURL = BuddyBucket.uploadPoster(id, poster, posterSize);
             PreparedStatement updateMovieInfo = conn.prepareStatement(UPDATE_MOVIE_INFO);
             updateMovieInfo.setString(1, title);
             updateMovieInfo.setDate(2, Date.valueOf(releaseDate));
             updateMovieInfo.setInt(3, Integer.parseInt(duration));
             updateMovieInfo.setString(4, trailer);
-            updateMovieInfo.setString(5, description);
-            updateMovieInfo.setInt(6, id);
+            updateMovieInfo.setString(5, posterURL);
+            updateMovieInfo.setString(6, description);
+            updateMovieInfo.setInt(7, id);
             updateMovieInfo.executeUpdate();
             conn.commit();
         } catch (SQLException e) {
