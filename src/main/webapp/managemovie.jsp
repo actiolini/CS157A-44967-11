@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="moviebuddy.util.Passwords" %>
-<jsp:include page="/GetMovie" />
+<jsp:include page="/MovieGet" />
 <%
     response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
     response.setHeader("Pragma", "no-cache"); // HTTP 1.0
@@ -21,6 +21,9 @@
     if(session.getAttribute("email") == null || !session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr())) || session.getAttribute("staffId") == null || !(session.getAttribute("role").equals("admin") || session.getAttribute("role").equals("manager"))){
         response.sendRedirect("home.jsp");
     }
+
+    request.setAttribute("errorMessage", session.getAttribute("errorMessage"));
+    session.removeAttribute("errorMessage");
 %>
 <html lang="en">
 
@@ -51,7 +54,8 @@
                 <div class="col"></div>
             </div>
             <hr>
-            <c:forEach items="${movies}" var="movie">
+            <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
+            <c:forEach items="${movieList}" var="movie">
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
@@ -85,13 +89,13 @@
                         <div class="row">
                             <div class="col">
                                 <div class="container">
-                                    <form action="LoadMovie" method="POST" class="button">
+                                    <form action="MovieLoadEdit" method="POST" class="button">
                                         <input type="hidden" name="movieId" value=${movie.getId()} />
-                                        <input type="submit" class="btn btn-primary" value="Edit" />
+                                        <input type="submit" class="btn btn-outline-info" value="Edit" />
                                     </form>
-                                    <form action="DeleteMovie" method="POST" class="button">
+                                    <form action="MovieDelete" method="POST" class="button">
                                         <input type="hidden" name="movieId" value=${movie.getId()} />
-                                        <input type="submit" class="btn btn-primary" value="Delete" />
+                                        <input type="submit" class="btn btn-outline-info" value="Delete" />
                                     </form>
                                 </div>
                             </div>

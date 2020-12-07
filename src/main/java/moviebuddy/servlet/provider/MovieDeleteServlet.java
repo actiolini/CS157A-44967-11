@@ -5,13 +5,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import java.io.IOException;
 
 import moviebuddy.dao.MovieDAO;
 
-@WebServlet("/DeleteMovie")
-public class DeleteMovieServlet extends HttpServlet {
+@WebServlet("/MovieDelete")
+public class MovieDeleteServlet extends HttpServlet {
     private static final long serialVersionUID = -2683675903760366416L;
     private MovieDAO movieDAO;
 
@@ -23,8 +24,12 @@ public class DeleteMovieServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             String movieId = request.getParameter("movieId");
-            movieDAO.deleteMovieInfo(movieId);
-            response.sendRedirect("./managemovie.jsp");
+            String errorMessage = movieDAO.deleteMovie(movieId);
+            if (!errorMessage.isEmpty()) {
+                HttpSession session = request.getSession();
+                session.setAttribute("errorMessage", errorMessage);
+            }
+            response.sendRedirect("managemovie.jsp");
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("error.jsp");

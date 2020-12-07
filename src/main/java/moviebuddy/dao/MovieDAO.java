@@ -15,7 +15,7 @@ import moviebuddy.model.Movie;
 import moviebuddy.util.DBConnection;
 
 public class MovieDAO {
-    public String uploadMovieInfo(String title, String releaseDate, String duration, String trailer, InputStream poster,
+    public String uploadMovie(String title, String releaseDate, String duration, String trailer, InputStream poster,
             long posterSize, String description) throws Exception {
         String INSERT_MOVIE_INFO = "INSERT INTO movie (title, release_date, duration, trailer, description) VALUES (?,?,?,?,?)";
         String QUERY_MOVIE_ID = "SELECT LAST_INSERT_ID() as id";
@@ -41,6 +41,7 @@ public class MovieDAO {
             }
             String posterURL = BuddyBucket.uploadPoster(posterId, poster, posterSize);
             if (posterURL.isEmpty()) {
+                conn.rollback();
                 return "Fail to upload poster";
             }
             PreparedStatement updateMoviePoster = conn.prepareStatement(UPDATE_MOVIE_POSTER);
@@ -62,7 +63,7 @@ public class MovieDAO {
         return "";
     }
 
-    public List<Movie> getMoviesInfo() throws Exception {
+    public List<Movie> listMovies() throws Exception {
         String QUERY_MOVIES_INFO = "SELECT movie_id, title, release_date, duration, poster, trailer, description FROM movie ORDER BY release_date DESC;";
         Connection conn = DBConnection.connect();
         PreparedStatement queryMoviesInfo = conn.prepareStatement(QUERY_MOVIES_INFO);
@@ -83,7 +84,7 @@ public class MovieDAO {
         return movies;
     }
 
-    public Movie getMovieInfo(int movieId) throws Exception {
+    public Movie getMovieById(int movieId) throws Exception {
         String QUERY_MOVIE_INFO = "SELECT title, release_date, duration, trailer, description FROM movie WHERE movie_id=?;";
         Connection conn = DBConnection.connect();
         PreparedStatement queryMovieInfo = conn.prepareStatement(QUERY_MOVIE_INFO);
@@ -102,23 +103,29 @@ public class MovieDAO {
         return movie;
     }
 
-    public void updateMovieInfo(String movieId, String title, String releaseDate, String duration, String trailer,
+    public String updateMovie(String movieId, String title, String releaseDate, String duration, String trailer,
             InputStream poster, long posterSize, String description) throws Exception {
-        String UPDATE_MOVIE_INFO = "UPDATE movie SET title=?, release_date=?, duration=?, trailer=?,poster=?, description=? WHERE movie_id = ?;";
+        String UPDATE_MOVIE = "UPDATE movie SET title=?, release_date=?, duration=?, trailer=?, description=? WHERE movie_id = ?;";
+        String UPDATE_POSTER = "UPDATE movie SET poster=? WHERE movie_id = ?;";
         int id = Integer.parseInt(movieId);
         Connection conn = DBConnection.connect();
         conn.setAutoCommit(false);
         try {
-            String posterURL = BuddyBucket.uploadPoster(id, poster, posterSize);
-            PreparedStatement updateMovieInfo = conn.prepareStatement(UPDATE_MOVIE_INFO);
-            updateMovieInfo.setString(1, title);
-            updateMovieInfo.setDate(2, Date.valueOf(releaseDate));
-            updateMovieInfo.setInt(3, Integer.parseInt(duration));
-            updateMovieInfo.setString(4, trailer);
-            updateMovieInfo.setString(5, posterURL);
-            updateMovieInfo.setString(6, description);
-            updateMovieInfo.setInt(7, id);
-            updateMovieInfo.executeUpdate();
+            PreparedStatement updateMovie = conn.prepareStatement(UPDATE_MOVIE);
+            updateMovie.setString(1, title);
+            updateMovie.setDate(2, Date.valueOf(releaseDate));
+            updateMovie.setInt(3, Integer.parseInt(duration));
+            updateMovie.setString(4, trailer);
+            updateMovie.setString(5, description);
+            updateMovie.setInt(6, id);
+            updateMovie.executeUpdate();
+            if (posterSize > 0) {
+                String posterURL = BuddyBucket.uploadPoster(id, poster, posterSize);
+                PreparedStatement updatePoster = conn.prepareStatement(UPDATE_POSTER);
+                updatePoster.setString(1, posterURL);
+                updatePoster.setInt(2, id);
+                updatePoster.executeUpdate();
+            }
             conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -128,20 +135,26 @@ public class MovieDAO {
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
+            return "Fail to update";
         } finally {
             conn.setAutoCommit(true);
         }
+        return "";
     }
 
-    public void deleteMovieInfo(String movieId) throws Exception {
-        String DELETE_MOVIE_INFO = "DELETE FROM movie WHERE movie_id=?";
+    public String deleteMovie(String movieId) throws Exception {
+        String DELETE_SCHEDULE = "DELETE FROM movie_schedule WHERE movie_id=?;";
+        String DELETE_MOVIE = "DELETE FROM movie WHERE movie_id=?";
         int id = Integer.parseInt(movieId);
         Connection conn = DBConnection.connect();
         conn.setAutoCommit(false);
         try {
-            PreparedStatement updateMovieInfo = conn.prepareStatement(DELETE_MOVIE_INFO);
-            updateMovieInfo.setInt(1, id);
-            updateMovieInfo.executeUpdate();
+            PreparedStatement deleteSchedule = conn.prepareStatement(DELETE_SCHEDULE);
+            deleteSchedule.setInt(1, id);
+            deleteSchedule.executeUpdate();
+            PreparedStatement deleteMovie = conn.prepareStatement(DELETE_MOVIE);
+            deleteMovie.setInt(1, id);
+            deleteMovie.executeUpdate();
             conn.commit();
             BuddyBucket.deletePoster(id);
         } catch (SQLException e) {
@@ -152,8 +165,10 @@ public class MovieDAO {
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
+            return "Fail to delete";
         } finally {
             conn.setAutoCommit(true);
         }
+        return "";
     }
 }
