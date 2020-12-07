@@ -21,6 +21,24 @@
             text-align: center;
             font-size: 40px;
         }
+
+        .link {
+            background-color: transparent;
+            border: none;
+            color: #007bff;
+            cursor: pointer;
+            font-size: 1rem;
+            text-decoration: none;
+        }
+
+        .link:hover {
+            color: #0056b3;
+            text-decoration: none;
+        }
+
+        .link:focus {
+            outline: none;
+        }
     </style>
 </head>
 
@@ -30,7 +48,7 @@
         <div class='textbox'>
             <p class='errMsg'>Oops!!!</p>
             It seems like something just went wrong.<br>
-            Please <a class="asLink" href="home.jsp">click here</a> to return to our home page.
+            Please <a class="link" href="home.jsp">click here</a> to return to our home page.
         </div>
     </div>
 </body>

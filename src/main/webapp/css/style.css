@@ -1,17 +1,23 @@
-.asLink {
+.formAsLink{
+    margin-bottom: 0px;
+}
+
+.inputAsLink {
     background-color: transparent;
     border: none;
     color: #007bff;
     cursor: pointer;
     padding: 8px 16px;
     font-size: 1rem;
+    text-decoration: none;
 }
 
-.asLink:hover {
+.inputAsLink:hover {
     color: #0056b3;
+    text-decoration: none;
 }
 
-.asLink:focus {
+.inputAsLink:focus {
     outline: none;
 }
 
@@ -25,5 +31,20 @@
 
 .button {
     display: inline-block;
+    margin-bottom: 0px;
 }
 
+table {
+    width: 100%;
+    vertical-align: baseline;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 10px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
