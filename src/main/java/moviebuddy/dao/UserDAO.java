@@ -54,7 +54,7 @@ public class UserDAO {
     }
 
     public User getRegisteredUser(String email) throws Exception {
-        String QUERY_REGISTERED_USER = "SELECT account_id, name, email, hashpw, salt, zip_code FROM registered_user WHERE email = ? ;";
+        String QUERY_REGISTERED_USER = "SELECT account_id, name, hashpw, salt, zip_code FROM registered_user WHERE email = ? ;";
         Connection conn = DBConnection.connect();
         PreparedStatement getRegisteredUser = conn.prepareStatement(QUERY_REGISTERED_USER);
         getRegisteredUser.setString(1, email);
@@ -64,7 +64,7 @@ public class UserDAO {
             user = new User();
             user.setAccountId(res.getInt("account_id"));
             user.setUserName(res.getString("name"));
-            user.setEmail(res.getString("email"));
+            user.setEmail(email);
             user.setHashPassword(res.getBytes("hashpw"));
             user.setSalt(res.getBytes("salt"));
             user.setZip(res.getString("zip_code"));

@@ -1,4 +1,5 @@
 package moviebuddy.model;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -60,12 +61,12 @@ public class Ticket {
         this.theatreName = theatreName;
     }
 
-    public void setShowTime() {
-        this.showTime=showTime;
+    public void setShowTime(LocalTime showTime) {
+        this.showTime = showTime;
     }
 
-    public void setShowDate() {
-        this.showDate=showDate;
+    public void setShowDate(LocalDate showDate) {
+        this.showDate = showDate;
     }
 
     public String getFormattedDate() {

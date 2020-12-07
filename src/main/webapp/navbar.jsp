@@ -58,18 +58,18 @@
             <li class="nav-item active">
                 <form class="form-inline my-2 my-lg-0">
                     <label for="theatreName" class="mx-2 navbar-brand">Theatre Name</label>
-                    <input class="form-control mr-sm-2" type="search" placeholder="Zipcode">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Zip Code">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Enter</button>
                 </form>
             </li>
         </ul>
         <a ${signedOut} class="nav-link" href="./signin.jsp">Sign In</a>
         <a ${signedOut} class="nav-link" href="./signup.jsp">Sign Up</a>
-        <form action="" method="POST" style="margin-bottom: 0px;">
-            <input class="asLink" ${signedIn} type="submit" value="${userName}">
+        <form action="" method="POST" class="formAsLink">
+            <input class="inputAsLink" ${signedIn} type="submit" value="${userName}">
         </form>
-        <form action="SignOut" method="POST" style="margin-bottom: 0px;">
-            <input class="asLink" ${signedIn} type="submit" value="Sign Out">
+        <form action="SignOut" method="POST" class="formAsLink">
+            <input class="inputAsLink" ${signedIn} type="submit" value="Sign Out">
         </form>
     </div>
 </nav>

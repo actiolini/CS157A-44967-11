@@ -15,10 +15,16 @@ import java.io.InputStream;
 import moviebuddy.dao.MovieDAO;
 import moviebuddy.util.Validation;
 
-@WebServlet("/UploadMovie")
+@WebServlet("/MovieUpload")
 @MultipartConfig
-public class UploadMovieSevlet extends HttpServlet {
+public class MovieUploadSevlet extends HttpServlet {
     private static final long serialVersionUID = 3223494789974884818L;
+
+    private static final String TITLE = "movieTitleUpload";
+    private static final String RELEASE_DATE = "movieReleaseDateUpload";
+    private static final String DURATION = "movieDurationUpload";
+    private static final String TRAILER = "movieTrailerUpload";
+    private static final String DESCRIPTION = "movieDescriptionUpload";
     private MovieDAO movieDAO;
 
     public void init() {
@@ -36,13 +42,18 @@ public class UploadMovieSevlet extends HttpServlet {
             InputStream streamPoster = partPoster.getInputStream();
             long posterSize = partPoster.getSize();
             String description = Validation.sanitize(request.getParameter("description"));
-            String errorMessage = movieDAO.uploadMovieInfo(title, releaseDate, duration, trailer, streamPoster,
-                    posterSize, description);
+            String errorMessage = movieDAO.uploadMovie(title, releaseDate, duration, trailer, streamPoster, posterSize,
+                    description);
             HttpSession session = request.getSession();
             session.setAttribute("errorMessage", errorMessage);
             if (errorMessage.isEmpty()) {
                 response.sendRedirect("managemovie.jsp");
             } else {
+                session.setAttribute(TITLE, title);
+                session.setAttribute(RELEASE_DATE, releaseDate);
+                session.setAttribute(DURATION, duration);
+                session.setAttribute(TRAILER, trailer);
+                session.setAttribute(DESCRIPTION, description);
                 response.sendRedirect("movieupload.jsp");
             }
         } catch (Exception e) {

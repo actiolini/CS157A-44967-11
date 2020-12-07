@@ -6,6 +6,7 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import java.io.IOException;
@@ -14,9 +15,9 @@ import java.io.InputStream;
 import moviebuddy.dao.MovieDAO;
 import moviebuddy.util.Validation;
 
-@WebServlet("/EditMovie")
+@WebServlet("/MovieEdit")
 @MultipartConfig
-public class EditMovieServlet extends HttpServlet {
+public class MovieEditServlet extends HttpServlet {
     private static final long serialVersionUID = 6293849533123808650L;
     private MovieDAO movieDAO;
 
@@ -28,7 +29,7 @@ public class EditMovieServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             if (request.getParameter("action").equals("save")) {
-                String movieId = request.getParameter("movieId");
+                String movieId = Validation.sanitize(request.getParameter("movieId"));
                 String title = Validation.sanitize(request.getParameter("title"));
                 String releaseDate = Validation.sanitize(request.getParameter("releaseDate"));
                 String duration = Validation.sanitize(request.getParameter("duration"));
@@ -37,10 +38,19 @@ public class EditMovieServlet extends HttpServlet {
                 InputStream streamPoster = partPoster.getInputStream();
                 long posterSize = partPoster.getSize();
                 String description = Validation.sanitize(request.getParameter("description"));
-                movieDAO.updateMovieInfo(movieId, title, releaseDate, duration, trailer, streamPoster, posterSize,
-                        description);
+                String errorMessage = movieDAO.updateMovie(movieId, title, releaseDate, duration, trailer, streamPoster,
+                        posterSize, description);
+                if (errorMessage.isEmpty()) {
+                    response.sendRedirect("managemovie.jsp");
+                } else {
+                    HttpSession session = request.getSession();
+                    session.setAttribute("errorMessage", errorMessage);
+                    response.sendRedirect("movieedit.jsp");
+                }
             }
-            response.sendRedirect("./managemovie.jsp");
+            if (request.getParameter("action").equals("cancel")) {
+                response.sendRedirect("managemovie.jsp");
+            }
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("error.jsp");

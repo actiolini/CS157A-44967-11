@@ -21,17 +21,8 @@
         response.sendRedirect("home.jsp");
     }
 
-    request.setAttribute("movieId", session.getAttribute("editMovieId"));
-    request.setAttribute("title", session.getAttribute("editTitle"));
-    request.setAttribute("releaseDate", session.getAttribute("editReleaseDate"));
-    request.setAttribute("duration", session.getAttribute("editDuration"));
-    request.setAttribute("trailer", session.getAttribute("editTrailer"));
-    request.setAttribute("description", session.getAttribute("editDescription"));
-
     request.setAttribute("errorMessage", session.getAttribute("errorMessage"));
-    request.setAttribute("goodMessage", session.getAttribute("goodMessage"));
     session.removeAttribute("errorMessage");
-    session.removeAttribute("goodMessage");
 %>
 <html lang="en">
 
@@ -53,39 +44,41 @@
 
         <!-- Page Content -->
         <div class="container">
-            <h1 class="display-3 text-center">Upload Movie Information</h1>
+            <h1 class="display-3 text-center">Update Movie Information</h1>
             <hr>
+            <a class="inputAsLink" href="./managemovie.jsp">&#8249;
+                <span>Back</span>
+            </a>
             <div class="row">
                 <div class="col"></div>
                 <div class="col-6">
-                    <p class="text-center goodmessage">${goodMessage}</p>
                     <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
-                    <form id="editMovieForm" action="EditMovie" method="POST" enctype="multipart/form-data"
+                    <form id="editMovieForm" action="MovieEdit" method="POST" enctype="multipart/form-data"
                         onsubmit="return validateMovieUpload(this)">
                         <div class="form-group">
                             <input type="hidden" name="action" value="save" />
                         </div>
                         <div class="form-group">
-                            <input type="hidden" name="movieId" value="${movieId}" />
+                            <input type="hidden" name="movieId" value="${movieIdEdit}" />
                         </div>
                         <div class="form-group">
                             <label>Title</label><br>
                             <input class="inputbox" name="title" type="text" placeholder="Enter title"
-                                value="${title}" />
+                                value="${movieTitleEdit}" />
                         </div>
                         <div class="form-group">
                             <label>Release Date</label><br>
-                            <input class="inputbox" name="releaseDate" type="date" value="${releaseDate}" />
+                            <input class="inputbox" name="releaseDate" type="date" value="${movieReleaseDateEdit}" />
                         </div>
                         <div class="form-group">
                             <label>Duration</label><br>
                             <input class="inputbox" name="duration" type="text" placeholder="Enter duration in minutes"
-                                value="${duration}" />
+                                value="${movieDurationEdit}" />
                         </div>
                         <div class="form-group">
                             <label>Trailer Source</label><br>
                             <input class="inputbox" name="trailer" type="text" placeholder="Enter trailer source..."
-                                value="${trailer}" />
+                                value="${movieTrailerEdit}" />
                         </div>
                         <div class="form-group">
                             <label>Poster</label><br>
@@ -94,20 +87,20 @@
                         <div class="form-group">
                             <label>Description</label><br>
                             <textarea class="inputbox" name="description" cols="60" rows="5" maxlength="1000"
-                                placeholder="Enter movie description...">${description}</textarea>
+                                placeholder="Enter movie description...">${movieDescriptionEdit}</textarea>
                         </div>
                     </form>
-                    <form id="cancelMovieForm" action="EditMovie" method="POST">
+                    <form id="cancelMovieForm" action="MovieEdit" method="POST">
                         <div class="form-group">
                             <input type="hidden" name="action" value="cancel" />
                         </div>
                     </form>
                     <div class="text-center">
                         <div class="button">
-                            <input form="editMovieForm" type="submit" class="btn btn-primary" value="Save">
+                            <input form="editMovieForm" type="submit" class="btn btn-outline-info" value="Save">
                         </div>
                         <div class="button">
-                            <input form="cancelMovieForm" type="submit" class="btn btn-primary" value="Cancel" />
+                            <input form="cancelMovieForm" type="submit" class="btn btn-outline-info" value="Cancel" />
                         </div>
                     </div>
                 </div>

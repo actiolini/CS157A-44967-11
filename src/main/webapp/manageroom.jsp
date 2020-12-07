@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="moviebuddy.util.Passwords" %>
-<jsp:include page="/MovieGet" />
+<jsp:include page="/RoomGet" />
 <%
     response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
     response.setHeader("Pragma", "no-cache"); // HTTP 1.0
@@ -17,7 +17,7 @@
         int count = (int) session.getAttribute("count");
         session.setAttribute("count", count + 1);
     }
-    
+
     if(session.getAttribute("email") == null || !session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr())) || session.getAttribute("staffId") == null || !(session.getAttribute("role").equals("admin") || session.getAttribute("role").equals("manager"))){
         response.sendRedirect("home.jsp");
     }
@@ -33,7 +33,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
         integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="./css/style.css">
-    <title>Movie Buddy | Manage Movie</title>
+    <title>Movie Buddy | Manage Theatre</title>
 </head>
 
 <body style="height: 100%; display: flex; flex-direction: column;">
@@ -43,67 +43,51 @@
 
         <!-- Page Content -->
         <div class="container">
+            <h3>Theatre: ${roomTheatreName}</h3>
             <hr>
+            <a class="inputAsLink" href="./managetheatre.jsp">&#8249;
+                <span>Back</span>
+            </a>
             <div class="row">
                 <div class="col"></div>
                 <div class="col-6 text-center">
-                    <a href="./movieupload.jsp">
-                        <button type="button" class="btn btn-outline-info">Upload Movie</button>
+                    <a href="./roomcreate.jsp">
+                        <button type="button" class="btn btn-outline-info">Add Room</button>
                     </a>
                 </div>
                 <div class="col"></div>
             </div>
             <hr>
             <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
-            <c:forEach items="${movieList}" var="movie">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col col-lg-5">
-                                <div class="text-center">
-                                    <img src=${movie.getPoster()} class="rounded mx-auto w-100" alt="poster">
-                                </div>
+            <table>
+                <tr>
+                    <th>Room Number</th>
+                    <th>Number of Rows</th>
+                    <th>Seats per Row</th>
+                    <th></th>
+                </tr>
+                <c:forEach items="${roomList}" var="room">
+                    <tr>
+                        <td>${room.getRoomNumber()}</td>
+                        <td>${room.getNumberOfRows()}</td>
+                        <td>${room.getSeatsPerRow()}</td>
+                        <td class="text-center">
+                            <div class="container">
+                                <form action="RoomLoadEdit" method="POST" class="button">
+                                    <input type="hidden" name="theatreId" value="${roomTheatreId}" />
+                                    <input type="hidden" name="roomNumber" value="${room.getRoomNumber()}" />
+                                    <input type="submit" class="btn btn-outline-info" value="Edit" />
+                                </form>
+                                <form action="RoomDelete" method="POST" class="button">
+                                    <input type="hidden" name="theatreId" value="${roomTheatreId}" />
+                                    <input type="hidden" name="roomNumber" value="${room.getRoomNumber()}" />
+                                    <input type="submit" class="btn btn-outline-info" value="Delete" />
+                                </form>
                             </div>
-                            <div class="col">
-                                <ul class="list-inline">
-                                    <li class="list-inline-item">
-                                        <h1>${movie.getTitle()}</h1>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <p class="">Length: ${movie.getDuration()} minutes</p>
-                                    </li>
-                                </ul>
-                                <hr>
-                                <h3>Trailer</h3>
-                                <div class="embed-responsive embed-responsive-16by9">
-                                    <iframe width="907" height="510" src="${movie.getTrailer()}" frameborder="0"
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                        allowfullscreen></iframe>
-                                </div>
-                                <hr>
-                                <h3>Description</h3>
-                                <p>${movie.getDescription()}</p>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col">
-                                <div class="container">
-                                    <form action="MovieLoadEdit" method="POST" class="button">
-                                        <input type="hidden" name="movieId" value=${movie.getId()} />
-                                        <input type="submit" class="btn btn-outline-info" value="Edit" />
-                                    </form>
-                                    <form action="MovieDelete" method="POST" class="button">
-                                        <input type="hidden" name="movieId" value=${movie.getId()} />
-                                        <input type="submit" class="btn btn-outline-info" value="Delete" />
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <br>
-            </c:forEach>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </table>
         </div>
     </div>
     <div style="flex-shrink: 0;">

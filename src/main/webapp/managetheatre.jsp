@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="moviebuddy.util.Passwords" %>
+<jsp:include page="/TheatreGet" />
 <%
     response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
     response.setHeader("Pragma", "no-cache"); // HTTP 1.0
@@ -32,16 +33,61 @@
     <title>Movie Buddy | Manage Theatre</title>
 </head>
 
-<body style="height: 100%; display: flex; flex-direction: column;"
-    onload="refillSignUp('${signupUserName}', '${signupEmail}')">
+<body style="height: 100%; display: flex; flex-direction: column;">
     <div style="flex: 1 0 auto;">
         <!-- Navigation bar -->
         <jsp:include page="/navbar.jsp" />
 
         <!-- Page Content -->
         <div class="container">
-
+            <hr>
+            <div class="row">
+                <div class="col"></div>
+                <div class="col-6 text-center">
+                    <a href="./theatrecreate.jsp">
+                        <button type="button" class="btn btn-outline-info">Create Theatre</button>
+                    </a>
+                </div>
+                <div class="col"></div>
+            </div>
+            <hr>
+            <table>
+                <tr>
+                    <th>Theatre Name</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Country</th>
+                    <th>Zip</th>
+                    <th></th>
+                </tr>
+                <c:forEach items="${theatreList}" var="theatre">
+                    <tr>
+                        <td>${theatre.getTheatreName()}</td>
+                        <td>${theatre.getAddress()}</td>
+                        <td>${theatre.getCity()}</td>
+                        <td>${theatre.getState()}</td>
+                        <td>${theatre.getCountry()}</td>
+                        <td>${theatre.getZip()}</td>
+                        <td class="text-center">
+                            <form action="RoomGet" method="POST" class="button">
+                                <input type="hidden" name="theatreId" value="${theatre.getId()}" />
+                                <input type="submit" class="btn btn-outline-info" value="Room" />
+                            </form>
+                            <form action="TheatreLoadEdit" method="POST" class="button">
+                                <input type="hidden" name="theatreId" value="${theatre.getId()}" />
+                                <input type="submit" class="btn btn-outline-info" value="Edit" />
+                            </form>
+                            <form action="TheatreDelete" method="POST" class="button">
+                                <input type="hidden" name="theatreId" value="${theatre.getId()}" />
+                                <input type="submit" class="btn btn-outline-info" value="Delete" />
+                            </form>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </table>
         </div>
+    </div>
     </div>
     <div style="flex-shrink: 0;">
         <hr>
