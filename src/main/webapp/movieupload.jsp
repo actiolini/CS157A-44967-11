@@ -22,7 +22,17 @@
     }
 
     request.setAttribute("errorMessage", session.getAttribute("errorMessage"));
+    request.setAttribute("movieTitleUpload", session.getAttribute("movieTitleUpload"));
+    request.setAttribute("movieReleaseDateUpload", session.getAttribute("movieReleaseDateUpload"));
+    request.setAttribute("movieDurationUpload", session.getAttribute("movieDurationUpload"));
+    request.setAttribute("movieTrailerUpload", session.getAttribute("movieTrailerUpload"));
+    request.setAttribute("movieDescriptionUpload", session.getAttribute("movieDescriptionUpload"));
     session.removeAttribute("errorMessage");
+    session.removeAttribute("movieTitleUpload");
+    session.removeAttribute("movieReleaseDateUpload");
+    session.removeAttribute("movieDurationUpload");
+    session.removeAttribute("movieTrailerUpload");
+    session.removeAttribute("movieDescriptionUpload");
 %>
 <html lang="en">
 
@@ -46,40 +56,45 @@
         <div class="container">
             <h1 class="display-3 text-center">Upload Movie Information</h1>
             <hr>
+            <a class="inputAsLink" href="./managemovie.jsp">&#8249;
+                <span>Back</span>
+            </a>
             <div class="row">
                 <div class="col"></div>
                 <div class="col-6">
                     <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
-                    <form id="uploadMovieForm" action="UploadMovie" method="POST" enctype="multipart/form-data"
+                    <form id="uploadMovieForm" action="MovieUpload" method="POST" enctype="multipart/form-data"
                         onsubmit="return validateMovieUpload(this)">
                         <div class="form-group">
-                            <label>Title</label><br>
-                            <input class="inputbox" name="title" type="text" placeholder="Enter title" />
+                            <label>Title</label><span class="errormessage">*</span><br>
+                            <input class="inputbox" name="title" type="text" placeholder="Enter title"
+                                value="${movieTitleUpload}" />
                         </div>
                         <div class="form-group">
-                            <label>Release Date</label><br>
-                            <input class="inputbox" name="releaseDate" type="date" />
+                            <label>Release Date</label><span class="errormessage">*</span><br>
+                            <input class="inputbox" name="releaseDate" type="date" value="${movieReleaseDateUpload}" />
                         </div>
                         <div class="form-group">
-                            <label>Duration</label><br>
-                            <input class="inputbox" name="duration" type="text"
-                                placeholder="Enter duration in minutes" />
+                            <label>Duration</label><span class="errormessage">*</span><br>
+                            <input class="inputbox" name="duration" type="text" placeholder="Enter duration in minutes"
+                                value="${movieDurationUpload}" />
                         </div>
                         <div class="form-group">
-                            <label>Trailer Source</label><br>
-                            <input class="inputbox" name="trailer" type="text" placeholder="Enter trailer source..." />
+                            <label>Trailer Source</label><span class="errormessage">*</span><br>
+                            <input class="inputbox" name="trailer" type="text" placeholder="Enter trailer source..."
+                                value="${movieTrailerUpload}" />
                         </div>
                         <div class="form-group">
                             <label>Poster</label><br>
                             <input class="inputbox" name="poster" type="file" />
                         </div>
                         <div class="form-group">
-                            <label>Description</label><br>
+                            <label>Description</label><span class="errormessage">*</span><br>
                             <textarea class="inputbox" name="description" cols="60" rows="5" maxlength="1000"
-                                placeholder="Enter movie description..."></textarea>
+                                placeholder="Enter movie description...">${movieDescriptionUpload}</textarea>
                         </div>
                         <div class="text-center">
-                            <input type="submit" class="btn btn-primary" value="Upload">
+                            <input type="submit" class="btn btn-outline-info" value="Upload">
                         </div>
                     </form>
                 </div>
