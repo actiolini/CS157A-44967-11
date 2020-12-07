@@ -146,7 +146,7 @@ function validateRole(role) {
     if (role == "none") {
         return "Please select a role\n";
     }
-    if (!(role == "admin" || role == "manager" || role == faculty)) {
+    if (!(role == "admin" || role == "manager" || role == "faculty")) {
         return "Invalid selected role\n";
     }
     return "";
@@ -186,11 +186,45 @@ function validateMovieUpload(form) {
     description = form.description.value
     errorId = document.getElementById("errorMessage");
     if (title == "" || releaseDate == "" || duration == "" || trailer == "" || description == "") {
-        errorId.innerHTML = "One or more fields are empty";
+        errorId.innerHTML = "* required fields"
         return false;
     }
     if (!/^\d+$/.test(duration)) {
-        errorId.innerHTML = "Duration can only be number"
+        errorId.innerHTML = "duration must be a number"
+        return false;
+    }
+    return true;
+}
+
+function validateTheatreUpload(form) {
+    theatreName = form.theatreName.value;
+    address = form.address.value;
+    city = form.city.value;
+    country = form.country.value;
+    zip = form.zip.value;
+    errorId = document.getElementById("errorMessage");
+    if (theatreName == "" || address == "" || city == "" || country == "" || zip == "") {
+        errorId.innerHTML = "* required fields"
+        return false;
+    }
+    if (!/^\d+$/.test(zip)) {
+        errorId.innerHTML = "Invalid zip code"
+        return false;
+    }
+    return true;
+}
+
+function validateRoomCreate(form) {
+    roomNumber = form.roomNumber.value;
+    sections = form.sections.value;
+    seats = form.seats.value;
+    errorId = document.getElementById("errorMessage");
+    if (sections == "" || seats == "") {
+        errorId.innerHTML = "* required fields"
+        return false;
+    }
+    if (!/^\d+$/.test(roomNumber) || !/^\d+$/.test(sections) || !/^\d+$/.test(seats)) {
+        errorId.innerHTML = "Invalid input"
         return false;
     }
     return true;
