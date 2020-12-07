@@ -178,7 +178,7 @@ function checkSignInInput(elementId, errorId) {
     return invalidInput;
 }
 
-function validateMovieUpload(form) {
+function validateMovieForm(form) {
     title = form.title.value;
     releaseDate = form.releaseDate.value;
     duration = form.duration.value;
@@ -196,14 +196,15 @@ function validateMovieUpload(form) {
     return true;
 }
 
-function validateTheatreUpload(form) {
+function validateTheatreForm(form) {
     theatreName = form.theatreName.value;
     address = form.address.value;
     city = form.city.value;
+    state = form.state.value;
     country = form.country.value;
     zip = form.zip.value;
     errorId = document.getElementById("errorMessage");
-    if (theatreName == "" || address == "" || city == "" || country == "" || zip == "") {
+    if (theatreName == "" || address == "" || city == "" || state == "none" || country == "" || zip == "") {
         errorId.innerHTML = "* required fields"
         return false;
     }
@@ -214,7 +215,7 @@ function validateTheatreUpload(form) {
     return true;
 }
 
-function validateRoomCreate(form) {
+function validateRoomForm(form) {
     roomNumber = form.roomNumber.value;
     sections = form.sections.value;
     seats = form.seats.value;

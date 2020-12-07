@@ -53,7 +53,7 @@
                 <div class="col"></div>
                 <div class="col-4">
                     <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
-                    <form id="editRoomForm" action="RoomEdit" method="POST" onsubmit="return validateRoomCreate(this)">
+                    <form id="editRoomForm" action="RoomEdit" method="POST" onsubmit="return validateRoomForm(this)">
                         <div class="form-group">
                             <input type="hidden" name="action" value="save" />
                         </div>

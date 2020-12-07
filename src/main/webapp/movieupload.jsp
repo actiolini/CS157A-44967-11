@@ -64,7 +64,7 @@
                 <div class="col-6">
                     <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
                     <form id="uploadMovieForm" action="MovieUpload" method="POST" enctype="multipart/form-data"
-                        onsubmit="return validateMovieUpload(this)">
+                        onsubmit="return validateMovieForm(this)">
                         <div class="form-group">
                             <label>Title</label><span class="errormessage">*</span><br>
                             <input class="inputbox" name="title" type="text" placeholder="Enter title"

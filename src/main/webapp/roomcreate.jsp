@@ -59,7 +59,7 @@
                 <div class="col"></div>
                 <div class="col-4">
                     <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
-                    <form action="RoomCreate" method="POST" onsubmit="return validateRoomCreate(this)">
+                    <form action="RoomCreate" method="POST" onsubmit="return validateRoomForm(this)">
                         <div class="form-group">
                             <label>Room Number</label><span class="errormessage">*</span><br>
                             <input class="inputbox" name="roomNumber" type="number" min="1"
