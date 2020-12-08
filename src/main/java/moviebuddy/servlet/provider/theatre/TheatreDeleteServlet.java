@@ -24,13 +24,18 @@ public class TheatreDeleteServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            int theatreId = Integer.parseInt(Validation.sanitize(request.getParameter("theatreId")));
-            String errorMessage = theatreDAO.deleteTheatre(theatreId);
-            if (!errorMessage.isEmpty()) {
-                HttpSession session = request.getSession();
-                session.setAttribute("errorMessage", errorMessage);
+            HttpSession session = request.getSession();
+            Object role = session.getAttribute("role");
+            if (role != null && role.equals("admin")) {
+                int theatreId = Integer.parseInt(Validation.sanitize(request.getParameter("theatreId")));
+                String errorMessage = theatreDAO.deleteTheatre(theatreId);
+                if (!errorMessage.isEmpty()) {
+                    session.setAttribute("errorMessage", errorMessage);
+                }
+                response.sendRedirect("managetheatre.jsp");
+            } else {
+                response.sendRedirect("home.jsp");
             }
-            response.sendRedirect("managetheatre.jsp");
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("error.jsp");

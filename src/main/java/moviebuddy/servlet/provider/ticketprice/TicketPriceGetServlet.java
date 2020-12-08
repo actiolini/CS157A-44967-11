@@ -31,14 +31,19 @@ public class TicketPriceGetServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            int theatreId = Integer.parseInt(request.getParameter("theatreId"));
-            Theatre theatre = theatreDAO.getTheatreById(theatreId);
-            List<TicketPrice> ticketPrices = theatreDAO.listTicketPrices(theatreId);
             HttpSession session = request.getSession();
-            session.setAttribute(THEATRE_ID, theatreId);
-            session.setAttribute(THEATRE_NAME, theatre.getTheatreName());
-            session.setAttribute(TICKET_PRICES, ticketPrices);
-            response.sendRedirect("ticketprice.jsp");
+            Object role = session.getAttribute("role");
+            if (role != null && role.equals("admin")) {
+                int theatreId = Integer.parseInt(request.getParameter("theatreId"));
+                Theatre theatre = theatreDAO.getTheatreById(theatreId);
+                List<TicketPrice> ticketPrices = theatreDAO.listTicketPrices(theatreId);
+                session.setAttribute(THEATRE_ID, theatreId);
+                session.setAttribute(THEATRE_NAME, theatre.getTheatreName());
+                session.setAttribute(TICKET_PRICES, ticketPrices);
+                response.sendRedirect("ticketprice.jsp");
+            } else {
+                response.sendRedirect("home.jsp");
+            }
         } catch (Exception e) {
             response.sendRedirect("error.jsp");
             e.printStackTrace();

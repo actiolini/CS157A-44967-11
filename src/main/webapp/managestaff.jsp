@@ -32,9 +32,8 @@
     <title>Movie Buddy | Manage Staff</title>
 </head>
 
-<body style="height: 100%; display: flex; flex-direction: column;"
-    onload="refillSignUp('${signupUserName}', '${signupEmail}')">
-    <div style="flex: 1 0 auto;">
+<body style="height: 100%; display: flex; flex-direction: column;">
+    <div style=" flex: 1 0 auto;">
         <!-- Navigation bar -->
         <jsp:include page="/navbar.jsp" />
 

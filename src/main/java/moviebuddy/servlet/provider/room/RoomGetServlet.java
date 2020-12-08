@@ -31,14 +31,19 @@ public class RoomGetServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            int theatreId = Integer.parseInt(request.getParameter("theatreId"));
-            Theatre theatre = theatreDAO.getTheatreById(theatreId);
-            List<Room> rooms = theatreDAO.listRooms(theatreId);
             HttpSession session = request.getSession();
-            session.setAttribute(THEATRE_ID, theatreId);
-            session.setAttribute(THEATRE_NAME, theatre.getTheatreName());
-            session.setAttribute(ROOMS, rooms);
-            response.sendRedirect("manageroom.jsp");
+            Object role = session.getAttribute("role");
+            if (role != null && role.equals("admin")) {
+                int theatreId = Integer.parseInt(request.getParameter("theatreId"));
+                Theatre theatre = theatreDAO.getTheatreById(theatreId);
+                List<Room> rooms = theatreDAO.listRooms(theatreId);
+                session.setAttribute(THEATRE_ID, theatreId);
+                session.setAttribute(THEATRE_NAME, theatre.getTheatreName());
+                session.setAttribute(ROOMS, rooms);
+                response.sendRedirect("manageroom.jsp");
+            } else {
+                response.sendRedirect("home.jsp");
+            }
         } catch (Exception e) {
             response.sendRedirect("error.jsp");
             e.printStackTrace();

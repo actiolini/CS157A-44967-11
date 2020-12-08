@@ -34,27 +34,32 @@ public class MovieUploadSevlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            String title = Validation.sanitize(request.getParameter("title"));
-            String releaseDate = Validation.sanitize(request.getParameter("releaseDate"));
-            String duration = Validation.sanitize(request.getParameter("duration"));
-            String trailer = Validation.sanitize(request.getParameter("trailer"));
-            Part partPoster = request.getPart("poster");
-            InputStream streamPoster = partPoster.getInputStream();
-            long posterSize = partPoster.getSize();
-            String description = Validation.sanitize(request.getParameter("description"));
-            String errorMessage = movieDAO.uploadMovie(title, releaseDate, duration, trailer, streamPoster, posterSize,
-                    description);
-            if (errorMessage.isEmpty()) {
-                response.sendRedirect("managemovie.jsp");
+            HttpSession session = request.getSession();
+            Object role = session.getAttribute("role");
+            if (role != null && role.equals("admin")) {
+                String title = Validation.sanitize(request.getParameter("title"));
+                String releaseDate = Validation.sanitize(request.getParameter("releaseDate"));
+                String duration = Validation.sanitize(request.getParameter("duration"));
+                String trailer = Validation.sanitize(request.getParameter("trailer"));
+                Part partPoster = request.getPart("poster");
+                InputStream streamPoster = partPoster.getInputStream();
+                long posterSize = partPoster.getSize();
+                String description = Validation.sanitize(request.getParameter("description"));
+                String errorMessage = movieDAO.uploadMovie(title, releaseDate, duration, trailer, streamPoster,
+                        posterSize, description);
+                if (errorMessage.isEmpty()) {
+                    response.sendRedirect("managemovie.jsp");
+                } else {
+                    session.setAttribute("errorMessage", errorMessage);
+                    session.setAttribute(TITLE, title);
+                    session.setAttribute(RELEASE_DATE, releaseDate);
+                    session.setAttribute(DURATION, duration);
+                    session.setAttribute(TRAILER, trailer);
+                    session.setAttribute(DESCRIPTION, description);
+                    response.sendRedirect("movieupload.jsp");
+                }
             } else {
-                HttpSession session = request.getSession();
-                session.setAttribute("errorMessage", errorMessage);
-                session.setAttribute(TITLE, title);
-                session.setAttribute(RELEASE_DATE, releaseDate);
-                session.setAttribute(DURATION, duration);
-                session.setAttribute(TRAILER, trailer);
-                session.setAttribute(DESCRIPTION, description);
-                response.sendRedirect("movieupload.jsp");
+                response.sendRedirect("home.jsp");
             }
         } catch (Exception e) {
             response.sendRedirect("error.jsp");

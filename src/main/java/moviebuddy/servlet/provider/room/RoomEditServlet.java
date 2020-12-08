@@ -29,32 +29,37 @@ public class RoomEditServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            if (request.getParameter("action").equals("save")) {
-                int theatreId = Integer.parseInt(Validation.sanitize(request.getParameter("theatreId")));
-                int roomId = Integer.parseInt(Validation.sanitize(request.getParameter("roomId")));
-                int roomNumber = Integer.parseInt(Validation.sanitize(request.getParameter("roomNumber")));
-                int sections = Integer.parseInt(Validation.sanitize(request.getParameter("sections")));
-                int seats = Integer.parseInt(Validation.sanitize(request.getParameter("seats")));
-                String errorMessage = "";
-                if (roomId != roomNumber && theatreDAO.getRoomById(theatreId, roomNumber) != null) {
-                    errorMessage = "Room number already existed.";
+            HttpSession session = request.getSession();
+            Object role = session.getAttribute("role");
+            if (role != null && role.equals("admin")) {
+                if (request.getParameter("action").equals("save")) {
+                    int theatreId = Integer.parseInt(Validation.sanitize(request.getParameter("theatreId")));
+                    int roomId = Integer.parseInt(Validation.sanitize(request.getParameter("roomId")));
+                    int roomNumber = Integer.parseInt(Validation.sanitize(request.getParameter("roomNumber")));
+                    int sections = Integer.parseInt(Validation.sanitize(request.getParameter("sections")));
+                    int seats = Integer.parseInt(Validation.sanitize(request.getParameter("seats")));
+                    String errorMessage = "";
+                    if (roomId != roomNumber && theatreDAO.getRoomById(theatreId, roomNumber) != null) {
+                        errorMessage = "Room number already existed.";
+                    }
+                    if (errorMessage.isEmpty()) {
+                        errorMessage = theatreDAO.updateRoom(theatreId, roomId, roomNumber, sections, seats);
+                    }
+                    if (errorMessage.isEmpty()) {
+                        response.sendRedirect("manageroom.jsp");
+                    } else {
+                        session.setAttribute("errorMessage", errorMessage);
+                        session.setAttribute(ROOM_NUMBER, request.getParameter("roomNumber"));
+                        session.setAttribute(SECTIONS, request.getParameter("sections"));
+                        session.setAttribute(SEATS, request.getParameter("seats"));
+                        response.sendRedirect("roomedit.jsp");
+                    }
                 }
-                if (errorMessage.isEmpty()) {
-                    errorMessage = theatreDAO.updateRoom(theatreId, roomId, roomNumber, sections, seats);
-                }
-                if (errorMessage.isEmpty()) {
+                if (request.getParameter("action").equals("cancel")) {
                     response.sendRedirect("manageroom.jsp");
-                } else {
-                    HttpSession session = request.getSession();
-                    session.setAttribute("errorMessage", errorMessage);
-                    session.setAttribute(ROOM_NUMBER, request.getParameter("roomNumber"));
-                    session.setAttribute(SECTIONS, request.getParameter("sections"));
-                    session.setAttribute(SEATS, request.getParameter("seats"));
-                    response.sendRedirect("roomedit.jsp");
                 }
-            }
-            if (request.getParameter("action").equals("cancel")) {
-                response.sendRedirect("manageroom.jsp");
+            } else {
+                response.sendRedirect("home.jsp");
             }
         } catch (Exception e) {
             e.printStackTrace();

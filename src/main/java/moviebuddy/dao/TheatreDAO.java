@@ -140,7 +140,7 @@ public class TheatreDAO {
     }
 
     public String deleteTheatre(int theatreId) throws Exception {
-        String DELETE_MANAGE = "DELETE FROM manage WHERE theatre_id=?;";
+        String DELETE_EMPLOY = "DELETE FROM employ WHERE theatre_id=?;";
         String DELETE_TICKET_PRICE = "DELETE FROM ticket_price WHERE theatre_id=?;";
         String DELETE_SCHEDULE = "DELETE FROM movie_schedule WHERE theatre_id=?;";
         String DELETE_ROOM = "DELETE FROM room WHERE theatre_id=?;";
@@ -148,7 +148,7 @@ public class TheatreDAO {
         Connection conn = DBConnection.connect();
         conn.setAutoCommit(false);
         try {
-            PreparedStatement deleteManage = conn.prepareStatement(DELETE_MANAGE);
+            PreparedStatement deleteManage = conn.prepareStatement(DELETE_EMPLOY);
             deleteManage.setInt(1, theatreId);
             deleteManage.executeUpdate();
             PreparedStatement deleteTicketPrice = conn.prepareStatement(DELETE_TICKET_PRICE);

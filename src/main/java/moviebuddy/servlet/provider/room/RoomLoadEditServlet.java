@@ -31,18 +31,23 @@ public class RoomLoadEditServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            int theatreId = Integer.parseInt(Validation.sanitize(request.getParameter("theatreId")));
-            int roomNumber = Integer.parseInt(Validation.sanitize(request.getParameter("roomNumber")));
-            Room room = theatreDAO.getRoomById(theatreId, roomNumber);
-            if (room != null) {
-                HttpSession session = request.getSession();
-                session.setAttribute(ROOM_ID, roomNumber);
-                session.setAttribute(ROOM_NUMBER, room.getRoomNumber());
-                session.setAttribute(SECTIONS, room.getNumberOfRows());
-                session.setAttribute(SEATS, room.getSeatsPerRow());
-                response.sendRedirect("roomedit.jsp");
+            HttpSession session = request.getSession();
+            Object role = session.getAttribute("role");
+            if (role != null && role.equals("admin")) {
+                int theatreId = Integer.parseInt(Validation.sanitize(request.getParameter("theatreId")));
+                int roomNumber = Integer.parseInt(Validation.sanitize(request.getParameter("roomNumber")));
+                Room room = theatreDAO.getRoomById(theatreId, roomNumber);
+                if (room != null) {
+                    session.setAttribute(ROOM_ID, roomNumber);
+                    session.setAttribute(ROOM_NUMBER, room.getRoomNumber());
+                    session.setAttribute(SECTIONS, room.getNumberOfRows());
+                    session.setAttribute(SEATS, room.getSeatsPerRow());
+                    response.sendRedirect("roomedit.jsp");
+                } else {
+                    response.sendRedirect("manageroom.jsp");
+                }
             } else {
-                response.sendRedirect("manageroom.jsp");
+                response.sendRedirect("home.jsp");
             }
         } catch (Exception e) {
             response.sendRedirect("error.jsp");

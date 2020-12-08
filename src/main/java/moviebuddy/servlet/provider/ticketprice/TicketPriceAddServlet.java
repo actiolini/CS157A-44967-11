@@ -28,30 +28,35 @@ public class TicketPriceAddServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            int theatreId = Integer.parseInt(request.getParameter("theatreId"));
-            String startTime = Validation.sanitize(request.getParameter("startTime"));
-            String priceInput = Validation.sanitize(request.getParameter("price"));
-            String errorMessage = Validation.validateTime(startTime);
-            if (errorMessage.isEmpty()) {
-                errorMessage = Validation.validateDouble(priceInput);
+            HttpSession session = request.getSession();
+            Object role = session.getAttribute("role");
+            if (role != null && role.equals("admin")) {
+                int theatreId = Integer.parseInt(request.getParameter("theatreId"));
+                String startTime = Validation.sanitize(request.getParameter("startTime"));
+                String priceInput = Validation.sanitize(request.getParameter("price"));
+                String errorMessage = Validation.validateTime(startTime);
+                if (errorMessage.isEmpty()) {
+                    errorMessage = Validation.validateDouble(priceInput);
+                }
+                double price = 0;
+                if (errorMessage.isEmpty()) {
+                    price = Double.parseDouble(priceInput);
+                }
+                if (errorMessage.isEmpty() && theatreDAO.getTicketPrice(theatreId, startTime) != null) {
+                    errorMessage = "Ticket price already existed";
+                }
+                if (errorMessage.isEmpty()) {
+                    errorMessage = theatreDAO.addTicketPrice(theatreId, startTime, price);
+                }
+                if (!errorMessage.isEmpty()) {
+                    session.setAttribute("errorMessage", errorMessage);
+                    session.setAttribute(START_TIME, startTime);
+                    session.setAttribute(PRICE, priceInput);
+                }
+                response.sendRedirect("ticketprice.jsp");
+            } else {
+                response.sendRedirect("home.jsp");
             }
-            double price = 0;
-            if (errorMessage.isEmpty()) {
-                price = Double.parseDouble(priceInput);
-            }
-            if (errorMessage.isEmpty() && theatreDAO.getTicketPrice(theatreId, startTime) != null) {
-                errorMessage = "Ticket price already existed";
-            }
-            if (errorMessage.isEmpty()) {
-                errorMessage = theatreDAO.addTicketPrice(theatreId, startTime, price);
-            }
-            if (!errorMessage.isEmpty()) {
-                HttpSession session = request.getSession();
-                session.setAttribute("errorMessage", errorMessage);
-                session.setAttribute(START_TIME, startTime);
-                session.setAttribute(PRICE, priceInput);
-            }
-            response.sendRedirect("ticketprice.jsp");
         } catch (Exception e) {
             response.sendRedirect("error.jsp");
             e.printStackTrace();

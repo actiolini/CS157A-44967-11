@@ -23,13 +23,18 @@ public class MovieDeleteServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            String movieId = request.getParameter("movieId");
-            String errorMessage = movieDAO.deleteMovie(movieId);
-            if (!errorMessage.isEmpty()) {
-                HttpSession session = request.getSession();
-                session.setAttribute("errorMessage", errorMessage);
+            HttpSession session = request.getSession();
+            Object role = session.getAttribute("role");
+            if (role != null && role.equals("admin")) {
+                String movieId = request.getParameter("movieId");
+                String errorMessage = movieDAO.deleteMovie(movieId);
+                if (!errorMessage.isEmpty()) {
+                    session.setAttribute("errorMessage", errorMessage);
+                }
+                response.sendRedirect("managemovie.jsp");
+            } else {
+                response.sendRedirect("home.jsp");
             }
-            response.sendRedirect("managemovie.jsp");
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("error.jsp");

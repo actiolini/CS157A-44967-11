@@ -29,26 +29,31 @@ public class RoomCreateServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            int theatreId = Integer.parseInt(Validation.sanitize(request.getParameter("theatreId")));
-            int roomNumber = Integer.parseInt(Validation.sanitize(request.getParameter("roomNumber")));
-            String errorMessage = "";
-            if (theatreDAO.getRoomById(theatreId, roomNumber) != null) {
-                errorMessage = "Room number already existed.";
-            }
-            int sections = Integer.parseInt(Validation.sanitize(request.getParameter("sections")));
-            int seats = Integer.parseInt(Validation.sanitize(request.getParameter("seats")));
-            if (errorMessage.isEmpty()) {
-                errorMessage = theatreDAO.createRoom(theatreId, roomNumber, sections, seats);
-            }
-            if (errorMessage.isEmpty()) {
-                response.sendRedirect("manageroom.jsp");
+            HttpSession session = request.getSession();
+            Object role = session.getAttribute("role");
+            if (role != null && role.equals("admin")) {
+                int theatreId = Integer.parseInt(Validation.sanitize(request.getParameter("theatreId")));
+                int roomNumber = Integer.parseInt(Validation.sanitize(request.getParameter("roomNumber")));
+                String errorMessage = "";
+                if (theatreDAO.getRoomById(theatreId, roomNumber) != null) {
+                    errorMessage = "Room number already existed.";
+                }
+                int sections = Integer.parseInt(Validation.sanitize(request.getParameter("sections")));
+                int seats = Integer.parseInt(Validation.sanitize(request.getParameter("seats")));
+                if (errorMessage.isEmpty()) {
+                    errorMessage = theatreDAO.createRoom(theatreId, roomNumber, sections, seats);
+                }
+                if (errorMessage.isEmpty()) {
+                    response.sendRedirect("manageroom.jsp");
+                } else {
+                    session.setAttribute("errorMessage", errorMessage);
+                    session.setAttribute(ROOM_NUMBER, roomNumber);
+                    session.setAttribute(SECTIONS, sections);
+                    session.setAttribute(SEATS, seats);
+                    response.sendRedirect("roomcreate.jsp");
+                }
             } else {
-                HttpSession session = request.getSession();
-                session.setAttribute("errorMessage", errorMessage);
-                session.setAttribute(ROOM_NUMBER, roomNumber);
-                session.setAttribute(SECTIONS, sections);
-                session.setAttribute(SEATS, seats);
-                response.sendRedirect("roomcreate.jsp");
+                response.sendRedirect("home.jsp");
             }
         } catch (Exception e) {
             response.sendRedirect("error.jsp");
