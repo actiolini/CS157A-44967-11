@@ -44,11 +44,11 @@ public class MovieUploadSevlet extends HttpServlet {
             String description = Validation.sanitize(request.getParameter("description"));
             String errorMessage = movieDAO.uploadMovie(title, releaseDate, duration, trailer, streamPoster, posterSize,
                     description);
-            HttpSession session = request.getSession();
-            session.setAttribute("errorMessage", errorMessage);
             if (errorMessage.isEmpty()) {
                 response.sendRedirect("managemovie.jsp");
             } else {
+                HttpSession session = request.getSession();
+                session.setAttribute("errorMessage", errorMessage);
                 session.setAttribute(TITLE, title);
                 session.setAttribute(RELEASE_DATE, releaseDate);
                 session.setAttribute(DURATION, duration);

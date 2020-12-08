@@ -49,11 +49,9 @@ public class RoomGetServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             HttpSession session = request.getSession();
-            if (session.getAttribute("roomTheatreId") != null) {
-                int theatreId = Integer.parseInt(session.getAttribute("roomTheatreId").toString());
-                Theatre theatre = theatreDAO.getTheatreById(theatreId);
+            if (session.getAttribute(THEATRE_ID) != null) {
+                int theatreId = Integer.parseInt(session.getAttribute(THEATRE_ID).toString());
                 List<Room> rooms = theatreDAO.listRooms(theatreId);
-                session.setAttribute(THEATRE_NAME, theatre.getTheatreName());
                 session.setAttribute(ROOMS, rooms);
             }
         } catch (Exception e) {

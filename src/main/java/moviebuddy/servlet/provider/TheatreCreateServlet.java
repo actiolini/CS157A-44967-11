@@ -45,11 +45,11 @@ public class TheatreCreateServlet extends HttpServlet {
             if (errorMessage.isEmpty()) {
                 errorMessage = theatreDAO.createTheatre(theatreName, address, city, state, country, zip);
             }
-            HttpSession session = request.getSession();
-            session.setAttribute("errorMessage", errorMessage);
             if (errorMessage.isEmpty()) {
                 response.sendRedirect("managetheatre.jsp");
             } else {
+                HttpSession session = request.getSession();
+                session.setAttribute("errorMessage", errorMessage);
                 session.setAttribute(NAME, theatreName);
                 session.setAttribute(ADDRESS, address);
                 session.setAttribute(CITY, city);
