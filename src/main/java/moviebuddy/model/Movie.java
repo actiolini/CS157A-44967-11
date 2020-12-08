@@ -2,6 +2,7 @@ package moviebuddy.model;
 
 import java.util.List;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Movie {
     private int id;
@@ -31,6 +32,10 @@ public class Movie {
 
     public LocalDate getReleaseDate() {
         return releaseDate;
+    }
+
+    public String displayReleaseDate() {
+        return DateTimeFormatter.ofPattern("MMM dd yyy").format(releaseDate);
     }
 
     public String getTrailer() {

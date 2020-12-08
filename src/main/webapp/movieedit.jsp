@@ -54,7 +54,7 @@
                 <div class="col-6">
                     <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
                     <form id="editMovieForm" action="MovieEdit" method="POST" enctype="multipart/form-data"
-                        onsubmit="return validateMovieUpload(this)">
+                        onsubmit="return validateMovieForm(this)">
                         <div class="form-group">
                             <input type="hidden" name="action" value="save" />
                         </div>

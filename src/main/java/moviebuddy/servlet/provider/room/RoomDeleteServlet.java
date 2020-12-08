@@ -1,4 +1,4 @@
-package moviebuddy.servlet.provider;
+package moviebuddy.servlet.provider.room;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,9 +12,10 @@ import java.io.IOException;
 import moviebuddy.dao.TheatreDAO;
 import moviebuddy.util.Validation;
 
-@WebServlet("/TheatreDelete")
-public class TheatreDeleteServlet extends HttpServlet {
-    private static final long serialVersionUID = -3317681345145396262L;
+@WebServlet("/RoomDelete")
+public class RoomDeleteServlet extends HttpServlet {
+    private static final long serialVersionUID = 5778241877398137416L;
+
     private TheatreDAO theatreDAO;
 
     public void init() {
@@ -25,12 +26,13 @@ public class TheatreDeleteServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             int theatreId = Integer.parseInt(Validation.sanitize(request.getParameter("theatreId")));
-            String errorMessage = theatreDAO.deleteTheatre(theatreId);
+            int roomNumber = Integer.parseInt(Validation.sanitize(request.getParameter("roomNumber")));
+            String errorMessage = theatreDAO.deleteRoom(theatreId, roomNumber);
             if (!errorMessage.isEmpty()) {
                 HttpSession session = request.getSession();
                 session.setAttribute("errorMessage", errorMessage);
             }
-            response.sendRedirect("managetheatre.jsp");
+            response.sendRedirect("manageroom.jsp");
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("error.jsp");

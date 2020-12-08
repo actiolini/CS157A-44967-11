@@ -1,4 +1,4 @@
-package moviebuddy.servlet.provider;
+package moviebuddy.servlet.provider.room;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.ServletException;
@@ -40,11 +40,11 @@ public class RoomCreateServlet extends HttpServlet {
             if (errorMessage.isEmpty()) {
                 errorMessage = theatreDAO.createRoom(theatreId, roomNumber, sections, seats);
             }
-            HttpSession session = request.getSession();
-            session.setAttribute("errorMessage", errorMessage);
             if (errorMessage.isEmpty()) {
                 response.sendRedirect("manageroom.jsp");
             } else {
+                HttpSession session = request.getSession();
+                session.setAttribute("errorMessage", errorMessage);
                 session.setAttribute(ROOM_NUMBER, roomNumber);
                 session.setAttribute(SECTIONS, sections);
                 session.setAttribute(SEATS, seats);

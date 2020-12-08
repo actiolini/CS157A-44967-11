@@ -40,7 +40,6 @@
     <div style="flex: 1 0 auto;">
         <!-- Navigation bar -->
         <jsp:include page="/navbar.jsp" />
-
         <!-- Page Content -->
         <div class="container">
             <hr>
@@ -59,6 +58,12 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
+                            <div class="col">
+                                <h1>${movie.getTitle()}</h1>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
                             <div class="col col-lg-5">
                                 <div class="text-center">
                                     <img src=${movie.getPoster()} class="rounded mx-auto w-100" alt="poster">
@@ -66,12 +71,8 @@
                             </div>
                             <div class="col">
                                 <ul class="list-inline">
-                                    <li class="list-inline-item">
-                                        <h1>${movie.getTitle()}</h1>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <p class="">Length: ${movie.getDuration()} minutes</p>
-                                    </li>
+                                    <p><b>Length:</b> ${movie.getDuration()} minutes</p>
+                                    <p><b>Release Date:</b> ${movie.displayReleaseDate()}</p>
                                 </ul>
                                 <hr>
                                 <h3>Trailer</h3>

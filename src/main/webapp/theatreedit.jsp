@@ -52,7 +52,7 @@
                 <div class="col-6">
                     <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
                     <form id="editTheatreForm" action="TheatreEdit" method="POST"
-                        onsubmit="return validateTheatreUpload(this)">
+                        onsubmit="return validateTheatreForm(this)">
                         <div class="form-group">
                             <input type="hidden" name="action" value="save" />
                         </div>
@@ -75,11 +75,9 @@
                                 value="${theatreCityEdit}" />
                         </div>
                         <div class="form-group">
-                            <label>State</label><br>
+                            <label>State</label><span class="errormessage">*</span><br>
                             <select id="state" class="inputbox" name="state">
-                                <option id="default" hidden selected value="none">
-                                    Select a State
-                                </option>
+                                <option id="default" hidden selected value="none">Select a State</option>
                                 <option value="AL">Alabama</option>
                                 <option value="AK">Alaska</option>
                                 <option value="AZ">Arizona</option>

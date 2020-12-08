@@ -64,7 +64,7 @@
                 <div class="col-6">
                     <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
                     <form id="uploadTheatreForm" action="TheatreCreate" method="POST"
-                        onsubmit="return validateTheatreUpload(this)">
+                        onsubmit="return validateTheatreForm(this)">
                         <div class="form-group">
                             <label>Theatre Name</label><span class="errormessage">*</span><br>
                             <input class="inputbox" name="theatreName" type="text" placeholder="Buddy###"
@@ -81,7 +81,7 @@
                                 value="${theatreCityUpload}" />
                         </div>
                         <div class="form-group">
-                            <label>State</label><br>
+                            <label>State</label><span class="errormessage">*</span><br>
                             <select class="inputbox" id="state" name="state">
                                 <option id="default" hidden selected value="none">Select a State</option>
                                 <option value="AL">Alabama</option>

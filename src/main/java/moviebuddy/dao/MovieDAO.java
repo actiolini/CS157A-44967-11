@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Date;
 
 import java.io.InputStream;
 import java.util.List;
@@ -26,7 +25,7 @@ public class MovieDAO {
         try {
             PreparedStatement insertMovieInfo = conn.prepareStatement(INSERT_MOVIE_INFO);
             insertMovieInfo.setString(1, title);
-            insertMovieInfo.setDate(2, Date.valueOf(releaseDate));
+            insertMovieInfo.setString(2, releaseDate);
             insertMovieInfo.setInt(3, Integer.parseInt(duration));
             insertMovieInfo.setString(4, trailer);
             insertMovieInfo.setString(5, description);
@@ -113,7 +112,7 @@ public class MovieDAO {
         try {
             PreparedStatement updateMovie = conn.prepareStatement(UPDATE_MOVIE);
             updateMovie.setString(1, title);
-            updateMovie.setDate(2, Date.valueOf(releaseDate));
+            updateMovie.setString(2, releaseDate);
             updateMovie.setInt(3, Integer.parseInt(duration));
             updateMovie.setString(4, trailer);
             updateMovie.setString(5, description);

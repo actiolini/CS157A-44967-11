@@ -1,4 +1,4 @@
-package moviebuddy.servlet.provider;
+package moviebuddy.servlet.provider.theatre;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,27 +9,28 @@ import javax.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-import moviebuddy.dao.MovieDAO;
+import moviebuddy.dao.TheatreDAO;
+import moviebuddy.util.Validation;
 
-@WebServlet("/MovieDelete")
-public class MovieDeleteServlet extends HttpServlet {
-    private static final long serialVersionUID = -2683675903760366416L;
-    private MovieDAO movieDAO;
+@WebServlet("/TheatreDelete")
+public class TheatreDeleteServlet extends HttpServlet {
+    private static final long serialVersionUID = -3317681345145396262L;
+    private TheatreDAO theatreDAO;
 
     public void init() {
-        movieDAO = new MovieDAO();
+        theatreDAO = new TheatreDAO();
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            String movieId = request.getParameter("movieId");
-            String errorMessage = movieDAO.deleteMovie(movieId);
+            int theatreId = Integer.parseInt(Validation.sanitize(request.getParameter("theatreId")));
+            String errorMessage = theatreDAO.deleteTheatre(theatreId);
             if (!errorMessage.isEmpty()) {
                 HttpSession session = request.getSession();
                 session.setAttribute("errorMessage", errorMessage);
             }
-            response.sendRedirect("managemovie.jsp");
+            response.sendRedirect("managetheatre.jsp");
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("error.jsp");
