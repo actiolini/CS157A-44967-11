@@ -35,7 +35,8 @@
     <title>Movie Buddy | Manage Theatre</title>
 </head>
 
-<body style="height: 100%; display: flex; flex-direction: column;" onload="loadSelectedState('${theatreStateEdit}')">
+<body style="height: 100%; display: flex; flex-direction: column;"
+    onload="loadSelectedOption('default', 'state', '${theatreStateEdit}')">
     <div style="flex: 1 0 auto;">
         <!-- Navigation bar -->
         <jsp:include page="/navbar.jsp" />
