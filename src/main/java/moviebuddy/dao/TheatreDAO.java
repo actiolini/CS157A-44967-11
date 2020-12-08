@@ -7,9 +7,11 @@ import java.sql.SQLException;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.time.LocalTime;
 
 import moviebuddy.model.Theatre;
 import moviebuddy.model.Room;
+import moviebuddy.model.TicketPrice;
 import moviebuddy.util.DBConnection;
 
 public class TheatreDAO {
@@ -130,7 +132,7 @@ public class TheatreDAO {
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
-            return "Fail to update";
+            return "Fail to update theatre";
         } finally {
             conn.setAutoCommit(true);
         }
@@ -170,7 +172,7 @@ public class TheatreDAO {
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
-            return "Fail to delete";
+            return "Fail to delete theatre";
         } finally {
             conn.setAutoCommit(true);
         }
@@ -261,7 +263,7 @@ public class TheatreDAO {
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
-            return "Fail to update";
+            return "Fail to update room";
         } finally {
             conn.setAutoCommit(true);
         }
@@ -291,7 +293,90 @@ public class TheatreDAO {
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
-            return "Fail to delete";
+            return "Fail to delete room";
+        } finally {
+            conn.setAutoCommit(true);
+        }
+        return "";
+    }
+
+    public String addTicketPrice(int theatreId, String startTime, double price) throws Exception {
+        String INSERT_TICKET_PRICE = "INSERT INTO ticket_price (theatre_id, start_time, price) VALUES (?,?,?);";
+        Connection conn = DBConnection.connect();
+        conn.setAutoCommit(false);
+        try {
+            PreparedStatement insertTicketPrice = conn.prepareStatement(INSERT_TICKET_PRICE);
+            insertTicketPrice.setInt(1, theatreId);
+            insertTicketPrice.setString(2, startTime);
+            insertTicketPrice.setDouble(3, price);
+            insertTicketPrice.executeUpdate();
+            conn.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            try {
+                System.out.println("Transaction is being rolled back");
+                conn.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            return "Fail to add ticket price";
+        } finally {
+            conn.setAutoCommit(true);
+        }
+        return "";
+    }
+
+    public List<TicketPrice> listTicketPrices(int theatreId) throws Exception {
+        String QUERY_TICKET_PRICES = "SELECT start_time, price FROM ticket_price WHERE theatre_id=? ORDER BY start_time;";
+        Connection conn = DBConnection.connect();
+        PreparedStatement queryTicketPrices = conn.prepareStatement(QUERY_TICKET_PRICES);
+        queryTicketPrices.setInt(1, theatreId);
+        ResultSet res = queryTicketPrices.executeQuery();
+        List<TicketPrice> ticketPrices = new ArrayList<>();
+        while (res.next()) {
+            TicketPrice ticketPrice = new TicketPrice(theatreId, LocalTime.parse(res.getString("start_time")));
+            ticketPrice.setPrice(res.getDouble("price"));
+            ticketPrices.add(ticketPrice);
+        }
+        queryTicketPrices.close();
+        conn.close();
+        return ticketPrices;
+    }
+
+    public TicketPrice getTicketPrice(int theatreId, String startTime) throws Exception {
+        String QUERY_TICKET_PRICE = "SELECT start_time, price FROM ticket_price WHERE theatre_id=? AND start_time=?;";
+        Connection conn = DBConnection.connect();
+        PreparedStatement queryTicketPrice = conn.prepareStatement(QUERY_TICKET_PRICE);
+        queryTicketPrice.setInt(1, theatreId);
+        queryTicketPrice.setString(2, startTime);
+        ResultSet res = queryTicketPrice.executeQuery();
+        TicketPrice ticketPrice = null;
+        while (res.next()) {
+            ticketPrice = new TicketPrice(theatreId, LocalTime.parse(res.getString("start_time")));
+            ticketPrice.setPrice(res.getDouble("price"));
+        }
+        return ticketPrice;
+    }
+
+    public String deleteTicketPrice(int theatreId, String startTime) throws Exception {
+        String DELETE_TICKET_PRICE = "DELETE FROM ticket_price WHERE theatre_id=? AND start_time=?;";
+        Connection conn = DBConnection.connect();
+        conn.setAutoCommit(false);
+        try {
+            PreparedStatement deleteTicketPrice = conn.prepareStatement(DELETE_TICKET_PRICE);
+            deleteTicketPrice.setInt(1, theatreId);
+            deleteTicketPrice.setString(2, startTime);
+            deleteTicketPrice.executeUpdate();
+            conn.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            try {
+                System.out.println("Transaction is being rolled back");
+                conn.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            return "Fail to delete ticket price";
         } finally {
             conn.setAutoCommit(true);
         }

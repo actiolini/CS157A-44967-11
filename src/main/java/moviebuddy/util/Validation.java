@@ -1,5 +1,7 @@
 package moviebuddy.util;
 
+import java.time.LocalTime;
+
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 
@@ -94,6 +96,24 @@ public class Validation {
     public static String validateNumber(String number) {
         if (!number.matches("[0-9]+")) {
             return "Invalid number input\n";
+        }
+        return "";
+    }
+
+    public static String validateTime(String time) {
+        try {
+            LocalTime.parse(time);
+        } catch (Exception e) {
+            return "Invalid time input\n";
+        }
+        return "";
+    }
+
+    public static String validateDouble(String number) {
+        try {
+            Double.parseDouble(number);
+        } catch (Exception e) {
+            return "Invalid double input\n";
         }
         return "";
     }

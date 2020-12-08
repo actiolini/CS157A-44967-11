@@ -230,3 +230,14 @@ function validateRoomForm(form) {
     }
     return true;
 }
+
+function validateTicketPriceForm(form) {
+    startTime = form.startTime.value;
+    price = form.price.value;
+    errorId = document.getElementById("errorMessage");
+    if (startTime == "" || price == "") {
+        errorId.innerHTML = "One or more inputs are empty"
+        return false;
+    }
+    return true;
+}
