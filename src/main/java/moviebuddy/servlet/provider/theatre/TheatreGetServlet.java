@@ -1,4 +1,4 @@
-package moviebuddy.servlet.provider;
+package moviebuddy.servlet.provider.theatre;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.ServletException;
@@ -9,26 +9,26 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-import moviebuddy.dao.MovieDAO;
-import moviebuddy.model.Movie;
+import moviebuddy.dao.TheatreDAO;
+import moviebuddy.model.Theatre;
 
-@WebServlet("/MovieGet")
-public class MovieGetServlet extends HttpServlet {
-    private static final long serialVersionUID = 4366896761698484912L;
+@WebServlet("/TheatreGet")
+public class TheatreGetServlet extends HttpServlet {
+    private static final long serialVersionUID = -4869640868654901643L;
 
-    private static final String MOVIES = "movieList";
+    private static final String THEATRES = "theatreList";
 
-    private MovieDAO movieDAO;
+    private TheatreDAO theatreDAO;
 
     public void init() {
-        movieDAO = new MovieDAO();
+        theatreDAO = new TheatreDAO();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            List<Movie> movies = movieDAO.listMovies();
-            request.setAttribute(MOVIES, movies);
+            List<Theatre> theatres = theatreDAO.listTheatres();
+            request.setAttribute(THEATRES, theatres);
         } catch (Exception e) {
             response.sendRedirect("error.jsp");
             e.printStackTrace();

@@ -1,4 +1,4 @@
-package moviebuddy.servlet.provider;
+package moviebuddy.servlet.provider.ticketprice;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.ServletException;

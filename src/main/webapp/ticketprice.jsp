@@ -64,6 +64,23 @@
                             <th>Price</th>
                             <th></th>
                         </tr>
+                        <tr>
+                            <td>
+                                <input form="addTicketPriceForm" style="width: 80px;" name="startTime" type="time"
+                                    value="${ticketPriceStartTimeUpload}" />
+                            </td>
+                            <td>
+                                <input form="addTicketPriceForm" style="width: 80px;" name="price" type="number" min="0"
+                                    step="0.01" ; placeholder="11.50" value="${ticketPricePriceUpload}" />
+                            </td>
+                            <td>
+                                <form id="addTicketPriceForm" action="TicketPriceAdd" method="POST" class="button"
+                                    onsubmit="return validateTicketPriceForm(this)">
+                                    <input type="hidden" name="theatreId" value="${ticketPriceTheatreId}" />
+                                    <input type="submit" class="btn btn-outline-info" value="Add" />
+                                </form>
+                            </td>
+                        </tr>
                         <c:forEach items="${ticketPriceList}" var="ticketPrice">
                             <tr>
                                 <td>${ticketPrice.getStartTime()}</td>
@@ -77,23 +94,6 @@
                                 </td>
                             </tr>
                         </c:forEach>
-                        <tr>
-                            <td>
-                                <input form="addTicketPriceForm" class="inputbox" name="startTime" type="time"
-                                    value="${ticketPriceStartTimeUpload}" />
-                            </td>
-                            <td>
-                                <input form="addTicketPriceForm" class="inputbox" name="price" type="number" min="0"
-                                    step="0.01" ; placeholder="11.50" value="${ticketPricePriceUpload}" />
-                            </td>
-                            <td>
-                                <form id="addTicketPriceForm" action="TicketPriceAdd" method="POST" class="button"
-                                    onsubmit="return validateTicketPriceForm(this)">
-                                    <input type="hidden" name="theatreId" value="${ticketPriceTheatreId}" />
-                                    <input type="submit" class="btn btn-outline-info" value="Add" />
-                                </form>
-                            </td>
-                        </tr>
                     </table>
                 </div>
                 <div class="col"></div>

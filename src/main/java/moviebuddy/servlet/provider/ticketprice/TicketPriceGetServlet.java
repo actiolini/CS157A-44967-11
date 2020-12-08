@@ -1,4 +1,4 @@
-package moviebuddy.servlet.provider;
+package moviebuddy.servlet.provider.ticketprice;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.ServletException;
@@ -12,15 +12,15 @@ import java.util.List;
 
 import moviebuddy.dao.TheatreDAO;
 import moviebuddy.model.Theatre;
-import moviebuddy.model.Room;
+import moviebuddy.model.TicketPrice;
 
-@WebServlet("/RoomGet")
-public class RoomGetServlet extends HttpServlet {
-    private static final long serialVersionUID = 7128033020470518231L;
+@WebServlet("/TicketPriceGet")
+public class TicketPriceGetServlet extends HttpServlet {
+    private static final long serialVersionUID = -1637661127728707360L;
 
-    private static final String THEATRE_ID = "roomTheatreId";
-    private static final String THEATRE_NAME = "roomTheatreName";
-    private static final String ROOMS = "roomList";
+    private static final String THEATRE_ID = "ticketPriceTheatreId";
+    private static final String THEATRE_NAME = "ticketPriceTheatreName";
+    private static final String TICKET_PRICES = "ticketPriceList";
 
     private TheatreDAO theatreDAO;
 
@@ -33,12 +33,12 @@ public class RoomGetServlet extends HttpServlet {
         try {
             int theatreId = Integer.parseInt(request.getParameter("theatreId"));
             Theatre theatre = theatreDAO.getTheatreById(theatreId);
-            List<Room> rooms = theatreDAO.listRooms(theatreId);
+            List<TicketPrice> ticketPrices = theatreDAO.listTicketPrices(theatreId);
             HttpSession session = request.getSession();
             session.setAttribute(THEATRE_ID, theatreId);
             session.setAttribute(THEATRE_NAME, theatre.getTheatreName());
-            session.setAttribute(ROOMS, rooms);
-            response.sendRedirect("manageroom.jsp");
+            session.setAttribute(TICKET_PRICES, ticketPrices);
+            response.sendRedirect("ticketprice.jsp");
         } catch (Exception e) {
             response.sendRedirect("error.jsp");
             e.printStackTrace();
@@ -51,8 +51,8 @@ public class RoomGetServlet extends HttpServlet {
             HttpSession session = request.getSession();
             if (session.getAttribute(THEATRE_ID) != null) {
                 int theatreId = Integer.parseInt(session.getAttribute(THEATRE_ID).toString());
-                List<Room> rooms = theatreDAO.listRooms(theatreId);
-                session.setAttribute(ROOMS, rooms);
+                List<TicketPrice> ticketPrices = theatreDAO.listTicketPrices(theatreId);
+                session.setAttribute(TICKET_PRICES, ticketPrices);
             }
         } catch (Exception e) {
             response.sendRedirect("error.jsp");
