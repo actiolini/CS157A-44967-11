@@ -39,7 +39,7 @@ public class RoomEditServlet extends HttpServlet {
                     String sections = Validation.sanitize(request.getParameter("sections"));
                     String seats = Validation.sanitize(request.getParameter("seats"));
                     String errorMessage = "";
-                    if (roomId != roomNumber && theatreDAO.getRoomById(theatreId, roomNumber) != null) {
+                    if (!roomId.equals(roomNumber) && theatreDAO.getRoomById(theatreId, roomNumber) != null) {
                         errorMessage = "Room number already existed.";
                     }
                     if (errorMessage.isEmpty()) {
