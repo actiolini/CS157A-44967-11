@@ -27,7 +27,7 @@ public class TheatreDeleteServlet extends HttpServlet {
             HttpSession session = request.getSession();
             Object role = session.getAttribute("role");
             if (role != null && role.equals("admin")) {
-                int theatreId = Integer.parseInt(Validation.sanitize(request.getParameter("theatreId")));
+                String theatreId = Validation.sanitize(request.getParameter("theatreId"));
                 String errorMessage = theatreDAO.deleteTheatre(theatreId);
                 if (!errorMessage.isEmpty()) {
                     session.setAttribute("errorMessage", errorMessage);

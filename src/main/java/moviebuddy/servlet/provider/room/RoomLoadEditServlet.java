@@ -34,8 +34,8 @@ public class RoomLoadEditServlet extends HttpServlet {
             HttpSession session = request.getSession();
             Object role = session.getAttribute("role");
             if (role != null && role.equals("admin")) {
-                int theatreId = Integer.parseInt(Validation.sanitize(request.getParameter("theatreId")));
-                int roomNumber = Integer.parseInt(Validation.sanitize(request.getParameter("roomNumber")));
+                String theatreId = Validation.sanitize(request.getParameter("theatreId"));
+                String roomNumber = Validation.sanitize(request.getParameter("roomNumber"));
                 Room room = theatreDAO.getRoomById(theatreId, roomNumber);
                 if (room != null) {
                     session.setAttribute(ROOM_ID, roomNumber);

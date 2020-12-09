@@ -37,7 +37,7 @@ public class TheatreEditServlet extends HttpServlet {
             Object role = session.getAttribute("role");
             if (role != null && role.equals("admin")) {
                 if (request.getParameter("action").equals("save")) {
-                    int theatreId = Integer.parseInt(Validation.sanitize(request.getParameter("theatreId")));
+                    String theatreId = Validation.sanitize(request.getParameter("theatreId"));
                     String theatreName = Validation.sanitize(request.getParameter("theatreName"));
                     String address = Validation.sanitize(request.getParameter("address"));
                     String city = Validation.sanitize(request.getParameter("city"));
@@ -46,7 +46,7 @@ public class TheatreEditServlet extends HttpServlet {
                     String zip = Validation.sanitize(request.getParameter("zip"));
                     String errorMessage = "";
                     Theatre theatre = theatreDAO.getTheatreByName(theatreName);
-                    if (theatre != null && theatre.getId() != theatreId) {
+                    if (theatre != null && theatre.getId() != Integer.parseInt(theatreId)) {
                         errorMessage = "Theatre name already existed";
                     }
                     if (errorMessage.isEmpty()) {

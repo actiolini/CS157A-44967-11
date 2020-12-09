@@ -13,6 +13,7 @@ import java.util.List;
 import moviebuddy.dao.TheatreDAO;
 import moviebuddy.model.Theatre;
 import moviebuddy.model.TicketPrice;
+import moviebuddy.util.Validation;
 
 @WebServlet("/TicketPriceGet")
 public class TicketPriceGetServlet extends HttpServlet {
@@ -34,7 +35,7 @@ public class TicketPriceGetServlet extends HttpServlet {
             HttpSession session = request.getSession();
             Object role = session.getAttribute("role");
             if (role != null && role.equals("admin")) {
-                int theatreId = Integer.parseInt(request.getParameter("theatreId"));
+                String theatreId = Validation.sanitize(request.getParameter("theatreId"));
                 Theatre theatre = theatreDAO.getTheatreById(theatreId);
                 List<TicketPrice> ticketPrices = theatreDAO.listTicketPrices(theatreId);
                 session.setAttribute(THEATRE_ID, theatreId);
@@ -55,7 +56,7 @@ public class TicketPriceGetServlet extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             if (session.getAttribute(THEATRE_ID) != null) {
-                int theatreId = Integer.parseInt(session.getAttribute(THEATRE_ID).toString());
+                String theatreId = Validation.sanitize(session.getAttribute(THEATRE_ID).toString());
                 List<TicketPrice> ticketPrices = theatreDAO.listTicketPrices(theatreId);
                 session.setAttribute(TICKET_PRICES, ticketPrices);
             }

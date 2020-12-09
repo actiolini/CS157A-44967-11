@@ -32,14 +32,14 @@ public class RoomCreateServlet extends HttpServlet {
             HttpSession session = request.getSession();
             Object role = session.getAttribute("role");
             if (role != null && role.equals("admin")) {
-                int theatreId = Integer.parseInt(Validation.sanitize(request.getParameter("theatreId")));
-                int roomNumber = Integer.parseInt(Validation.sanitize(request.getParameter("roomNumber")));
+                String theatreId = Validation.sanitize(request.getParameter("theatreId"));
+                String roomNumber = Validation.sanitize(request.getParameter("roomNumber"));
                 String errorMessage = "";
                 if (theatreDAO.getRoomById(theatreId, roomNumber) != null) {
                     errorMessage = "Room number already existed.";
                 }
-                int sections = Integer.parseInt(Validation.sanitize(request.getParameter("sections")));
-                int seats = Integer.parseInt(Validation.sanitize(request.getParameter("seats")));
+                String sections = Validation.sanitize(request.getParameter("sections"));
+                String seats = Validation.sanitize(request.getParameter("seats"));
                 if (errorMessage.isEmpty()) {
                     errorMessage = theatreDAO.createRoom(theatreId, roomNumber, sections, seats);
                 }

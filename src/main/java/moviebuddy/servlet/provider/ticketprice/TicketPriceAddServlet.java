@@ -31,7 +31,7 @@ public class TicketPriceAddServlet extends HttpServlet {
             HttpSession session = request.getSession();
             Object role = session.getAttribute("role");
             if (role != null && role.equals("admin")) {
-                int theatreId = Integer.parseInt(request.getParameter("theatreId"));
+                String theatreId = Validation.sanitize(request.getParameter("theatreId"));
                 String startTime = Validation.sanitize(request.getParameter("startTime"));
                 String priceInput = Validation.sanitize(request.getParameter("price"));
                 String errorMessage = Validation.validateTime(startTime);

@@ -10,6 +10,7 @@ import java.io.IOException;
 
 import moviebuddy.dao.MovieDAO;
 import moviebuddy.model.Movie;
+import moviebuddy.util.Validation;
 
 @WebServlet("/MovieLoadEdit")
 public class MovieLoadEditServlet extends HttpServlet {
@@ -34,7 +35,7 @@ public class MovieLoadEditServlet extends HttpServlet {
             HttpSession session = request.getSession();
             Object role = session.getAttribute("role");
             if (role != null && role.equals("admin")) {
-                int movieId = Integer.parseInt(request.getParameter("movieId"));
+                String movieId = Validation.sanitize(request.getParameter("movieId"));
                 Movie movie = movieDAO.getMovieById(movieId);
                 if (movie != null) {
                     session.setAttribute(MOVIE_ID, movieId);

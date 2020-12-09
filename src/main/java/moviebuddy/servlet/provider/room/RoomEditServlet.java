@@ -33,11 +33,11 @@ public class RoomEditServlet extends HttpServlet {
             Object role = session.getAttribute("role");
             if (role != null && role.equals("admin")) {
                 if (request.getParameter("action").equals("save")) {
-                    int theatreId = Integer.parseInt(Validation.sanitize(request.getParameter("theatreId")));
-                    int roomId = Integer.parseInt(Validation.sanitize(request.getParameter("roomId")));
-                    int roomNumber = Integer.parseInt(Validation.sanitize(request.getParameter("roomNumber")));
-                    int sections = Integer.parseInt(Validation.sanitize(request.getParameter("sections")));
-                    int seats = Integer.parseInt(Validation.sanitize(request.getParameter("seats")));
+                    String theatreId = Validation.sanitize(request.getParameter("theatreId"));
+                    String roomId = Validation.sanitize(request.getParameter("roomId"));
+                    String roomNumber = Validation.sanitize(request.getParameter("roomNumber"));
+                    String sections = Validation.sanitize(request.getParameter("sections"));
+                    String seats = Validation.sanitize(request.getParameter("seats"));
                     String errorMessage = "";
                     if (roomId != roomNumber && theatreDAO.getRoomById(theatreId, roomNumber) != null) {
                         errorMessage = "Room number already existed.";

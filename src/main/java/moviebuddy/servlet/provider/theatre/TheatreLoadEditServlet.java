@@ -37,7 +37,7 @@ public class TheatreLoadEditServlet extends HttpServlet {
             HttpSession session = request.getSession();
             Object role = session.getAttribute("role");
             if (role != null && role.equals("admin")) {
-                int theatreId = Integer.parseInt(Validation.sanitize(request.getParameter("theatreId")));
+                String theatreId = Validation.sanitize(request.getParameter("theatreId"));
                 Theatre theatre = theatreDAO.getTheatreById(theatreId);
                 if (theatre != null) {
                     session.setAttribute(THEATRE_ID, theatreId);

@@ -5,9 +5,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.ArrayList;
 
 import moviebuddy.dao.TheatreDAO;
 import moviebuddy.model.Theatre;
@@ -27,7 +29,17 @@ public class TheatreGetServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            List<Theatre> theatres = theatreDAO.listTheatres();
+            List<Theatre> theatres = new ArrayList<>();
+            HttpSession session = request.getSession();
+            Object role = session.getAttribute("role");
+            if (role != null && role.equals("admin")) {
+                theatres = theatreDAO.listTheatres();
+            }
+            if (role != null && role.equals("manager")) {
+                String employTheatreId = session.getAttribute("employTheatreId").toString();
+                Theatre theatre = theatreDAO.getTheatreById(employTheatreId);
+                theatres.add(theatre);
+            }
             request.setAttribute(THEATRES, theatres);
         } catch (Exception e) {
             response.sendRedirect("error.jsp");

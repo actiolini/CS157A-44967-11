@@ -28,8 +28,8 @@ public class RoomDeleteServlet extends HttpServlet {
             HttpSession session = request.getSession();
             Object role = session.getAttribute("role");
             if (role != null && role.equals("admin")) {
-                int theatreId = Integer.parseInt(Validation.sanitize(request.getParameter("theatreId")));
-                int roomNumber = Integer.parseInt(Validation.sanitize(request.getParameter("roomNumber")));
+                String theatreId = Validation.sanitize(request.getParameter("theatreId"));
+                String roomNumber = Validation.sanitize(request.getParameter("roomNumber"));
                 String errorMessage = theatreDAO.deleteRoom(theatreId, roomNumber);
                 if (!errorMessage.isEmpty()) {
                     session.setAttribute("errorMessage", errorMessage);

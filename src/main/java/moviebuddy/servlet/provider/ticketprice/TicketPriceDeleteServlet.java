@@ -28,7 +28,7 @@ public class TicketPriceDeleteServlet extends HttpServlet {
             HttpSession session = request.getSession();
             Object role = session.getAttribute("role");
             if (role != null && role.equals("admin")) {
-                int theatreId = Integer.parseInt(Validation.sanitize(request.getParameter("theatreId")));
+                String theatreId = Validation.sanitize(request.getParameter("theatreId"));
                 String startTime = Validation.sanitize(request.getParameter("startTime"));
                 String errorMessage = theatreDAO.deleteTicketPrice(theatreId, startTime);
                 if (!errorMessage.isEmpty()) {
