@@ -55,44 +55,50 @@
             <h1 class="display-3 text-center">Sign Up</h1>
             <hr>
             <div class="row">
-                <div class="col"></div>
-                <div class="col-6">
-                    <form id="signUpForm" action="SignUp" method="POST" onsubmit="return validate(this)">
-                        <div class="form-group">
-                            <label>Name</label><br>
-                            <input class="inputbox" type="text" name="userName" placeholder="Enter your name"
-                                onkeyup="checkName(this, 'userNameError')" value="${userName}">
-                            <br>
-                            <span id="userNameError" class="errormessage">${userNameError}</span>
+                <div class="col-lg"></div>
+                <div class="col-lg">
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="signUpForm" action="SignUp" method="POST" onsubmit="return validate(this)">
+                                <div class="form-group">
+                                    <label>Name</label><br>
+                                    <input class="inputbox" type="text" name="userName" placeholder="Enter your name"
+                                        onkeyup="checkName(this, 'userNameError')" value="${userName}">
+                                    <br>
+                                    <span id="userNameError" class="errormessage">${userNameError}</span>
+                                </div>
+                                <div class="form-group">
+                                    <label>Email</label><br>
+                                    <input class="inputbox" type="text" name="email" placeholder="Enter email"
+                                        onkeyup="checkEmail(this, 'emailError')" value="${email}">
+                                    <br>
+                                    <span id="emailError" class="errormessage">${emailError}</span>
+                                </div>
+                                <div class="form-group">
+                                    <label>Password</label><br>
+                                    <input class="inputbox" type="password" name="password" placeholder="Enter password"
+                                        onkeyup="checkPassword(this, 'passwordError')">
+                                    <br>
+                                    <span id="passwordError" class="errormessage">${passwordError}</span>
+                                </div>
+                                <div class="form-group">
+                                    <label>Confirm Password</label><br>
+                                    <input class="inputbox" type="password" name="rePassword"
+                                        placeholder="Re-enter password"
+                                        onkeyup="checkRePassword('signUpForm', 'rePasswordError')">
+                                    <br>
+                                    <span id="rePasswordError" class="errormessage">${rePasswordError}</span>
+                                </div>
+                                <div class="text-center">
+                                    <input type="submit" class="btn btn-primary" value="Sign Up">
+                                </div>
+                            </form>
+                            <a href="./signin.jsp">Already have an account? Sign in here</a>
                         </div>
-                        <div class="form-group">
-                            <label>Email</label><br>
-                            <input class="inputbox" type="text" name="email" placeholder="Enter email"
-                                onkeyup="checkEmail(this, 'emailError')" value="${email}">
-                            <br>
-                            <span id="emailError" class="errormessage">${emailError}</span>
-                        </div>
-                        <div class="form-group">
-                            <label>Password</label><br>
-                            <input class="inputbox" type="password" name="password" placeholder="Enter password"
-                                onkeyup="checkPassword(this, 'passwordError')">
-                            <br>
-                            <span id="passwordError" class="errormessage">${passwordError}</span>
-                        </div>
-                        <div class="form-group">
-                            <label>Confirm Password</label><br>
-                            <input class="inputbox" type="password" name="rePassword" placeholder="Re-enter password"
-                                onkeyup="checkRePassword('signUpForm', 'rePasswordError')">
-                            <br>
-                            <span id="rePasswordError" class="errormessage">${rePasswordError}</span>
-                        </div>
-                        <div class="text-center">
-                            <input type="submit" class="btn btn-primary" value="Sign Up">
-                        </div>
-                    </form>
-                    <a href="./signin.jsp">Already have an account? Sign in here</a>
+                    </div>
+
                 </div>
-                <div class="col"></div>
+                <div class="col-lg"></div>
             </div>
         </div>
     </div>

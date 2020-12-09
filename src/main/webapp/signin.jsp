@@ -48,8 +48,8 @@
             <hr>
             <br>
             <div class="row">
-                <div class="col-sm"></div>
-                <div class="col-sm">
+                <div class="col-lg"></div>
+                <div class="col-lg">
                     <div class="card">
                         <div class="card-body ">
                             <form action="SignIn" method="POST" onsubmit="return validateSignIn(this)">
@@ -79,7 +79,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm"></div>
+                <div class="col-lg"></div>
             </div>
         </div>
     </div>
