@@ -22,6 +22,15 @@
         response.sendRedirect("home.jsp");
     }
 
+    if(session.getAttribute("roomTheatreName") != null){
+        request.setAttribute("roomTheatreName", session.getAttribute("roomTheatreName"));
+        session.removeAttribute("roomTheatreName");
+    }
+    if(session.getAttribute("roomList") != null){
+        request.setAttribute("roomList", session.getAttribute("roomList"));
+        session.removeAttribute("roomList");
+    }
+
     request.setAttribute("errorMessage", session.getAttribute("errorMessage"));
     session.removeAttribute("errorMessage");
 %>

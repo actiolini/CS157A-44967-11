@@ -22,6 +22,15 @@
         response.sendRedirect("home.jsp");
     }
 
+    if(session.getAttribute("ticketPriceTheatreName") != null){
+        request.setAttribute("ticketPriceTheatreName", session.getAttribute("ticketPriceTheatreName"));
+        session.removeAttribute("ticketPriceTheatreName");
+    }
+    if(session.getAttribute("ticketPriceList") != null){
+        request.setAttribute("ticketPriceList", session.getAttribute("ticketPriceList"));
+        session.removeAttribute("ticketPriceList");
+    }
+
     request.setAttribute("ticketPriceStartTimeUpload", session.getAttribute("ticketPriceStartTimeUpload"));
     request.setAttribute("ticketPricePriceUpload", session.getAttribute("ticketPricePriceUpload"));
     request.setAttribute("errorMessage", session.getAttribute("errorMessage"));

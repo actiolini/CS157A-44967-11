@@ -57,8 +57,10 @@ public class TicketPriceGetServlet extends HttpServlet {
             HttpSession session = request.getSession();
             if (session.getAttribute(THEATRE_ID) != null) {
                 String theatreId = Validation.sanitize(session.getAttribute(THEATRE_ID).toString());
+                Theatre theatre = theatreDAO.getTheatreById(theatreId);
                 List<TicketPrice> ticketPrices = theatreDAO.listTicketPrices(theatreId);
-                session.setAttribute(TICKET_PRICES, ticketPrices);
+                request.setAttribute(THEATRE_NAME, theatre.getTheatreName());
+                request.setAttribute(TICKET_PRICES, ticketPrices);
             }
         } catch (Exception e) {
             response.sendRedirect("error.jsp");

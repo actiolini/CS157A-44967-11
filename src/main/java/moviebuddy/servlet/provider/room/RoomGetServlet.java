@@ -57,8 +57,10 @@ public class RoomGetServlet extends HttpServlet {
             HttpSession session = request.getSession();
             if (session.getAttribute(THEATRE_ID) != null) {
                 String theatreId = Validation.sanitize(session.getAttribute(THEATRE_ID).toString());
+                Theatre theatre = theatreDAO.getTheatreById(theatreId);
                 List<Room> rooms = theatreDAO.listRooms(theatreId);
-                session.setAttribute(ROOMS, rooms);
+                request.setAttribute(THEATRE_NAME, theatre.getTheatreName());
+                request.setAttribute(ROOMS, rooms);
             }
         } catch (Exception e) {
             response.sendRedirect("error.jsp");
