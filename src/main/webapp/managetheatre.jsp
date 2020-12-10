@@ -74,22 +74,24 @@
                         <td>${theatre.getCountry()}</td>
                         <td>${theatre.getZip()}</td>
                         <td>
-                            <form action="TicketPriceGet" method="POST" class="button">
-                                <input type="hidden" name="theatreId" value="${theatre.getId()}" />
-                                <input type="submit" class="btn btn-outline-info" value="Ticket Price" />
-                            </form>
-                            <form action="RoomGet" method="POST" class="button">
-                                <input type="hidden" name="theatreId" value="${theatre.getId()}" />
-                                <input type="submit" class="btn btn-outline-info" value="Room" />
-                            </form>
-                            <form action="TheatreLoadEdit" method="POST" class="button">
-                                <input type="hidden" name="theatreId" value="${theatre.getId()}" />
-                                <input type="submit" class="btn btn-outline-info" value="Edit" />
-                            </form>
-                            <form action="TheatreDelete" method="POST" class="button">
-                                <input type="hidden" name="theatreId" value="${theatre.getId()}" />
-                                <input type="submit" class="btn btn-outline-info" value="Delete" />
-                            </form>
+                            <div class="container">
+                                <form action="TicketPriceGet" method="POST" class="button">
+                                    <input type="hidden" name="theatreId" value="${theatre.getId()}" />
+                                    <input type="submit" class="btn btn-outline-info" value="Ticket Price" />
+                                </form>
+                                <form action="RoomGet" method="POST" class="button">
+                                    <input type="hidden" name="theatreId" value="${theatre.getId()}" />
+                                    <input type="submit" class="btn btn-outline-info" value="Room" />
+                                </form>
+                                <form action="TheatreLoadEdit" method="POST" class="button">
+                                    <input type="hidden" name="theatreId" value="${theatre.getId()}" />
+                                    <input type="submit" class="btn btn-outline-info" value="Edit" />
+                                </form>
+                                <form action="TheatreDelete" method="POST" class="button">
+                                    <input type="hidden" name="theatreId" value="${theatre.getId()}" />
+                                    <input type="submit" class="btn btn-outline-info" value="Delete" />
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 </c:forEach>

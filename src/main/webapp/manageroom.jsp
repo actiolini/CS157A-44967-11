@@ -80,7 +80,7 @@
                         <td>${room.getRoomNumber()}</td>
                         <td>${room.getNumberOfRows()}</td>
                         <td>${room.getSeatsPerRow()}</td>
-                        <td class="text-center">
+                        <td>
                             <div class="container">
                                 <form action="RoomLoadEdit" method="POST" class="button">
                                     <input type="hidden" name="theatreId" value="${roomTheatreId}" />
