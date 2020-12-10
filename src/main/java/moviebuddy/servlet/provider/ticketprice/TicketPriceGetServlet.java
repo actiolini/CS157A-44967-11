@@ -29,21 +29,14 @@ public class TicketPriceGetServlet extends HttpServlet {
         theatreDAO = new TheatreDAO();
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
             HttpSession session = request.getSession();
-            Object role = session.getAttribute("role");
-            if (role != null && role.equals("admin")) {
-                String theatreId = Validation.sanitize(request.getParameter("theatreId"));
-                Theatre theatre = theatreDAO.getTheatreById(theatreId);
+            if (session.getAttribute(THEATRE_ID) != null) {
+                String theatreId = session.getAttribute(THEATRE_ID).toString();
                 List<TicketPrice> ticketPrices = theatreDAO.listTicketPrices(theatreId);
-                session.setAttribute(THEATRE_ID, theatreId);
-                session.setAttribute(THEATRE_NAME, theatre.getTheatreName());
-                session.setAttribute(TICKET_PRICES, ticketPrices);
-                response.sendRedirect("ticketprice.jsp");
-            } else {
-                response.sendRedirect("home.jsp");
+                request.setAttribute(TICKET_PRICES, ticketPrices);
             }
         } catch (Exception e) {
             response.sendRedirect("error.jsp");
@@ -51,17 +44,15 @@ public class TicketPriceGetServlet extends HttpServlet {
         }
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
             HttpSession session = request.getSession();
-            if (session.getAttribute(THEATRE_ID) != null) {
-                String theatreId = Validation.sanitize(session.getAttribute(THEATRE_ID).toString());
-                Theatre theatre = theatreDAO.getTheatreById(theatreId);
-                List<TicketPrice> ticketPrices = theatreDAO.listTicketPrices(theatreId);
-                request.setAttribute(THEATRE_NAME, theatre.getTheatreName());
-                request.setAttribute(TICKET_PRICES, ticketPrices);
-            }
+            String theatreId = Validation.sanitize(request.getParameter("theatreId"));
+            Theatre theatre = theatreDAO.getTheatreById(theatreId);
+            session.setAttribute(THEATRE_ID, theatreId);
+            session.setAttribute(THEATRE_NAME, theatre.getTheatreName());
+            response.sendRedirect("ticketprice.jsp");
         } catch (Exception e) {
             response.sendRedirect("error.jsp");
             e.printStackTrace();

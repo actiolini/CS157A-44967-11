@@ -14,6 +14,7 @@ import moviebuddy.dao.TheatreDAO;
 import moviebuddy.dao.UserDAO;
 import moviebuddy.model.Theatre;
 import moviebuddy.model.User;
+import moviebuddy.util.Validation;
 
 @WebServlet("/StaffGet")
 public class StaffGetServlet extends HttpServlet {
@@ -75,7 +76,8 @@ public class StaffGetServlet extends HttpServlet {
             HttpSession session = request.getSession();
             Object role = session.getAttribute("role");
             if (role != null && role.equals("admin")) {
-                session.setAttribute(SELECTED_THEATRE_ID, request.getParameter("selectTheatreOption"));
+                String theatreId = Validation.sanitize(request.getParameter("selectTheatreOption"));
+                session.setAttribute(SELECTED_THEATRE_ID, theatreId);
                 response.sendRedirect("managestaff.jsp");
             } else {
                 response.sendRedirect("home.jsp");
