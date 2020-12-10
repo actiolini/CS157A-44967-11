@@ -21,10 +21,10 @@
         response.sendRedirect("home.jsp");
     }
 
-    request.setAttribute("staffId", session.getAttribute("signinStaffId"));
-    request.setAttribute("message", session.getAttribute("signinMessage"));
+    request.setAttribute("signinStaffId", session.getAttribute("signinStaffId"));
+    request.setAttribute("errorMessage", session.getAttribute("errorMessage"));
     session.removeAttribute("signinStaffId");
-    session.removeAttribute("signinMessage");
+    session.removeAttribute("errorMessage");
 %>
 <html lang="en">
 
@@ -48,8 +48,8 @@
             <hr>
             <br>
             <div class="row">
-                <div class="col-sm"></div>
-                <div class="col-sm">
+                <div class="col-lg"></div>
+                <div class="col-lg">
                     <div class="card">
                         <div class="card-body ">
                             <form action="SignInStaff" method="POST" onsubmit="return validateSignIn(this)">
@@ -57,7 +57,7 @@
                                     <label>Staff ID Number</label><br>
                                     <input class="inputbox" type="text" name="staffId"
                                         placeholder="Enter staff ID number"
-                                        onkeyup="checkSignInInput(this, 'staffIdError')" value="${staffId}">
+                                        onkeyup="checkSignInInput(this, 'staffIdError')" value="${signinStaffId}">
                                     <br>
                                     <span id="staffIdError" class="errormessage"></span>
                                 </div>
@@ -72,12 +72,12 @@
                                     <input type="submit" class="btn btn-primary" value="Sign In">
                                 </div>
                             </form>
-                            <p id="signInError" class="errormessage">${message}</p>
+                            <p id="signInError" class="errormessage">${errorMessage}</p>
                             <a href="./signin.jsp">Not a faculty? Sign in as customer here</a>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm"></div>
+                <div class="col-lg"></div>
             </div>
         </div>
     </div>

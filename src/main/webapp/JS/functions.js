@@ -4,3 +4,7 @@ function loadSelectedOption(defaultId, selectId, optionValue) {
         document.getElementById(selectId).value = optionValue;
     }
 }
+
+function submitOnChange(formId) {
+    document.getElementById(formId).submit();
+}

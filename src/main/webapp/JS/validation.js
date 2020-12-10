@@ -110,6 +110,11 @@ function validateStaffSignUp(form) {
 
     invalidRole = validateRole(form.role.value);
     document.getElementById("roleError").innerHTML = invalidRole;
+    invalidLocation = "";
+    if (invalidRole == "" && form.role.value != "admin") {
+        invalidLocation = validateTheatreLocation(form.theatreLocation.value);
+    }
+    document.getElementById("theatreLocationError").innerHTML = invalidLocation;
 
     invalidUserName = validateUserName(form.userName.value);
     document.getElementById("userNameError").innerHTML = invalidUserName;
@@ -130,15 +135,21 @@ function validateStaffSignUp(form) {
     }
 
     fail += invalidRole;
+    fail += invalidLocation;
     fail += invalidUserName;
     fail += invalidEmail;
     fail += invalidPassword;
     return false;
 }
 
-function checkRole(elementId, errorId) {
+function checkRole(elementId, errorId, theatreLocationInputId) {
     invalidRole = validateRole(elementId.value)
     document.getElementById(errorId).innerHTML = invalidRole;
+    if (invalidRole == "" && elementId.value == "admin") {
+        document.getElementById(theatreLocationInputId).setAttribute("hidden", "");
+    } else {
+        document.getElementById(theatreLocationInputId).removeAttribute("hidden");
+    }
     return invalidRole;
 }
 
@@ -147,7 +158,20 @@ function validateRole(role) {
         return "Please select a role\n";
     }
     if (!(role == "admin" || role == "manager" || role == "faculty")) {
-        return "Invalid selected role\n";
+        return "Invalid role selected\n";
+    }
+    return "";
+}
+
+function checkTheatreLocation(elementId, errorId) {
+    invalidLocation = validateTheatreLocation(elementId.value)
+    document.getElementById(errorId).innerHTML = invalidLocation;
+    return invalidLocation;
+}
+
+function validateTheatreLocation(location) {
+    if (location == "" || location == "none") {
+        return "Please select a theatre location\n";
     }
     return "";
 }
@@ -167,11 +191,11 @@ function checkSignInInput(elementId, errorId) {
     invalidInput = "";
     if (elementId.value == "") {
         if (elementId.name == "email") {
-            invalidInput = "Please enter an email"
+            invalidInput = "Please enter an email";
         } else if (elementId.name == "password") {
-            invalidInput = "Please enter a password"
+            invalidInput = "Please enter a password";
         } else if (elementId.name == "staffId") {
-            invalidInput = "Please enter a staff ID number"
+            invalidInput = "Please enter a staff ID number";
         }
     }
     document.getElementById(errorId).innerHTML = invalidInput;
