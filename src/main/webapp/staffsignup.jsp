@@ -64,6 +64,9 @@
         <div class="container">
             <h1 class="display-3 text-center">Create Faculty Account</h1>
             <hr>
+            <a class="inputAsLink" href="./managestaff.jsp">&#8249;
+                <span>Back</span>
+            </a>
             <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
             <div class="row">
                 <div class="col-lg"></div>

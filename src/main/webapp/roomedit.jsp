@@ -44,11 +44,11 @@
         <div class="container">
             <h3>Theatre: ${roomTheatreName}</h3>
             <hr>
-            <h4 class="display-3 text-center">Update room</h4>
-            <hr>
             <a class="inputAsLink" href="./manageroom.jsp">&#8249;
                 <span>Back</span>
             </a>
+            <h1 class="display-3 text-center">Update room</h1>
+            <hr>
             <div class="row">
                 <div class="col"></div>
                 <div class="col-4">
