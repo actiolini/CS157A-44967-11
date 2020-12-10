@@ -17,7 +17,7 @@
         session.setAttribute("count", count + 1);
     }
 
-    if(session.getAttribute("email") == null || !session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr())) || session.getAttribute("staffId") == null || !(session.getAttribute("role").equals("admin") || session.getAttribute("role").equals("manager"))){
+    if(session.getAttribute("email") == null || !session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr())) || session.getAttribute("staffId") == null || !(session.getAttribute("role").equals("admin"))){
         response.sendRedirect("home.jsp");
     }
 
@@ -54,6 +54,8 @@
 
         <!-- Page Content -->
         <div class="container">
+            <h3>Movie</h3>
+            <hr>
             <h1 class="display-3 text-center">Upload Movie Information</h1>
             <hr>
             <a class="inputAsLink" href="./managemovie.jsp">&#8249;
