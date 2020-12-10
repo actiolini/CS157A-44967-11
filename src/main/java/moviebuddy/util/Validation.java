@@ -1,5 +1,6 @@
 package moviebuddy.util;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 import org.jsoup.Jsoup;
@@ -103,6 +104,15 @@ public class Validation {
     public static String validateNumber(String number) {
         if (!number.matches("[0-9]+")) {
             return "Invalid number input\n";
+        }
+        return "";
+    }
+
+    public static String validateDate(String date) {
+        try {
+            LocalDate.parse(date);
+        } catch (Exception e) {
+            return "Invalid date input\n";
         }
         return "";
     }
