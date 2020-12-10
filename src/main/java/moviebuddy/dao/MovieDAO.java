@@ -83,14 +83,15 @@ public class MovieDAO {
         return movies;
     }
 
-    public Movie getMovieById(int movieId) throws Exception {
-        String QUERY_MOVIE_INFO = "SELECT title, release_date, duration, trailer, description FROM movie WHERE movie_id=?;";
+    public Movie getMovieById(String movieId) throws Exception {
+        String QUERY_MOVIE_INFO = "SELECT movie_id, title, release_date, duration, trailer, description FROM movie WHERE movie_id=?;";
         Connection conn = DBConnection.connect();
         PreparedStatement queryMovieInfo = conn.prepareStatement(QUERY_MOVIE_INFO);
-        queryMovieInfo.setInt(1, movieId);
+        queryMovieInfo.setString(1, movieId);
         ResultSet res = queryMovieInfo.executeQuery();
-        Movie movie = new Movie(movieId);
+        Movie movie = null;
         while (res.next()) {
+            movie = new Movie(res.getInt("movie_id"));
             movie.setTitle(res.getString("title"));
             movie.setReleaseDate(LocalDate.parse(res.getString("release_date")));
             movie.setDuration(res.getInt("duration"));

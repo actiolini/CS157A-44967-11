@@ -28,28 +28,33 @@ public class MovieEditServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            if (request.getParameter("action").equals("save")) {
-                String movieId = Validation.sanitize(request.getParameter("movieId"));
-                String title = Validation.sanitize(request.getParameter("title"));
-                String releaseDate = Validation.sanitize(request.getParameter("releaseDate"));
-                String duration = Validation.sanitize(request.getParameter("duration"));
-                String trailer = Validation.sanitize(request.getParameter("trailer"));
-                Part partPoster = request.getPart("poster");
-                InputStream streamPoster = partPoster.getInputStream();
-                long posterSize = partPoster.getSize();
-                String description = Validation.sanitize(request.getParameter("description"));
-                String errorMessage = movieDAO.updateMovie(movieId, title, releaseDate, duration, trailer, streamPoster,
-                        posterSize, description);
-                if (errorMessage.isEmpty()) {
-                    response.sendRedirect("managemovie.jsp");
-                } else {
-                    HttpSession session = request.getSession();
-                    session.setAttribute("errorMessage", errorMessage);
-                    response.sendRedirect("movieedit.jsp");
+            HttpSession session = request.getSession();
+            Object role = session.getAttribute("role");
+            if (role != null && role.equals("admin")) {
+                if (request.getParameter("action").equals("save")) {
+                    String movieId = Validation.sanitize(request.getParameter("movieId"));
+                    String title = Validation.sanitize(request.getParameter("title"));
+                    String releaseDate = Validation.sanitize(request.getParameter("releaseDate"));
+                    String duration = Validation.sanitize(request.getParameter("duration"));
+                    String trailer = Validation.sanitize(request.getParameter("trailer"));
+                    Part partPoster = request.getPart("poster");
+                    InputStream streamPoster = partPoster.getInputStream();
+                    long posterSize = partPoster.getSize();
+                    String description = Validation.sanitize(request.getParameter("description"));
+                    String errorMessage = movieDAO.updateMovie(movieId, title, releaseDate, duration, trailer,
+                            streamPoster, posterSize, description);
+                    if (errorMessage.isEmpty()) {
+                        response.sendRedirect("managemovie.jsp");
+                    } else {
+                        session.setAttribute("errorMessage", errorMessage);
+                        response.sendRedirect("movieedit.jsp");
+                    }
                 }
-            }
-            if (request.getParameter("action").equals("cancel")) {
-                response.sendRedirect("managemovie.jsp");
+                if (request.getParameter("action").equals("cancel")) {
+                    response.sendRedirect("managemovie.jsp");
+                }
+            } else {
+                response.sendRedirect("home.jsp");
             }
         } catch (Exception e) {
             e.printStackTrace();

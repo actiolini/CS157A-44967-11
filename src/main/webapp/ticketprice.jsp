@@ -18,8 +18,17 @@
         session.setAttribute("count", count + 1);
     }
 
-    if(session.getAttribute("email") == null || !session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr())) || session.getAttribute("staffId") == null || !(session.getAttribute("role").equals("admin") || session.getAttribute("role").equals("manager"))){
+    if(session.getAttribute("email") == null || !session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr())) || session.getAttribute("staffId") == null || !(session.getAttribute("role").equals("admin"))){
         response.sendRedirect("home.jsp");
+    }
+
+    if(session.getAttribute("ticketPriceTheatreName") != null){
+        request.setAttribute("ticketPriceTheatreName", session.getAttribute("ticketPriceTheatreName"));
+        session.removeAttribute("ticketPriceTheatreName");
+    }
+    if(session.getAttribute("ticketPriceList") != null){
+        request.setAttribute("ticketPriceList", session.getAttribute("ticketPriceList"));
+        session.removeAttribute("ticketPriceList");
     }
 
     request.setAttribute("ticketPriceStartTimeUpload", session.getAttribute("ticketPriceStartTimeUpload"));
@@ -62,7 +71,7 @@
                         <tr>
                             <th>Start time</th>
                             <th>Price</th>
-                            <th></th>
+                            <th>Actions</th>
                         </tr>
                         <tr>
                             <td>

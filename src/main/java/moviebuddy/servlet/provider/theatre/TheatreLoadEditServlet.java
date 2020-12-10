@@ -34,20 +34,25 @@ public class TheatreLoadEditServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            int theatreId = Integer.parseInt(Validation.sanitize(request.getParameter("theatreId")));
-            Theatre theatre = theatreDAO.getTheatreById(theatreId);
-            if (theatre != null) {
-                HttpSession session = request.getSession();
-                session.setAttribute(THEATRE_ID, theatreId);
-                session.setAttribute(NAME, theatre.getTheatreName());
-                session.setAttribute(ADDRESS, theatre.getAddress());
-                session.setAttribute(CITY, theatre.getCity());
-                session.setAttribute(STATE, theatre.getState());
-                session.setAttribute(COUNTRY, theatre.getCountry());
-                session.setAttribute(ZIP, theatre.getZip());
-                response.sendRedirect("theatreedit.jsp");
+            HttpSession session = request.getSession();
+            Object role = session.getAttribute("role");
+            if (role != null && role.equals("admin")) {
+                String theatreId = Validation.sanitize(request.getParameter("theatreId"));
+                Theatre theatre = theatreDAO.getTheatreById(theatreId);
+                if (theatre != null) {
+                    session.setAttribute(THEATRE_ID, theatreId);
+                    session.setAttribute(NAME, theatre.getTheatreName());
+                    session.setAttribute(ADDRESS, theatre.getAddress());
+                    session.setAttribute(CITY, theatre.getCity());
+                    session.setAttribute(STATE, theatre.getState());
+                    session.setAttribute(COUNTRY, theatre.getCountry());
+                    session.setAttribute(ZIP, theatre.getZip());
+                    response.sendRedirect("theatreedit.jsp");
+                } else {
+                    response.sendRedirect("managetheatre.jsp");
+                }
             } else {
-                response.sendRedirect("managetheatre.jsp");
+                response.sendRedirect("home.jsp");
             }
         } catch (Exception e) {
             response.sendRedirect("error.jsp");

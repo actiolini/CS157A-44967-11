@@ -10,6 +10,7 @@ import java.io.IOException;
 
 import moviebuddy.dao.MovieDAO;
 import moviebuddy.model.Movie;
+import moviebuddy.util.Validation;
 
 @WebServlet("/MovieLoadEdit")
 public class MovieLoadEditServlet extends HttpServlet {
@@ -31,19 +32,24 @@ public class MovieLoadEditServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            int movieId = Integer.parseInt(request.getParameter("movieId"));
-            Movie movie = movieDAO.getMovieById(movieId);
-            if (movie != null) {
-                HttpSession session = request.getSession();
-                session.setAttribute(MOVIE_ID, movieId);
-                session.setAttribute(TITLE, movie.getTitle());
-                session.setAttribute(RELEASE_DATE, movie.getReleaseDate());
-                session.setAttribute(DURATION, movie.getDuration());
-                session.setAttribute(TRAILER, movie.getTrailer());
-                session.setAttribute(DESCRIPTION, movie.getDescription());
-                response.sendRedirect("movieedit.jsp");
+            HttpSession session = request.getSession();
+            Object role = session.getAttribute("role");
+            if (role != null && role.equals("admin")) {
+                String movieId = Validation.sanitize(request.getParameter("movieId"));
+                Movie movie = movieDAO.getMovieById(movieId);
+                if (movie != null) {
+                    session.setAttribute(MOVIE_ID, movieId);
+                    session.setAttribute(TITLE, movie.getTitle());
+                    session.setAttribute(RELEASE_DATE, movie.getReleaseDate());
+                    session.setAttribute(DURATION, movie.getDuration());
+                    session.setAttribute(TRAILER, movie.getTrailer());
+                    session.setAttribute(DESCRIPTION, movie.getDescription());
+                    response.sendRedirect("movieedit.jsp");
+                } else {
+                    response.sendRedirect("managemovie.jsp");
+                }
             } else {
-                response.sendRedirect("managemovie.jsp");
+                response.sendRedirect("home.jsp");
             }
         } catch (Exception e) {
             e.printStackTrace();

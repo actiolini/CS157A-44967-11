@@ -13,6 +13,7 @@ import java.util.List;
 import moviebuddy.dao.TheatreDAO;
 import moviebuddy.model.Theatre;
 import moviebuddy.model.Room;
+import moviebuddy.util.Validation;
 
 @WebServlet("/RoomGet")
 public class RoomGetServlet extends HttpServlet {
@@ -31,14 +32,19 @@ public class RoomGetServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            int theatreId = Integer.parseInt(request.getParameter("theatreId"));
-            Theatre theatre = theatreDAO.getTheatreById(theatreId);
-            List<Room> rooms = theatreDAO.listRooms(theatreId);
             HttpSession session = request.getSession();
-            session.setAttribute(THEATRE_ID, theatreId);
-            session.setAttribute(THEATRE_NAME, theatre.getTheatreName());
-            session.setAttribute(ROOMS, rooms);
-            response.sendRedirect("manageroom.jsp");
+            Object role = session.getAttribute("role");
+            if (role != null && role.equals("admin")) {
+                String theatreId = Validation.sanitize(request.getParameter("theatreId"));
+                Theatre theatre = theatreDAO.getTheatreById(theatreId);
+                List<Room> rooms = theatreDAO.listRooms(theatreId);
+                session.setAttribute(THEATRE_ID, theatreId);
+                session.setAttribute(THEATRE_NAME, theatre.getTheatreName());
+                session.setAttribute(ROOMS, rooms);
+                response.sendRedirect("manageroom.jsp");
+            } else {
+                response.sendRedirect("home.jsp");
+            }
         } catch (Exception e) {
             response.sendRedirect("error.jsp");
             e.printStackTrace();
@@ -50,9 +56,11 @@ public class RoomGetServlet extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             if (session.getAttribute(THEATRE_ID) != null) {
-                int theatreId = Integer.parseInt(session.getAttribute(THEATRE_ID).toString());
+                String theatreId = Validation.sanitize(session.getAttribute(THEATRE_ID).toString());
+                Theatre theatre = theatreDAO.getTheatreById(theatreId);
                 List<Room> rooms = theatreDAO.listRooms(theatreId);
-                session.setAttribute(ROOMS, rooms);
+                request.setAttribute(THEATRE_NAME, theatre.getTheatreName());
+                request.setAttribute(ROOMS, rooms);
             }
         } catch (Exception e) {
             response.sendRedirect("error.jsp");

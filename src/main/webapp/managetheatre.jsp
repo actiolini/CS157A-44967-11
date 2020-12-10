@@ -18,7 +18,7 @@
         session.setAttribute("count", count + 1);
     }
 
-    if(session.getAttribute("email") == null || !session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr())) || session.getAttribute("staffId") == null || !(session.getAttribute("role").equals("admin") || session.getAttribute("role").equals("manager"))){
+    if(session.getAttribute("email") == null || !session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr())) || session.getAttribute("staffId") == null || !(session.getAttribute("role").equals("admin"))){
         response.sendRedirect("home.jsp");
     }
 
@@ -63,7 +63,7 @@
                     <th>State</th>
                     <th>Country</th>
                     <th>Zip</th>
-                    <th></th>
+                    <th>Actions</th>
                 </tr>
                 <c:forEach items="${theatreList}" var="theatre">
                     <tr>
@@ -74,26 +74,24 @@
                         <td>${theatre.getCountry()}</td>
                         <td>${theatre.getZip()}</td>
                         <td>
-                            <form action="RoomGet" method="POST" class="button">
-                                <input type="hidden" name="theatreId" value="${theatre.getId()}" />
-                                <input type="submit" class="btn btn-outline-info" value="Room" />
-                            </form>
-                            <form action="ManagerGet" method="POST" class="button">
-                                <input type="hidden" name="theatreId" value="${theatre.getId()}" />
-                                <input type="submit" class="btn btn-outline-info" value="Manager" />
-                            </form>
-                            <form action="TicketPriceGet" method="POST" class="button">
-                                <input type="hidden" name="theatreId" value="${theatre.getId()}" />
-                                <input type="submit" class="btn btn-outline-info" value="Ticket Price" />
-                            </form>
-                            <form action="TheatreLoadEdit" method="POST" class="button">
-                                <input type="hidden" name="theatreId" value="${theatre.getId()}" />
-                                <input type="submit" class="btn btn-outline-info" value="Edit" />
-                            </form>
-                            <form action="TheatreDelete" method="POST" class="button">
-                                <input type="hidden" name="theatreId" value="${theatre.getId()}" />
-                                <input type="submit" class="btn btn-outline-info" value="Delete" />
-                            </form>
+                            <div class="container">
+                                <form action="TicketPriceGet" method="POST" class="button">
+                                    <input type="hidden" name="theatreId" value="${theatre.getId()}" />
+                                    <input type="submit" class="btn btn-outline-info" value="Ticket Price" />
+                                </form>
+                                <form action="RoomGet" method="POST" class="button">
+                                    <input type="hidden" name="theatreId" value="${theatre.getId()}" />
+                                    <input type="submit" class="btn btn-outline-info" value="Room" />
+                                </form>
+                                <form action="TheatreLoadEdit" method="POST" class="button">
+                                    <input type="hidden" name="theatreId" value="${theatre.getId()}" />
+                                    <input type="submit" class="btn btn-outline-info" value="Edit" />
+                                </form>
+                                <form action="TheatreDelete" method="POST" class="button">
+                                    <input type="hidden" name="theatreId" value="${theatre.getId()}" />
+                                    <input type="submit" class="btn btn-outline-info" value="Delete" />
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 </c:forEach>

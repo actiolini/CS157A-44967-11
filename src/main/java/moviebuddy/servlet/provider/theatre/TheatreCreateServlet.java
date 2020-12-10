@@ -32,31 +32,36 @@ public class TheatreCreateServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            String theatreName = Validation.sanitize(request.getParameter("theatreName"));
-            String address = Validation.sanitize(request.getParameter("address"));
-            String city = Validation.sanitize(request.getParameter("city"));
-            String state = Validation.sanitize(request.getParameter("state"));
-            String country = Validation.sanitize(request.getParameter("country"));
-            String zip = Validation.sanitize(request.getParameter("zip"));
-            String errorMessage = "";
-            if (theatreDAO.getTheatreByName(theatreName) != null) {
-                errorMessage = "Theatre name already existed";
-            }
-            if (errorMessage.isEmpty()) {
-                errorMessage = theatreDAO.createTheatre(theatreName, address, city, state, country, zip);
-            }
-            if (errorMessage.isEmpty()) {
-                response.sendRedirect("managetheatre.jsp");
+            HttpSession session = request.getSession();
+            Object role = session.getAttribute("role");
+            if (role != null && role.equals("admin")) {
+                String theatreName = Validation.sanitize(request.getParameter("theatreName"));
+                String address = Validation.sanitize(request.getParameter("address"));
+                String city = Validation.sanitize(request.getParameter("city"));
+                String state = Validation.sanitize(request.getParameter("state"));
+                String country = Validation.sanitize(request.getParameter("country"));
+                String zip = Validation.sanitize(request.getParameter("zip"));
+                String errorMessage = "";
+                if (theatreDAO.getTheatreByName(theatreName) != null) {
+                    errorMessage = "Theatre name already existed";
+                }
+                if (errorMessage.isEmpty()) {
+                    errorMessage = theatreDAO.createTheatre(theatreName, address, city, state, country, zip);
+                }
+                if (errorMessage.isEmpty()) {
+                    response.sendRedirect("managetheatre.jsp");
+                } else {
+                    session.setAttribute("errorMessage", errorMessage);
+                    session.setAttribute(NAME, theatreName);
+                    session.setAttribute(ADDRESS, address);
+                    session.setAttribute(CITY, city);
+                    session.setAttribute(STATE, state);
+                    session.setAttribute(COUNTRY, country);
+                    session.setAttribute(ZIP, zip);
+                    response.sendRedirect("theatrecreate.jsp");
+                }
             } else {
-                HttpSession session = request.getSession();
-                session.setAttribute("errorMessage", errorMessage);
-                session.setAttribute(NAME, theatreName);
-                session.setAttribute(ADDRESS, address);
-                session.setAttribute(CITY, city);
-                session.setAttribute(STATE, state);
-                session.setAttribute(COUNTRY, country);
-                session.setAttribute(ZIP, zip);
-                response.sendRedirect("theatrecreate.jsp");
+                response.sendRedirect("home.jsp");
             }
         } catch (Exception e) {
             response.sendRedirect("error.jsp");

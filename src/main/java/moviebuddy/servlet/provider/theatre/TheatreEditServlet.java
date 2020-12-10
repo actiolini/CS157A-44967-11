@@ -33,38 +33,44 @@ public class TheatreEditServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            if (request.getParameter("action").equals("save")) {
-                int theatreId = Integer.parseInt(Validation.sanitize(request.getParameter("theatreId")));
-                String theatreName = Validation.sanitize(request.getParameter("theatreName"));
-                String address = Validation.sanitize(request.getParameter("address"));
-                String city = Validation.sanitize(request.getParameter("city"));
-                String state = Validation.sanitize(request.getParameter("state"));
-                String country = Validation.sanitize(request.getParameter("country"));
-                String zip = Validation.sanitize(request.getParameter("zip"));
-                String errorMessage = "";
-                Theatre theatre = theatreDAO.getTheatreByName(theatreName);
-                if (theatre != null && theatre.getId() != theatreId) {
-                    errorMessage = "Theatre name already existed";
+            HttpSession session = request.getSession();
+            Object role = session.getAttribute("role");
+            if (role != null && role.equals("admin")) {
+                if (request.getParameter("action").equals("save")) {
+                    String theatreId = Validation.sanitize(request.getParameter("theatreId"));
+                    String theatreName = Validation.sanitize(request.getParameter("theatreName"));
+                    String address = Validation.sanitize(request.getParameter("address"));
+                    String city = Validation.sanitize(request.getParameter("city"));
+                    String state = Validation.sanitize(request.getParameter("state"));
+                    String country = Validation.sanitize(request.getParameter("country"));
+                    String zip = Validation.sanitize(request.getParameter("zip"));
+                    String errorMessage = "";
+                    Theatre theatre = theatreDAO.getTheatreByName(theatreName);
+                    if (theatre != null && theatre.getId() != Integer.parseInt(theatreId)) {
+                        errorMessage = "Theatre name already existed";
+                    }
+                    if (errorMessage.isEmpty()) {
+                        errorMessage = theatreDAO.updateTheatre(theatreId, theatreName, address, city, state, country,
+                                zip);
+                    }
+                    if (errorMessage.isEmpty()) {
+                        response.sendRedirect("managetheatre.jsp");
+                    } else {
+                        session.setAttribute("errorMessage", errorMessage);
+                        session.setAttribute(NAME, theatreName);
+                        session.setAttribute(ADDRESS, address);
+                        session.setAttribute(CITY, city);
+                        session.setAttribute(STATE, state);
+                        session.setAttribute(COUNTRY, country);
+                        session.setAttribute(ZIP, zip);
+                        response.sendRedirect("theatreedit.jsp");
+                    }
                 }
-                if (errorMessage.isEmpty()) {
-                    errorMessage = theatreDAO.updateTheatre(theatreId, theatreName, address, city, state, country, zip);
-                }
-                if (errorMessage.isEmpty()) {
+                if (request.getParameter("action").equals("cancel")) {
                     response.sendRedirect("managetheatre.jsp");
-                } else {
-                    HttpSession session = request.getSession();
-                    session.setAttribute("errorMessage", errorMessage);
-                    session.setAttribute(NAME, theatreName);
-                    session.setAttribute(ADDRESS, address);
-                    session.setAttribute(CITY, city);
-                    session.setAttribute(STATE, state);
-                    session.setAttribute(COUNTRY, country);
-                    session.setAttribute(ZIP, zip);
-                    response.sendRedirect("theatreedit.jsp");
                 }
-            }
-            if (request.getParameter("action").equals("cancel")) {
-                response.sendRedirect("managetheatre.jsp");
+            } else {
+                response.sendRedirect("home.jsp");
             }
         } catch (Exception e) {
             response.sendRedirect("error.jsp");

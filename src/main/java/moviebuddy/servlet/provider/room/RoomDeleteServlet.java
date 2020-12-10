@@ -25,14 +25,19 @@ public class RoomDeleteServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            int theatreId = Integer.parseInt(Validation.sanitize(request.getParameter("theatreId")));
-            int roomNumber = Integer.parseInt(Validation.sanitize(request.getParameter("roomNumber")));
-            String errorMessage = theatreDAO.deleteRoom(theatreId, roomNumber);
-            if (!errorMessage.isEmpty()) {
-                HttpSession session = request.getSession();
-                session.setAttribute("errorMessage", errorMessage);
+            HttpSession session = request.getSession();
+            Object role = session.getAttribute("role");
+            if (role != null && role.equals("admin")) {
+                String theatreId = Validation.sanitize(request.getParameter("theatreId"));
+                String roomNumber = Validation.sanitize(request.getParameter("roomNumber"));
+                String errorMessage = theatreDAO.deleteRoom(theatreId, roomNumber);
+                if (!errorMessage.isEmpty()) {
+                    session.setAttribute("errorMessage", errorMessage);
+                }
+                response.sendRedirect("manageroom.jsp");
+            } else {
+                response.sendRedirect("home.jsp");
             }
-            response.sendRedirect("manageroom.jsp");
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("error.jsp");

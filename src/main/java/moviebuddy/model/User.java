@@ -14,6 +14,7 @@ public class User {
     private boolean autoRenew;
     private int staffId;
     private String role;
+    private int theatre_id;
 
     public int getAccountId() {
         return accountId;
@@ -59,6 +60,10 @@ public class User {
         return role;
     }
 
+    public int getTheatre_id() {
+        return theatre_id;
+    }
+
     public void setAccountId(int accountId) {
         this.accountId = accountId;
     }
@@ -101,5 +106,9 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public void setTheatre_id(int theatre_id) {
+        this.theatre_id = theatre_id;
     }
 }

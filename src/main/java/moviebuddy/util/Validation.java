@@ -86,6 +86,13 @@ public class Validation {
         return "";
     }
 
+    public static String validateTheatreLocation(String location) {
+        if (location.isEmpty() || location.equals("none")) {
+            return "Please select a theatre location\n";
+        }
+        return "";
+    }
+
     public static String validateStaffId(String staffId) {
         if (staffId.length() != STAFF_ID_LENGTH || !staffId.matches("[0-9]+")) {
             return "Incorrect staff ID number format\n";

@@ -1,6 +1,10 @@
-function loadSelectedState(state) {
-    if (state != "") {
-        document.getElementById("default").removeAttribute("selected");
-        document.getElementById("state").value = state;
+function loadSelectedOption(defaultId, selectId, optionValue) {
+    if (optionValue != "") {
+        document.getElementById(defaultId).removeAttribute("selected");
+        document.getElementById(selectId).value = optionValue;
     }
+}
+
+function submitOnChange(formId) {
+    document.getElementById(formId).submit();
 }

@@ -1,4 +1,4 @@
-package moviebuddy.servlet.provider.theatre;
+package moviebuddy.servlet.provider.staff;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,16 +9,18 @@ import javax.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-import moviebuddy.dao.TheatreDAO;
+import moviebuddy.dao.UserDAO;
+import moviebuddy.model.User;
 import moviebuddy.util.Validation;
 
-@WebServlet("/TheatreDelete")
-public class TheatreDeleteServlet extends HttpServlet {
-    private static final long serialVersionUID = -3317681345145396262L;
-    private TheatreDAO theatreDAO;
+@WebServlet("/StaffDelete")
+public class StaffDeleteServlet extends HttpServlet {
+    private static final long serialVersionUID = -8552363830506676929L;
+
+    private UserDAO userDAO;
 
     public void init() {
-        theatreDAO = new TheatreDAO();
+        userDAO = new UserDAO();
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -26,13 +28,20 @@ public class TheatreDeleteServlet extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             Object role = session.getAttribute("role");
-            if (role != null && role.equals("admin")) {
-                String theatreId = Validation.sanitize(request.getParameter("theatreId"));
-                String errorMessage = theatreDAO.deleteTheatre(theatreId);
+            if (role != null && (role.equals("admin") || role.equals("manager"))) {
+                String staffId = Validation.sanitize(request.getParameter("staffId"));
+                User staff = userDAO.getStaffUser(staffId);
+                String errorMessage = "";
+                if (staff != null && !staff.getRole().equals("faculty") && role.equals("manager")) {
+                    errorMessage = "Unauthorized deletion";
+                }
+                if (errorMessage.isEmpty()) {
+                    errorMessage = userDAO.deleteStaff(staffId);
+                }
                 if (!errorMessage.isEmpty()) {
                     session.setAttribute("errorMessage", errorMessage);
                 }
-                response.sendRedirect("managetheatre.jsp");
+                response.sendRedirect("managestaff.jsp");
             } else {
                 response.sendRedirect("home.jsp");
             }

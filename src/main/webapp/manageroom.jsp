@@ -18,8 +18,17 @@
         session.setAttribute("count", count + 1);
     }
 
-    if(session.getAttribute("email") == null || !session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr())) || session.getAttribute("staffId") == null || !(session.getAttribute("role").equals("admin") || session.getAttribute("role").equals("manager"))){
+    if(session.getAttribute("email") == null || !session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr())) || session.getAttribute("staffId") == null || !(session.getAttribute("role").equals("admin"))){
         response.sendRedirect("home.jsp");
+    }
+
+    if(session.getAttribute("roomTheatreName") != null){
+        request.setAttribute("roomTheatreName", session.getAttribute("roomTheatreName"));
+        session.removeAttribute("roomTheatreName");
+    }
+    if(session.getAttribute("roomList") != null){
+        request.setAttribute("roomList", session.getAttribute("roomList"));
+        session.removeAttribute("roomList");
     }
 
     request.setAttribute("errorMessage", session.getAttribute("errorMessage"));
@@ -64,14 +73,14 @@
                     <th>Room Number</th>
                     <th>Number of Rows</th>
                     <th>Seats per Row</th>
-                    <th></th>
+                    <th>Actions</th>
                 </tr>
                 <c:forEach items="${roomList}" var="room">
                     <tr>
                         <td>${room.getRoomNumber()}</td>
                         <td>${room.getNumberOfRows()}</td>
                         <td>${room.getSeatsPerRow()}</td>
-                        <td class="text-center">
+                        <td>
                             <div class="container">
                                 <form action="RoomLoadEdit" method="POST" class="button">
                                     <input type="hidden" name="theatreId" value="${roomTheatreId}" />
