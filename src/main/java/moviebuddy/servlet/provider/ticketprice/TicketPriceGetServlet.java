@@ -52,7 +52,7 @@ public class TicketPriceGetServlet extends HttpServlet {
             Theatre theatre = theatreDAO.getTheatreById(theatreId);
             session.setAttribute(THEATRE_ID, theatreId);
             session.setAttribute(THEATRE_NAME, theatre.getTheatreName());
-            response.sendRedirect("ticketprice.jsp");
+            response.sendRedirect("manageticketprice.jsp");
         } catch (Exception e) {
             response.sendRedirect("error.jsp");
             e.printStackTrace();

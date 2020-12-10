@@ -34,7 +34,7 @@ public class TicketPriceDeleteServlet extends HttpServlet {
                 if (!errorMessage.isEmpty()) {
                     session.setAttribute("errorMessage", errorMessage);
                 }
-                response.sendRedirect("ticketprice.jsp");
+                response.sendRedirect("manageticketprice.jsp");
             } else {
                 response.sendRedirect("home.jsp");
             }
