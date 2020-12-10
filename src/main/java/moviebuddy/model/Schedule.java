@@ -8,19 +8,22 @@ import java.time.format.DateTimeFormatter;
 
 public class Schedule {
     private int scheduleId;
+    private int theatreId;
     private int movieId;
     private LocalDate showDate;
-    private List<LocalTime> showTimes;
+    private List<ShowTime> showTimes;
 
-    public Schedule(int scheduleId, int movieId, LocalDate showDate) {
+    public Schedule(int scheduleId) {
         this.scheduleId = scheduleId;
-        this.movieId = movieId;
-        this.showDate = showDate;
         this.showTimes = new ArrayList<>();
     }
 
     public int getScheduleId() {
         return scheduleId;
+    }
+
+    public int getTheatreId() {
+        return theatreId;
     }
 
     public int getMovieId() {
@@ -31,11 +34,28 @@ public class Schedule {
         return showDate;
     }
 
-    public String getFormattedDate() {
-        return this.showDate.format(DateTimeFormatter.ofPattern("MM/dd"));
+    public String displayShowDate() {
+        return DateTimeFormatter.ofPattern("MM/dd").format(showDate);
     }
 
-    public List<LocalTime> getShowTimes() {
+    public List<ShowTime> getShowTimes() {
         return showTimes;
     }
+
+    public void setTheatreId(int theatreId) {
+        this.theatreId = theatreId;
+    }
+
+    public void setMovieId(int movieId) {
+        this.movieId = movieId;
+    }
+
+    public void setShowDate(LocalDate showDate) {
+        this.showDate = showDate;
+    }
+
+    public void addShowTime(LocalTime startTime, LocalTime endTime, int roomNumber) {
+        showTimes.add(new ShowTime(startTime, endTime, roomNumber));
+    }
+
 }

@@ -207,14 +207,14 @@ public class TheatreDAO {
     }
 
     public List<Room> listRooms(String theatreId) throws Exception {
-        String QUERY_ROOMS = "SELECT theatre_id, room_number, sections, seats FROM room WHERE theatre_id=? ORDER BY room_number;";
+        String QUERY_ROOMS = "SELECT room_number, sections, seats FROM room WHERE theatre_id=? ORDER BY room_number;";
         Connection conn = DBConnection.connect();
         PreparedStatement queryRooms = conn.prepareStatement(QUERY_ROOMS);
         queryRooms.setString(1, theatreId);
         ResultSet res = queryRooms.executeQuery();
         List<Room> rooms = new ArrayList<>();
         while (res.next()) {
-            Room room = new Room(res.getInt("theatre_id"), res.getInt("room_number"));
+            Room room = new Room(Integer.parseInt(theatreId), res.getInt("room_number"));
             room.setNumberOfRows(res.getInt("sections"));
             room.setSeatsPerRow(res.getInt("seats"));
             rooms.add(room);

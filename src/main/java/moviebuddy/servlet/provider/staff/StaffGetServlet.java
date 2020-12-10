@@ -24,7 +24,7 @@ public class StaffGetServlet extends HttpServlet {
     private static final String ADMINS = "adminUserList";
 
     private static final String THEATRE_NAME = "staffTheatreName";
-    private static final String STAFFS = "staffUsersList";
+    private static final String STAFFS = "staffUserList";
 
     private UserDAO userDAO;
     private TheatreDAO theatreDAO;

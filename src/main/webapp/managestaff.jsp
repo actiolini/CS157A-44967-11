@@ -94,7 +94,7 @@
                     </c:forEach>
                     <tr></tr>
                 </c:if>
-                <c:forEach items="${staffUsersList}" var="staff">
+                <c:forEach items="${staffUserList}" var="staff">
                     <tr>
                         <td>${staff.getStaffId()}</td>
                         <td>${staff.getUserName()}</td>
