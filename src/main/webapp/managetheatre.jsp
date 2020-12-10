@@ -63,7 +63,7 @@
                     <th>State</th>
                     <th>Country</th>
                     <th>Zip</th>
-                    <th></th>
+                    <th>Actions</th>
                 </tr>
                 <c:forEach items="${theatreList}" var="theatre">
                     <tr>

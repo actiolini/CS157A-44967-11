@@ -73,7 +73,7 @@
                     <th>Room Number</th>
                     <th>Number of Rows</th>
                     <th>Seats per Row</th>
-                    <th></th>
+                    <th>Actions</th>
                 </tr>
                 <c:forEach items="${roomList}" var="room">
                     <tr>

@@ -71,7 +71,7 @@
                         <tr>
                             <th>Start time</th>
                             <th>Price</th>
-                            <th></th>
+                            <th>Actions</th>
                         </tr>
                         <tr>
                             <td>
