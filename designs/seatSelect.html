@@ -20,12 +20,12 @@
                 aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <a class="navbar-brand" href="#">Movie Buddy</a>
+            <a class="navbar-brand" href="./index.html">Movie Buddy</a>
 
             <div class="collapse navbar-collapse" id="navbarToggler">
                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                     <li class="nav-item active">
-                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="./index.html">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item active">
                         <form class="form-inline my-2 my-lg-0">
@@ -60,7 +60,7 @@
                         Screen
                     </div>
                     <div class="text-center">
-                        <form id="seatSelect" action="" onclick="checkboxes()">
+                        <form id="seatSelect" action="./checkout.html" onclick="checkboxes()">
                             <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                 <label class="btn btn btn-outline-info">
                                     <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
@@ -99,10 +99,12 @@
                                     </label>
                                 </label>
                             </div>
+                            <br>
+                            <button type="submit" class="btn btn-success">Purchase</button>
                         </form>
                         <br>
                         <br>
-                        <button type="submit" class="btn btn-success">Purchase</button>
+                        
                     </div>
                 </div>
             </div>

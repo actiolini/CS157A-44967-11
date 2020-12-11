@@ -1,16 +1,13 @@
 package moviebuddy.model;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-
 public class Ticket {
     private int scheduleId;
     private int theatreId;
     private String theatreName;
     private String seatNumber;
     private double price;
-    private LocalTime showTime;
-    private LocalDate showDate;
+    private String showTime;
+    private String showDate;
+    private String movieName;
 
     public int getScheduleId() {
         return scheduleId;
@@ -32,12 +29,16 @@ public class Ticket {
         return seatNumber;
     }
 
-    public LocalTime getShowTime() {
+    public String getShowTime() {
         return showTime;
     }
 
-    public LocalDate getShowDate() {
+    public String getShowDate() {
         return showDate;
+    }
+
+    public String getMovieName(){
+        return movieName;
     }
 
     public void setScheduleId(int scheduleId) {
@@ -60,15 +61,15 @@ public class Ticket {
         this.theatreName = theatreName;
     }
 
-    public void setShowTime() {
+    public void setShowTime(String showTime) {
         this.showTime=showTime;
     }
 
-    public void setShowDate() {
+    public void setShowDate(String showDate) {
         this.showDate=showDate;
     }
-
-    public String getFormattedDate() {
-        return this.showDate.format(DateTimeFormatter.ofPattern("MM/dd"));
+    
+    public void setMovieName(String movieName) {
+        this.movieName=movieName;
     }
 }
