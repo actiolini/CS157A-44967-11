@@ -45,8 +45,14 @@ public class MovieUploadSevlet extends HttpServlet {
                 InputStream streamPoster = partPoster.getInputStream();
                 long posterSize = partPoster.getSize();
                 String description = Validation.sanitize(request.getParameter("description"));
-                String errorMessage = movieDAO.uploadMovie(title, releaseDate, duration, trailer, streamPoster,
-                        posterSize, description);
+                String errorMessage = Validation.validateDate(releaseDate);
+                if (errorMessage.isEmpty()) {
+                    errorMessage = Validation.validateNumber(duration);
+                }
+                if (errorMessage.isEmpty()) {
+                    errorMessage = movieDAO.uploadMovie(title, releaseDate, duration, trailer, streamPoster, posterSize,
+                            description);
+                }
                 if (errorMessage.isEmpty()) {
                     response.sendRedirect("managemovie.jsp");
                 } else {

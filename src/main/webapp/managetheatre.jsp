@@ -43,6 +43,7 @@
 
         <!-- Page Content -->
         <div class="container">
+            <h3>Theatre</h3>
             <hr>
             <div class="row">
                 <div class="col"></div>

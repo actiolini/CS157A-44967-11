@@ -55,6 +55,8 @@
 
         <!-- Page Content -->
         <div class="container">
+            <h3>Theatre</h3>
+            <hr>
             <h1 class="display-3 text-center">Upload Theatre Information</h1>
             <hr>
             <a class="inputAsLink" href="./managetheatre.jsp">&#8249;

@@ -1,4 +1,4 @@
-package moviebuddy.servlet.provider.ticketprice;
+package moviebuddy.servlet.provider.schedule;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,17 +9,17 @@ import javax.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-import moviebuddy.dao.TheatreDAO;
+import moviebuddy.dao.ScheduleDAO;
 import moviebuddy.util.Validation;
 
-@WebServlet("/TicketPriceDelete")
-public class TicketPriceDeleteServlet extends HttpServlet {
-    private static final long serialVersionUID = -4687243445163545649L;
+@WebServlet("/ScheduleDelete")
+public class ScheduleDeleteServlet extends HttpServlet {
+    private static final long serialVersionUID = -8764893949095966660L;
 
-    private TheatreDAO theatreDAO;
+    private ScheduleDAO scheduleDAO;
 
     public void init() {
-        theatreDAO = new TheatreDAO();
+        scheduleDAO = new ScheduleDAO();
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -27,14 +27,13 @@ public class TicketPriceDeleteServlet extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             Object role = session.getAttribute("role");
-            if (role != null && role.equals("admin")) {
-                String theatreId = Validation.sanitize(request.getParameter("theatreId"));
-                String startTime = Validation.sanitize(request.getParameter("startTime"));
-                String errorMessage = theatreDAO.deleteTicketPrice(theatreId, startTime);
+            if (role != null && (role.equals("admin") || role.equals("manager"))) {
+                String scheduleId = Validation.sanitize(request.getParameter("scheduleId"));
+                String errorMessage = scheduleDAO.deleteSchedule(scheduleId);
                 if (!errorMessage.isEmpty()) {
                     session.setAttribute("errorMessage", errorMessage);
                 }
-                response.sendRedirect("manageticketprice.jsp");
+                response.sendRedirect("manageschedule.jsp");
             } else {
                 response.sendRedirect("home.jsp");
             }
