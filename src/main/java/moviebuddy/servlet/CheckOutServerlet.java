@@ -28,7 +28,7 @@ public class CheckOutServerlet extends HttpServlet {
             String[] seatNumber = request.getParameterValues("seatnumber");
             List<Ticket> tickets = new ArrayList<Ticket>();
             for(String seat : seatNumber){
-                Ticket ticket = ticketDAO.getTicketInfo(scheduleId,seat,theatreId);
+                Ticket ticket = ticketDAO.getReceiptInfo(scheduleId,seat,theatreId);
                 tickets.add(ticket);
             }
             request.setAttribute("tickets", tickets);
