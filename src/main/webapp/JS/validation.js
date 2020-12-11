@@ -34,7 +34,7 @@ function validate(form) {
 }
 
 function checkName(elementId, errorId) {
-    invalidUserName = validateUserName(elementId.value)
+    invalidUserName = validateUserName(elementId.value);
     document.getElementById(errorId).innerHTML = invalidUserName;
     return invalidUserName;
 }
