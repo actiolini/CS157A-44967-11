@@ -20,12 +20,12 @@
         aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <a class="navbar-brand" href="#">Movie Buddy</a>
+      <a class="navbar-brand" href="./index.html">Movie Buddy</a>
 
       <div class="collapse navbar-collapse" id="navbarToggler">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
           <li class="nav-item active">
-            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="./index.html">Home <span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item active">
             <form class="form-inline my-2 my-lg-0">
@@ -39,8 +39,11 @@
       </div>
     </nav>
     <div class="container">
-      <h1 class="display-3 text-center">Check Out</h1>
+      <h1 class="display-3 text-center">Recipt</h1>
       <hr>
+      <div class="alert alert-success" role="alert">
+        Ordered Successfully. (Order#123)
+      </div>
       <p><strong>Order#123</strong> (12:00pm, 11/01/2020)</p>
       <table class="table">
         <thead>
@@ -55,35 +58,48 @@
           <tr>
             <td>movie name</td>
             <td>11:00pm, 12/01/2020</td>
-            <td>A1,B1</td>
+            <td>A1</td>
             <td>$10</td>
           </tr>
-        </tbody>
-      </table>
-      <hr>
-      <p class="text-right"><strong>Total: $20.00</strong></p>
-      <hr>
-      <p><strong>Order#456</strong> (12:00pm, 11/05/2020)</p>
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">Movie</th>
-            <th scope="col">Time</th>
-            <th scope="col">Seat</th>
-            <th scope="col">Price</th>
-          </tr>
-        </thead>
-        <tbody>
           <tr>
             <td>movie name</td>
             <td>11:00pm, 12/01/2020</td>
-            <td>A1,B1</td>
+            <td>B1</td>
             <td>$10</td>
           </tr>
         </tbody>
       </table>
       <hr>
       <p class="text-right"><strong>Total: $20.00</strong></p>
+      <hr>
+      <div hidden>
+        <p><strong>Order#456</strong> (12:00pm, 11/05/2020)</p>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Movie</th>
+              <th scope="col">Time</th>
+              <th scope="col">Seat</th>
+              <th scope="col">Price</th>
+            </tr>
+          <tbody>
+            <tr>
+              <td>movie name</td>
+              <td>11:00pm, 12/01/2020</td>
+              <td>A1,B1</td>
+              <td>$10</td>
+            </tr>
+            <tr>
+              <td>movie name</td>
+              <td>11:00pm, 12/01/2020</td>
+              <td>B1</td>
+              <td>$10</td>
+            </tr>
+          </tbody>
+        </table>
+        <hr>
+        <p class="text-right"><strong>Total: $20.00</strong></p>
+      </div>
     </div>
   </div>
 

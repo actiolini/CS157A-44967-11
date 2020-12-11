@@ -19,16 +19,19 @@
     request.setAttribute("isProvider", "hidden");
     request.setAttribute("signedOut", "");
     request.setAttribute("signedIn", "hidden");
+    request.setAttribute("guestemail", "");
     if(session.getAttribute("email") != null && session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr()))){
         request.setAttribute("signedOut", "hidden");
         request.setAttribute("signedIn", "");
+        request.setAttribute("guestemail", "hidden");
         request.setAttribute("userName", session.getAttribute("userName"));
         request.setAttribute("zip", session.getAttribute("zip"));
-        request.setAttribute("guestemail", "hidden");
         if(session.getAttribute("staffId") != null && (session.getAttribute("role").equals("admin") || session.getAttribute("role").equals("manager"))){
             request.setAttribute("isProvider", "");
         }
     }
+
+
 %>
 
 <!doctype html>
@@ -53,12 +56,12 @@
                 aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <a class="navbar-brand" href="#">Movie Buddy</a>
+            <a class="navbar-brand" href="./home.jsp">Movie Buddy</a>
 
             <div class="collapse navbar-collapse" id="navbarToggler">
                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                     <li class="nav-item active">
-                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="./home.jsp">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item active">
                         <form class="form-inline my-2 my-lg-0">
@@ -68,7 +71,14 @@
                         </form>
                     </li>
                 </ul>
-                <a class="nav-link" href="#">Sign In / Register</a>
+                <a ${signedOut} class="nav-link" href="./signin.jsp">Sign In</a>
+                <a ${signedOut} class="nav-link" href="./signup.jsp">Sign Up</a>
+                <form action="" method="POST">
+                    <input class="submitLink" ${signedIn} type="submit" value="${userName}">
+                </form>
+                <form action="./SignOut" method="POST">
+                    <input class="submitLink" ${signedIn} type="submit" value="Sign Out">
+                </form>
             </div>
         </nav>
         <div class="container">
@@ -84,12 +94,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>movie name</td>
-                        <td>11:00pm, 12/01/2020</td>
-                        <td>A1,B1</td>
-                        <td>$10</td>
-                    </tr>
+                    <c:forEach items="${tickets}" var="ticket">
+                        <tr>
+                            <td>${ticket.getMovieName()}</td>
+                            <td>${ticket.getShowTime()}, ${ticket.getShowDate()}</td>
+                            <td>${ticket.getSeatNumber()}</td>
+                            <td>${ticket.getPrice()}</td>
+                        </tr>
+                    </c:forEach>
                 </tbody>
             </table>
             <hr>
@@ -104,8 +116,13 @@
                 <div id="paymentInfo">
                     <h1 class="display-4">Payment information</h1>
                     <div ${guestemail} class="form-group">
-                        <label for="inputCardHolderName">Email</label>
-                        <input type="text" class="form-control" id="inputEmail" placeholder="">
+                        <label for="inputGuestEmail">Email</label>
+                        <input id="guestemail" type="text" class="form-control" id="inputEmail" placeholder="">
+                        <label>Email</label><br>
+                            <input id="guestemail" class="form-control inputbox" type="text" name="guestemail" placeholder="Enter email"
+                                onkeyup="checkEmail(this, 'emailError')">
+                        <br>
+                        <span id="emailError" class="errormessage">${emailError}</span>
                     </div>
                     <div class="form-group">
                         <label for="inputCardHolderName">Card Holder Name</label>
