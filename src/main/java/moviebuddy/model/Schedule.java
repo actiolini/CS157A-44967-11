@@ -1,7 +1,5 @@
 package moviebuddy.model;
 
-import java.util.List;
-import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -9,13 +7,13 @@ import java.time.format.DateTimeFormatter;
 public class Schedule {
     private int scheduleId;
     private int theatreId;
+    private int roomNumber;
     private int movieId;
     private LocalDate showDate;
-    private List<ShowTime> showTimes;
+    private ShowTime showTime;
 
     public Schedule(int scheduleId) {
         this.scheduleId = scheduleId;
-        this.showTimes = new ArrayList<>();
     }
 
     public int getScheduleId() {
@@ -30,20 +28,28 @@ public class Schedule {
         return movieId;
     }
 
+    public int getRoomNumber() {
+        return roomNumber;
+    }
+
     public LocalDate getShowDate() {
         return showDate;
     }
 
     public String displayShowDate() {
-        return DateTimeFormatter.ofPattern("MM/dd").format(showDate);
+        return DateTimeFormatter.ofPattern("MM/dd/yyyy").format(showDate);
     }
 
-    public List<ShowTime> getShowTimes() {
-        return showTimes;
+    public ShowTime getShowTime() {
+        return showTime;
     }
 
     public void setTheatreId(int theatreId) {
         this.theatreId = theatreId;
+    }
+
+    public void setRoomNumber(int roomNumber) {
+        this.roomNumber = roomNumber;
     }
 
     public void setMovieId(int movieId) {
@@ -54,8 +60,8 @@ public class Schedule {
         this.showDate = showDate;
     }
 
-    public void addShowTime(LocalTime startTime, LocalTime endTime, int roomNumber) {
-        showTimes.add(new ShowTime(startTime, endTime, roomNumber));
+    public void setShowTime(LocalTime startTime, LocalTime endTime) {
+        this.showTime = new ShowTime(startTime, endTime);
     }
 
 }

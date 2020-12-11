@@ -40,20 +40,24 @@
     <div style="flex: 1 0 auto;">
         <!-- Navigation bar -->
         <jsp:include page="/navbar.jsp" />
+
         <!-- Page Content -->
         <div class="container">
+            <h3>Movie</h3>
             <hr>
-            <div class="row">
-                <div class="col"></div>
-                <div class="col-6 text-center">
-                    <a href="./movieupload.jsp">
-                        <button type="button" class="btn btn-outline-info">Upload Movie</button>
-                    </a>
+            <c:if test="${isAdmin}">
+                <div class="row">
+                    <div class="col"></div>
+                    <div class="col-6 text-center">
+                        <a href="./movieupload.jsp">
+                            <button type="button" class="btn btn-outline-info">Upload Movie</button>
+                        </a>
+                    </div>
+                    <div class="col"></div>
                 </div>
-                <div class="col"></div>
-            </div>
-            <hr>
-            <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
+                <hr>
+                <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
+            </c:if>
             <c:forEach items="${movieList}" var="movie">
                 <div class="card">
                     <div class="card-body">
@@ -90,14 +94,20 @@
                         <div class="row">
                             <div class="col">
                                 <div class="container">
-                                    <form action="MovieLoadEdit" method="POST" class="button">
+                                    <form action="ScheduleGet" method="POST" class="button">
                                         <input type="hidden" name="movieId" value=${movie.getId()} />
-                                        <input type="submit" class="btn btn-outline-info" value="Edit" />
+                                        <input type="submit" class="btn btn-outline-info" value="Schedule" />
                                     </form>
-                                    <form action="MovieDelete" method="POST" class="button">
-                                        <input type="hidden" name="movieId" value=${movie.getId()} />
-                                        <input type="submit" class="btn btn-outline-info" value="Delete" />
-                                    </form>
+                                    <c:if test="${isAdmin}">
+                                        <form action="MovieLoadEdit" method="POST" class="button">
+                                            <input type="hidden" name="movieId" value=${movie.getId()} />
+                                            <input type="submit" class="btn btn-outline-info" value="Edit" />
+                                        </form>
+                                        <form action="MovieDelete" method="POST" class="button">
+                                            <input type="hidden" name="movieId" value=${movie.getId()} />
+                                            <input type="submit" class="btn btn-outline-info" value="Delete" />
+                                        </form>
+                                    </c:if>
                                 </div>
                             </div>
                         </div>

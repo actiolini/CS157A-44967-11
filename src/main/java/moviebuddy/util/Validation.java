@@ -2,9 +2,13 @@ package moviebuddy.util;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
+
+import moviebuddy.model.Schedule;
+import moviebuddy.model.ShowTime;
 
 public class Validation {
     private static final int USERNAME_MIN_LENGTH = 2;
@@ -131,6 +135,18 @@ public class Validation {
             Double.parseDouble(number);
         } catch (Exception e) {
             return "Invalid double input\n";
+        }
+        return "";
+    }
+
+    public static String checkScheduleConflict(List<Schedule> schedule, ShowTime interval) {
+        for (Schedule s : schedule) {
+            ShowTime st = s.getShowTime();
+            if (interval.isConflict(st)) {
+                String message = String.format("Time conflict - Schedule ID: %s on %s at %s-%s", s.getScheduleId(),
+                        s.displayShowDate(), st.getStartTime(), st.getEndTime());
+                return message;
+            }
         }
         return "";
     }
