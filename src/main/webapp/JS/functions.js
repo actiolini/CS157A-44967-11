@@ -1,12 +1,10 @@
-function refillSignUp(userName, email) {
-    document.getElementById("userName").setAttribute('value', userName);
-    document.getElementById("email").setAttribute('value', email);
+function loadSelectedOption(defaultId, selectId, optionValue) {
+    if (optionValue != "") {
+        document.getElementById(defaultId).removeAttribute("selected");
+        document.getElementById(selectId).value = optionValue;
+    }
 }
 
-function refillSignIn(email) {
-    document.getElementById("email").setAttribute('value', email);
-}
-
-function refillStaffId(staffId) {
-    document.getElementById("staffId").setAttribute('value', staffId);
+function submitOnChange(formId) {
+    document.getElementById(formId).submit();
 }

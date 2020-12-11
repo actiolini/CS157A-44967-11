@@ -1,4 +1,4 @@
-package moviebuddy.servlet;
+package moviebuddy.servlet.auth;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

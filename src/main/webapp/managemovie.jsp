@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="moviebuddy.util.Passwords" %>
+<jsp:include page="/MovieGet" />
 <%
     response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
     response.setHeader("Pragma", "no-cache"); // HTTP 1.0
@@ -16,134 +17,104 @@
         int count = (int) session.getAttribute("count");
         session.setAttribute("count", count + 1);
     }
-    request.setAttribute("isProvider", "hidden");
-    request.setAttribute("isAdmin", "hidden");
-    if(session.getAttribute("staffId") != null && (session.getAttribute("role").equals("admin") || session.getAttribute("role").equals("manager")) && session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr()))){
-        request.setAttribute("isProvider", "");
-        if(session.getAttribute("role").equals("admin")){
-            request.setAttribute("isAdmin", "");
-        }
-    }else{
+    
+    if(session.getAttribute("email") == null || !session.getAttribute("currentSession").equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr())) || session.getAttribute("staffId") == null || !(session.getAttribute("role").equals("admin") || session.getAttribute("role").equals("manager"))){
         response.sendRedirect("home.jsp");
     }
+
+    request.setAttribute("errorMessage", session.getAttribute("errorMessage"));
+    session.removeAttribute("errorMessage");
 %>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movie Buddy | Manage Movie</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
         integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-    <style>
-        .inputbox {
-            width: 100%;
-        }
-
-        .errormessage {
-            color: red;
-        }
-
-        .submitLink {
-            background-color: transparent;
-            border: none;
-            color: #007bff;
-            cursor: pointer;
-        }
-
-        .submitLink:hover {
-            color: #0056b3;
-        }
-
-        .submitLink:focus {
-            outline: none;
-        }
-    </style>
+    <link rel="stylesheet" href="./css/style.css">
+    <title>Movie Buddy | Manage Movie</title>
 </head>
 
 <body style="height: 100%; display: flex; flex-direction: column;">
     <div style="flex: 1 0 auto;">
-        <nav id="movieBuddyNavBar" class="navbar navbar-expand-lg navbar-light bg-light">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler"
-                aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <a class="navbar-brand" href="./home.jsp">Movie Buddy</a>
-            <div class="collapse navbar-collapse" id="navbarToggler">
-                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                    <li ${isProvider} class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                            Manage
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="./managetheatre.jsp">Theatre</a>
-                            <a class="dropdown-item" href="./managemovie.jsp">Movie</a>
-                            <a class="dropdown-item" href="./manageschedule.jsp">Schedule</a>
-                            <a class="dropdown-item" href="./managestaff.jsp">Staff</a>
-                        </div>
-                    </li>
-                </ul>
-                <form action="" method="POST">
-                    <input class="submitLink" type="submit" value="${userName}">
-                </form>
-                <form action="./SignOut" method="POST">
-                    <input class="submitLink" type="submit" value="Sign Out">
-                </form>
-            </div>
-        </nav>
+        <!-- Navigation bar -->
+        <jsp:include page="/navbar.jsp" />
 
+        <!-- Page Content -->
         <div class="container">
+            <h3>Movie</h3>
             <hr>
-            <div class="row">
-                <div class="col"></div>
-                <div class="col-6 text-center">
-                    <a href="./movieupload.jsp">
-                        <button type="button" class="btn btn-outline-info">Upload Movie</button>
-                    </a>
+            <c:if test="${isAdmin}">
+                <div class="row">
+                    <div class="col"></div>
+                    <div class="col-6 text-center">
+                        <a href="./movieupload.jsp">
+                            <button type="button" class="btn btn-outline-info">Upload Movie</button>
+                        </a>
+                    </div>
+                    <div class="col"></div>
                 </div>
-                <div class="col"></div>
-            </div>
-            <hr>
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col col-lg-5">
-                            <div class="text-center">
-                                <img src="https://moviebuddy-157-001-011.s3.us-west-1.amazonaws.com/posters/1"
-                                    class="rounded mx-auto w-75" alt="poster">
+                <hr>
+                <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
+            </c:if>
+            <c:forEach items="${movieList}" var="movie">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <h1>${movie.getTitle()}</h1>
                             </div>
                         </div>
-                        <div class="col">
-                            <ul class="list-inline">
-                                <li class="list-inline-item">
-                                    <h1>Movie 1</h1>
-                                </li>
-                                <li class="list-inline-item">
-                                    <p class="">Length: 00:00</p>
-                                </li>
-                            </ul>
-                            <hr>
-                            <h3>Trailer</h3>
-                            <div class="embed-responsive embed-responsive-16by9">
-                                <iframe class="embed-responsive-item"
-                                    src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0" allowfullscreen></iframe>
+                        <hr>
+                        <div class="row">
+                            <div class="col col-lg-5">
+                                <div class="text-center">
+                                    <img src=${movie.getPoster()} class="rounded mx-auto w-100" alt="poster">
+                                </div>
                             </div>
-                            <hr>
-                            <h3>Description</h3>
-                            <p>Description</p>
+                            <div class="col">
+                                <ul class="list-inline">
+                                    <p><b>Length:</b> ${movie.getDuration()} minutes</p>
+                                    <p><b>Release Date:</b> ${movie.displayReleaseDate()}</p>
+                                </ul>
+                                <hr>
+                                <h3>Trailer</h3>
+                                <div class="embed-responsive embed-responsive-16by9">
+                                    <iframe width="907" height="510" src="${movie.getTrailer()}" frameborder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowfullscreen></iframe>
+                                </div>
+                                <hr>
+                                <h3>Description</h3>
+                                <p>${movie.getDescription()}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col">
+                                <div class="container">
+                                    <form action="ScheduleGet" method="POST" class="button">
+                                        <input type="hidden" name="movieId" value=${movie.getId()} />
+                                        <input type="submit" class="btn btn-outline-info" value="Schedule" />
+                                    </form>
+                                    <c:if test="${isAdmin}">
+                                        <form action="MovieLoadEdit" method="POST" class="button">
+                                            <input type="hidden" name="movieId" value=${movie.getId()} />
+                                            <input type="submit" class="btn btn-outline-info" value="Edit" />
+                                        </form>
+                                        <form action="MovieDelete" method="POST" class="button">
+                                            <input type="hidden" name="movieId" value=${movie.getId()} />
+                                            <input type="submit" class="btn btn-outline-info" value="Delete" />
+                                        </form>
+                                    </c:if>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col">
-                            <div class="container">
-                                <button type="button" class="btn btn-outline-info">00:00 am</button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-            </div>
+                <br>
+            </c:forEach>
         </div>
     </div>
     <div style="flex-shrink: 0;">

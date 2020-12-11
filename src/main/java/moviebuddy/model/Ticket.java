@@ -1,4 +1,9 @@
 package moviebuddy.model;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 public class Ticket {
     private int scheduleId;
     private int theatreId;
@@ -61,12 +66,14 @@ public class Ticket {
         this.theatreName = theatreName;
     }
 
-    public void setShowTime(String showTime) {
-        this.showTime=showTime;
+
+    public void setShowTime(LocalTime showTime) {
+        this.showTime = showTime;
     }
 
-    public void setShowDate(String showDate) {
-        this.showDate=showDate;
+    public void setShowDate(LocalDate showDate) {
+        this.showDate = showDate;
+
     }
     
     public void setMovieName(String movieName) {

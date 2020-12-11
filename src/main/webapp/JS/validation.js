@@ -108,6 +108,14 @@ function validateRePassword(password, rePassword) {
 function validateStaffSignUp(form) {
     fail = "";
 
+    invalidRole = validateRole(form.role.value);
+    document.getElementById("roleError").innerHTML = invalidRole;
+    invalidLocation = "";
+    if (invalidRole == "" && form.role.value != "admin") {
+        invalidLocation = validateTheatreLocation(form.theatreLocation.value);
+    }
+    document.getElementById("theatreLocationError").innerHTML = invalidLocation;
+
     invalidUserName = validateUserName(form.userName.value);
     document.getElementById("userNameError").innerHTML = invalidUserName;
 
@@ -126,12 +134,47 @@ function validateStaffSignUp(form) {
         }));
     }
 
+    fail += invalidRole;
+    fail += invalidLocation;
     fail += invalidUserName;
     fail += invalidEmail;
     fail += invalidPassword;
     return false;
 }
 
+function checkRole(elementId, errorId, theatreLocationInputId) {
+    invalidRole = validateRole(elementId.value)
+    document.getElementById(errorId).innerHTML = invalidRole;
+    if (invalidRole == "" && elementId.value == "admin") {
+        document.getElementById(theatreLocationInputId).setAttribute("hidden", "");
+    } else {
+        document.getElementById(theatreLocationInputId).removeAttribute("hidden");
+    }
+    return invalidRole;
+}
+
+function validateRole(role) {
+    if (role == "none") {
+        return "Please select a role\n";
+    }
+    if (!(role == "admin" || role == "manager" || role == "faculty")) {
+        return "Invalid role selected\n";
+    }
+    return "";
+}
+
+function checkTheatreLocation(elementId, errorId) {
+    invalidLocation = validateTheatreLocation(elementId.value)
+    document.getElementById(errorId).innerHTML = invalidLocation;
+    return invalidLocation;
+}
+
+function validateTheatreLocation(location) {
+    if (location == "" || location == "none") {
+        return "Please select a theatre location\n";
+    }
+    return "";
+}
 
 function validateSignIn(form) {
     fail = "";
@@ -148,13 +191,77 @@ function checkSignInInput(elementId, errorId) {
     invalidInput = "";
     if (elementId.value == "") {
         if (elementId.name == "email") {
-            invalidInput = "Please enter an email"
+            invalidInput = "Please enter an email";
         } else if (elementId.name == "password") {
-            invalidInput = "Please enter a password"
+            invalidInput = "Please enter a password";
         } else if (elementId.name == "staffId") {
-            invalidInput = "Please enter a staff ID number"
+            invalidInput = "Please enter a staff ID number";
         }
     }
     document.getElementById(errorId).innerHTML = invalidInput;
     return invalidInput;
+}
+
+function validateMovieForm(form) {
+    title = form.title.value;
+    releaseDate = form.releaseDate.value;
+    duration = form.duration.value;
+    trailer = form.trailer.value;
+    description = form.description.value
+    errorId = document.getElementById("errorMessage");
+    if (title == "" || releaseDate == "" || duration == "" || trailer == "" || description == "") {
+        errorId.innerHTML = "* required fields"
+        return false;
+    }
+    if (!/^\d+$/.test(duration)) {
+        errorId.innerHTML = "duration must be a number"
+        return false;
+    }
+    return true;
+}
+
+function validateTheatreForm(form) {
+    theatreName = form.theatreName.value;
+    address = form.address.value;
+    city = form.city.value;
+    state = form.state.value;
+    country = form.country.value;
+    zip = form.zip.value;
+    errorId = document.getElementById("errorMessage");
+    if (theatreName == "" || address == "" || city == "" || state == "none" || country == "" || zip == "") {
+        errorId.innerHTML = "* required fields"
+        return false;
+    }
+    if (!/^\d+$/.test(zip)) {
+        errorId.innerHTML = "Invalid zip code"
+        return false;
+    }
+    return true;
+}
+
+function validateRoomForm(form) {
+    roomNumber = form.roomNumber.value;
+    sections = form.sections.value;
+    seats = form.seats.value;
+    errorId = document.getElementById("errorMessage");
+    if (sections == "" || seats == "") {
+        errorId.innerHTML = "* required fields"
+        return false;
+    }
+    if (!/^\d+$/.test(roomNumber) || !/^\d+$/.test(sections) || !/^\d+$/.test(seats)) {
+        errorId.innerHTML = "Invalid input"
+        return false;
+    }
+    return true;
+}
+
+function validateTicketPriceForm(form) {
+    startTime = form.startTime.value;
+    price = form.price.value;
+    errorId = document.getElementById("errorMessage");
+    if (startTime == "" || price == "") {
+        errorId.innerHTML = "One or more inputs are empty"
+        return false;
+    }
+    return true;
 }

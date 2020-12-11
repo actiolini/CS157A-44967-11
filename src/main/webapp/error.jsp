@@ -2,7 +2,8 @@
 <html>
 
 <head>
-    <title>Movie Buddy | error</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <title>Movie Buddy | Error</title>
     <style>
         .container {
             width: 60%;
@@ -21,19 +22,21 @@
             font-size: 40px;
         }
 
-        .submitLink {
+        .link {
             background-color: transparent;
             border: none;
             color: #007bff;
             cursor: pointer;
+            font-size: 1rem;
             text-decoration: none;
         }
 
-        .submitLink:hover {
+        .link:hover {
             color: #0056b3;
+            text-decoration: none;
         }
 
-        .submitLink:focus {
+        .link:focus {
             outline: none;
         }
     </style>
@@ -41,11 +44,11 @@
 
 <body>
     <div class='container'>
-        <img style='width: 50%;' src='https://bit.ly/2MVsZU8' alt='saitama'>
+        <img style='width: 50%;' src='./images/error.png' alt='saitama'>
         <div class='textbox'>
             <p class='errMsg'>Oops!!!</p>
             It seems like something just went wrong.<br>
-            Please <a class="submitLink" href="home.jsp">click here</a> and try again.
+            Please <a class="link" href="home.jsp">click here</a> to return to our home page.
         </div>
     </div>
 </body>
