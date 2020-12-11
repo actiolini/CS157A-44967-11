@@ -86,7 +86,10 @@ public class ScheduleDAO {
 
     public String addSchedule(String theatreId, String roomNumber, String movieId, String showDate, String startTime)
             throws Exception {
-        String INSERT_SCHEDULE = "INSERT INTO movie_schedule (theatre_id, room_number, movie_id, show_date, show_time) VALUES (?,?,?,?,?)";
+        String INSERT_SCHEDULE = "INSERT INTO movie_schedule (theatre_id, room_number, movie_id, show_date, show_time) VALUES (?,?,?,?,?);";
+        String QUERY_SCHEDULE_ID = "SELECT LAST_INSERT_ID() as id;";
+        String QUERY_ROOM_CAPACITY = "SELECT sections, seats FROM room WHERE theatre_id=? AND room_number=?;";
+        String INSERT_TICKET = "INSERT INTO ticket (schedule_id, seat_number) VALUES (?, ?);";
         Connection conn = DBConnection.connect();
         conn.setAutoCommit(false);
         try {
@@ -97,6 +100,32 @@ public class ScheduleDAO {
             insertSchedule.setString(4, showDate);
             insertSchedule.setString(5, startTime);
             insertSchedule.executeUpdate();
+            String scheduleId = "";
+            PreparedStatement queryScheduleId = conn.prepareStatement(QUERY_SCHEDULE_ID);
+            ResultSet res1 = queryScheduleId.executeQuery();
+            while (res1.next()) {
+                scheduleId = res1.getString("id");
+            }
+            int sections = 0;
+            int seats = 0;
+            PreparedStatement queryRoomCapacity = conn.prepareStatement(QUERY_ROOM_CAPACITY);
+            queryRoomCapacity.setString(1, theatreId);
+            queryRoomCapacity.setString(2, roomNumber);
+            ResultSet res2 = queryRoomCapacity.executeQuery();
+            while (res2.next()) {
+                sections = res2.getInt("sections");
+                seats = res2.getInt("seats");
+            }
+            PreparedStatement insertTicket = conn.prepareStatement(INSERT_TICKET);
+            for (int i = 0; i < sections; i++) {
+                char sectionLetter = (char) ('A' + i);
+                for (int j = 1; j <= seats; j++) {
+                    String seatNumber = sectionLetter + ((j < 10) ? "0" : "") + j;
+                    insertTicket.setString(1, scheduleId);
+                    insertTicket.setString(2, seatNumber);
+                    insertTicket.executeUpdate();
+                }
+            }
             conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -109,6 +138,7 @@ public class ScheduleDAO {
             return "Fail to add schedule";
         } finally {
             conn.setAutoCommit(true);
+            conn.close();
         }
         return "";
     }
@@ -140,6 +170,7 @@ public class ScheduleDAO {
             schedule.setShowTime(startTime, endTime);
             schedules.add(schedule);
         }
+        conn.close();
         return schedules;
     }
 
@@ -171,6 +202,7 @@ public class ScheduleDAO {
             schedule.setShowTime(startTime, endTime);
             schedules.add(schedule);
         }
+        conn.close();
         return schedules;
     }
 
@@ -195,6 +227,7 @@ public class ScheduleDAO {
             schedule.setShowTime(startTime, endTime);
             schedules.add(schedule);
         }
+        conn.close();
         return schedules;
     }
 
@@ -218,6 +251,7 @@ public class ScheduleDAO {
             return "Fail to delete schedule";
         } finally {
             conn.setAutoCommit(true);
+            conn.close();
         }
         return "";
     }
