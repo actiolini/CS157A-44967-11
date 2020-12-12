@@ -10,8 +10,8 @@ public class Ticket {
     private String theatreName;
     private String seatNumber;
     private double price;
-    private String showTime;
-    private String showDate;
+    private LocalTime showTime;
+    private LocalDate showDate;
     private String movieName;
 
     public int getScheduleId() {
@@ -34,15 +34,15 @@ public class Ticket {
         return seatNumber;
     }
 
-    public String getShowTime() {
+    public LocalTime getShowTime() {
         return showTime;
     }
 
-    public String getShowDate() {
+    public LocalDate getShowDate() {
         return showDate;
     }
 
-    public String getMovieName(){
+    public String getMovieName() {
         return movieName;
     }
 
@@ -66,7 +66,6 @@ public class Ticket {
         this.theatreName = theatreName;
     }
 
-
     public void setShowTime(LocalTime showTime) {
         this.showTime = showTime;
     }
@@ -75,8 +74,8 @@ public class Ticket {
         this.showDate = showDate;
 
     }
-    
+
     public void setMovieName(String movieName) {
-        this.movieName=movieName;
+        this.movieName = movieName;
     }
 }
