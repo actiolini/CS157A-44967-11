@@ -2,7 +2,8 @@
 <html>
 
 <head>
-    <title>Movie Buddy | error</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <title>Movie Buddy | Error</title>
     <style>
         .container {
             width: 60%;
@@ -20,16 +21,34 @@
             text-align: center;
             font-size: 40px;
         }
+
+        .link {
+            background-color: transparent;
+            border: none;
+            color: #007bff;
+            cursor: pointer;
+            font-size: 1rem;
+            text-decoration: none;
+        }
+
+        .link:hover {
+            color: #0056b3;
+            text-decoration: none;
+        }
+
+        .link:focus {
+            outline: none;
+        }
     </style>
 </head>
 
 <body>
     <div class='container'>
-        <img style='width: 50%;' src='https://bit.ly/2MVsZU8' alt='saitama'>
+        <img style='width: 50%;' src='./images/error.png' alt='saitama'>
         <div class='textbox'>
             <p class='errMsg'>Oops!!!</p>
             It seems like something just went wrong.<br>
-            Please <a href="index.jsp">click here</a> and try again.
+            Please <a class="link" href="home.jsp">click here</a> to return to our home page.
         </div>
     </div>
 </body>
