@@ -143,8 +143,8 @@ public class Validation {
         for (Schedule s : schedule) {
             ShowTime st = s.getShowTime();
             if (interval.isConflict(st)) {
-                String message = String.format("Time conflict - Schedule ID: %s on %s at %s-%s", s.getScheduleId(),
-                        s.displayShowDate(), st.getStartTime(), st.getEndTime());
+                String message = String.format("Time conflict - Schedule ID: %s on %s at %s-%s room: %s", s.getScheduleId(),
+                        s.displayShowDate(), st.getStartTime(), st.getEndTime(), s.getRoomNumber());
                 return message;
             }
         }

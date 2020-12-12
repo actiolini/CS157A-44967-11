@@ -16,78 +16,16 @@ import java.time.LocalTime;
 import moviebuddy.model.Movie;
 import moviebuddy.model.Schedule;
 import moviebuddy.model.TicketPrice;
+import moviebuddy.model.ScheduledDate;
 import moviebuddy.util.DBConnection;
 
 public class ScheduleDAO {
-    // public List<Movie> getMovieSchedule() throws Exception {
-    // String QUERY_MOVIE_SCHEDULE = "SELECT schedule_id, show_date, show_time,
-    // movie_id FROM movie_schedule WHERE theatre_id = ? ;";
-
-    // String QUERY_MOVIE_INFO = "SELECT title, duration, release_date, description
-    // FROM movie WHERE movie_id = ?";
-
-    // List<Movie> movies = new ArrayList<>();
-    // Map<Integer, Map<LocalDate, Schedule>> schedules = new HashMap<>();
-    // // Initiate connection
-    // Connection conn = DBConnection.connect();
-
-    // // Query for all schedules
-    // PreparedStatement preparedStatement =
-    // conn.prepareStatement(QUERY_MOVIE_SCHEDULE);
-    // preparedStatement.setInt(1, 1);// theatre_id = 1
-    // ResultSet res = preparedStatement.executeQuery();
-    // while (res.next()) {
-    // int movieId = res.getInt("movie_id");
-    // LocalDate showDate = LocalDate.parse(res.getString("show_date"));
-    // if (!schedules.containsKey(movieId)) {
-    // schedules.put(movieId, new HashMap<>());
-    // }
-    // Map<LocalDate, Schedule> scheduleByDate = schedules.get(movieId);
-    // if (!scheduleByDate.containsKey(showDate)) {
-    // scheduleByDate.put(showDate, new Schedule(res.getInt("schedule_id"), movieId,
-    // showDate));
-    // }
-    // LocalTime showTime = LocalTime.parse(res.getString("show_time"));
-    // scheduleByDate.get(showDate).getShowTimes().add(showTime);
-    // }
-
-    // // Query for movie information that are scheduled
-    // preparedStatement = conn.prepareStatement(QUERY_MOVIE_INFO);
-    // Iterator<Integer> iter = schedules.keySet().iterator();
-    // while (iter.hasNext()) {
-    // int movieId = iter.next();
-    // List<Schedule> scheduleList = new
-    // ArrayList<>(schedules.get(movieId).values());
-    // for (Schedule schedule : scheduleList) {
-    // schedule.getShowTimes().sort((t1, t2) -> {
-    // return t1.compareTo(t2);
-    // });
-    // }
-    // scheduleList.sort((s1, s2) -> {
-    // return s1.getShowDate().compareTo(s2.getShowDate());
-    // });
-    // preparedStatement.setInt(1, movieId);
-    // res = preparedStatement.executeQuery();
-    // while (res.next()) {
-    // Movie movie = new Movie(movieId);
-    // movie.setTitle(res.getString("title"));
-    // movie.setDuration(res.getInt("duration"));
-    // movie.setReleaseDate(LocalDate.parse(res.getString("release_date")));
-    // movie.setDescription(res.getString("description"));
-    // movie.setSchedule(scheduleList);
-    // movies.add(movie);
-    // }
-    // }
-    // conn.close();
-    // movies.sort((m1, m2) -> {
-    // return m1.getReleaseDate().compareTo(m2.getReleaseDate());
-    // });
-    // return movies;
-    // }
-
     public String addSchedule(String theatreId, String roomNumber, String movieId, String showDate, String startTime)
             throws Exception {
-        String INSERT_SCHEDULE = "INSERT INTO movie_schedule (theatre_id, room_number, movie_id, show_date, show_time) VALUES (?,?,?,?,?)";
+        String INSERT_SCHEDULE = "INSERT INTO movie_schedule (theatre_id, room_number, movie_id, show_date, show_time) VALUES (?,?,?,?,?);";
+        String QUERY_SCHEDULE_ID = "SELECT LAST_INSERT_ID() as id;";
+        String QUERY_ROOM_CAPACITY = "SELECT sections, seats FROM room WHERE theatre_id=? AND room_number=?;";
+        String INSERT_TICKET = "INSERT INTO ticket (schedule_id, seat_number) VALUES (?, ?);";
         Connection conn = DBConnection.connect();
         conn.setAutoCommit(false);
         try {
@@ -98,6 +36,32 @@ public class ScheduleDAO {
             insertSchedule.setString(4, showDate);
             insertSchedule.setString(5, startTime);
             insertSchedule.executeUpdate();
+            String scheduleId = "";
+            PreparedStatement queryScheduleId = conn.prepareStatement(QUERY_SCHEDULE_ID);
+            ResultSet res1 = queryScheduleId.executeQuery();
+            while (res1.next()) {
+                scheduleId = res1.getString("id");
+            }
+            int sections = 0;
+            int seats = 0;
+            PreparedStatement queryRoomCapacity = conn.prepareStatement(QUERY_ROOM_CAPACITY);
+            queryRoomCapacity.setString(1, theatreId);
+            queryRoomCapacity.setString(2, roomNumber);
+            ResultSet res2 = queryRoomCapacity.executeQuery();
+            while (res2.next()) {
+                sections = res2.getInt("sections");
+                seats = res2.getInt("seats");
+            }
+            PreparedStatement insertTicket = conn.prepareStatement(INSERT_TICKET);
+            for (int i = 0; i < sections; i++) {
+                char sectionLetter = (char) ('A' + i);
+                for (int j = 1; j <= seats; j++) {
+                    String seatNumber = sectionLetter + ((j < 10) ? "0" : "") + j;
+                    insertTicket.setString(1, scheduleId);
+                    insertTicket.setString(2, seatNumber);
+                    insertTicket.executeUpdate();
+                }
+            }
             conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -110,6 +74,7 @@ public class ScheduleDAO {
             return "Fail to add schedule";
         } finally {
             conn.setAutoCommit(true);
+            conn.close();
         }
         return "";
     }
@@ -141,6 +106,7 @@ public class ScheduleDAO {
             schedule.setShowTime(startTime, endTime);
             schedules.add(schedule);
         }
+        conn.close();
         return schedules;
     }
 
@@ -172,6 +138,7 @@ public class ScheduleDAO {
             schedule.setShowTime(startTime, endTime);
             schedules.add(schedule);
         }
+        conn.close();
         return schedules;
     }
 
@@ -196,7 +163,12 @@ public class ScheduleDAO {
             schedule.setShowTime(startTime, endTime);
             schedules.add(schedule);
         }
+        conn.close();
         return schedules;
+    }
+
+    public List<ScheduledDate> listScheduledDates() throws Exception{
+        return null;
     }
 
     public String deleteSchedule(String scheduleId) throws Exception {
@@ -219,6 +191,7 @@ public class ScheduleDAO {
             return "Fail to delete schedule";
         } finally {
             conn.setAutoCommit(true);
+            conn.close();
         }
         return "";
     }

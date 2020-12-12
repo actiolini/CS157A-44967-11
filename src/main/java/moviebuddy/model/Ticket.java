@@ -28,5 +28,4 @@ public class Ticket {
     public void setOccupied(boolean occupied) {
         this.occupied = occupied;
     }
-
 }

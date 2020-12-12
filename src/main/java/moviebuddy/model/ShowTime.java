@@ -21,8 +21,8 @@ public class ShowTime implements Comparable<ShowTime> {
     }
 
     public boolean isConflict(ShowTime timeInterval) {
-        if (startTime.isBefore(endTime)) {
-            return this.startTime.isAfter(timeInterval.endTime) || this.endTime.isBefore(timeInterval.startTime);
+        if (this.startTime.isAfter(timeInterval.endTime) || this.endTime.isBefore(timeInterval.startTime)) {
+            return false;
         }
         return true;
     }
