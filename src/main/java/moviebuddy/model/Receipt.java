@@ -1,7 +1,9 @@
 package moviebuddy.model;
 
+import java.io.StringBufferInputStream;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 public class Receipt {
     
@@ -13,8 +15,7 @@ public class Receipt {
     private LocalDate showDate;
     private int quantity;
     private double totalPrice;
-    private double ticketPrice;
-    private Ticket[] tickets;
+    private ArrayList<String> seatNumbers;
 
     public int getQuantity() {
         return quantity;
@@ -32,13 +33,10 @@ public class Receipt {
         return totalPrice;
     }
 
-    public Ticket[] getTickets() {
-        return tickets;
+    public ArrayList<String> getSeatNumbers() {
+        return seatNumbers;
     }
 
-    public double getTicketPrice() {
-        return ticketPrice;
-    }
 
     public String getTheatreName() {
         return theatreName;
@@ -76,12 +74,9 @@ public class Receipt {
         this.totalPrice = totalPrice;
     }
 
-    public void setTickets(Ticket[] tickects) {
-        this.tickets = tickects;
-    }
-
-    public void setTicketPrice(double ticketPrice) {
-        this.ticketPrice = ticketPrice;
+    public void setSeatNumbers() {
+        //initialization
+        this.seatNumbers = new ArrayList<>();
     }
 
     public void setMovieName(String movieName) {

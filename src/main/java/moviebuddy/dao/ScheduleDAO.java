@@ -15,6 +15,7 @@ import java.time.LocalTime;
 
 import moviebuddy.model.Movie;
 import moviebuddy.model.Schedule;
+import moviebuddy.model.TicketPrice;
 import moviebuddy.util.DBConnection;
 
 public class ScheduleDAO {
@@ -220,5 +221,30 @@ public class ScheduleDAO {
             conn.setAutoCommit(true);
         }
         return "";
+    }
+
+    public double getTicketPrice(String showTime, String ScheduleID) throws Exception{
+        String QUERY_TICKET_PRICE = "SELECT DISTINCT tp.start_time, tp.price" +
+        "FROM ticket_price tp" +  
+        "JOIN movie_schedule ms ON tp.theatre_id=ms.theatre_id" +
+        "JOIN ticket t ON ms.schedule_id=t.schedule_id" + 
+        "WHERE t.schedule_id=?;";
+        Connection conn = DBConnection.connect();
+        PreparedStatement getTicketPrice = conn.prepareStatement(QUERY_TICKET_PRICE);
+        getTicketPrice.setString(1, ScheduleID);
+        ResultSet res = getTicketPrice.executeQuery();
+        List<TicketPrice> ticketPrices = new ArrayList<>();
+        while (res.next()) {
+            TicketPrice ticketPrice = new TicketPrice(res.getInt("theatre_id"),LocalTime.parse(res.getString("start_time")));
+            ticketPrice.setPrice(res.getDouble("price"));
+            ticketPrices.add(ticketPrice);
+        }
+        getTicketPrice.close();
+        conn.close();
+        for(int i =0;i<ticketPrices.size();i++){
+            if(LocalTime.parse(showTime).isAfter(ticketPrices.get(i).getStartTime()) || i==ticketPrices.size()-1)
+            return ticketPrices.get(i).getPrice();
+        }
+        return 0;   
     }
 }
