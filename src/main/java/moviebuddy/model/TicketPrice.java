@@ -7,6 +7,9 @@ public class TicketPrice {
     private LocalTime startTime;
     private double price;
 
+    public TicketPrice() {
+    }
+
     public TicketPrice(int theatreId, LocalTime startTime) {
         this.theatreId = theatreId;
         this.startTime = startTime;
