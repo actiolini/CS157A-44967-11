@@ -12,7 +12,7 @@ public class DBConnection {
 
     public static Connection connect() throws Exception {
         Connection conn = null;
-        String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
+        String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath().replaceAll("%20", " ");
         String dbConfigPath = rootPath + "db.properties";
         Properties props = new Properties();
         props.load(new FileInputStream(dbConfigPath));
