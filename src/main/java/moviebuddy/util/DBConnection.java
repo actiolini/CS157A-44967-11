@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -27,5 +28,17 @@ public class DBConnection {
         String pass = props.getProperty("pass");
         conn = DriverManager.getConnection(url, user, pass);
         return conn;
+    }
+
+    public static void close(PreparedStatement st) throws SQLException {
+        if (st != null) {
+            st.close();
+        }
+    }
+
+    public static void close(Connection conn) throws SQLException {
+        if (conn != null) {
+            conn.close();
+        }
     }
 }
