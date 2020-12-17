@@ -14,12 +14,13 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import java.io.InputStream;
 
 public class BuddyBucket {
-    private static final String BUCKET = "moviebuddy-157-001-011";
+    private static final String PROFILE = "moviebuddy";
+    private static final String BUCKET = "moviebuddy-157a";
     private static final String DIRECTORY = "posters/";
 
     public static String uploadPoster(int posterId, InputStream posterContent, long posterSize) {
         try {
-            AWSCredentials credentials = new ProfileCredentialsProvider("default").getCredentials();
+            AWSCredentials credentials = new ProfileCredentialsProvider(PROFILE).getCredentials();
             AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
                     .withCredentials(new AWSStaticCredentialsProvider(credentials)).withRegion(Regions.US_WEST_1)
                     .build();
@@ -40,7 +41,7 @@ public class BuddyBucket {
 
     public static void deletePoster(int posterId) {
         try {
-            AWSCredentials credentials = new ProfileCredentialsProvider("default").getCredentials();
+            AWSCredentials credentials = new ProfileCredentialsProvider(PROFILE).getCredentials();
             AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
                     .withCredentials(new AWSStaticCredentialsProvider(credentials)).withRegion(Regions.US_WEST_1)
                     .build();
