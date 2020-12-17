@@ -1,8 +1,10 @@
 package moviebuddy.util;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Properties;
 
 public class DBConnection {
@@ -10,7 +12,7 @@ public class DBConnection {
     private DBConnection() {
     }
 
-    public static Connection connect() throws Exception {
+    public static Connection connect() throws IOException, ClassNotFoundException, SQLException {
         Connection conn = null;
         String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath().replaceAll("%20", " ");
         String dbConfigPath = rootPath + "db.properties";
