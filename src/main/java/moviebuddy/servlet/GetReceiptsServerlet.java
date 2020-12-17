@@ -1,3 +1,5 @@
+package moviebuddy.servlet;
+
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,7 +17,7 @@ import moviebuddy.model.User;
 import moviebuddy.util.Passwords;
 import moviebuddy.util.Validation;
 
-@WebServlet("")
+// @WebServlet("")
 public class GetReceiptsServerlet extends HttpServlet {
     private static final long serialVersionUID = 4366896761698484912L;
     private static final String RECEIPTS = "receiptList";

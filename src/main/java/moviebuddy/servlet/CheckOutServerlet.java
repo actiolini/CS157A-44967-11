@@ -1,4 +1,5 @@
 package moviebuddy.servlet;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import moviebuddy.dao.TicketDAO;
 import moviebuddy.model.Ticket;
 
-@WebServlet("/CheckOut")
+// @WebServlet("/CheckOut")
 public class CheckOutServerlet extends HttpServlet {
     private static final long serialVersionUID = 0;
     private TicketDAO ticketDAO;
@@ -27,7 +28,7 @@ public class CheckOutServerlet extends HttpServlet {
             int theatreId = Integer.parseInt(request.getParameter("theatreid"));
             String[] seatNumber = request.getParameterValues("seatnumber");
             List<Ticket> tickets = new ArrayList<Ticket>();
-            for(String seat : seatNumber){
+            for (String seat : seatNumber) {
                 Ticket ticket = null;
                 tickets.add(ticket);
             }
