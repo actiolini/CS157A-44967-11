@@ -60,13 +60,13 @@ public class SignUpStaffServlet extends HttpServlet {
 
                 String errorMessage = "";
                 if (invalid.isEmpty() && role.equals("admin")) {
-                    errorMessage = userDAO.createStaff(roleInput, theatreLocation, userName, email, password);
+                    errorMessage = userDAO.signUpProvider(roleInput, theatreLocation, userName, email, password);
                 }
                 if (invalid.isEmpty() && role.equals("manager")
                         && !(roleInput.equals("admin") || roleInput.equals("manager"))) {
                     String employTheatreId = session.getAttribute("employTheatreId").toString();
                     if (employTheatreId.equals(theatreLocation)) {
-                        errorMessage = userDAO.createStaff(roleInput, theatreLocation, userName, email, password);
+                        errorMessage = userDAO.signUpProvider(roleInput, theatreLocation, userName, email, password);
                     } else {
                         errorMessage = "Unable to add staff to a different theatre\n";
                     }

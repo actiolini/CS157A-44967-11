@@ -44,7 +44,7 @@ public class SignInStaffServlet extends HttpServlet {
             String password = Validation.sanitize(request.getParameter("password"));
             String invalidStaffId = Validation.validateStaffId(staffId);
             if (invalidStaffId.isEmpty()) {
-                user = userDAO.signInStaff(staffId, password);
+                user = userDAO.signInProvider(staffId, password);
             }
 
             HttpSession session = request.getSession();

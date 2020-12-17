@@ -28,7 +28,7 @@ public class SignInServlet extends HttpServlet {
             // Sanitize user inputs
             String email = Validation.sanitize(request.getParameter("email"));
             String password = Validation.sanitize(request.getParameter("password"));
-            User user = userDAO.signIn(email, password);
+            User user = userDAO.signInCustomer(email, password);
             if (user != null) {
                 // Sign in successfully
                 HttpSession session = request.getSession();

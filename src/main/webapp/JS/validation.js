@@ -2,7 +2,7 @@ const username_min_length = 2;
 const username_max_length = 20;
 const password_min_length = 8;
 
-function validate(form) {
+function validateSignUp(form) {
     fail = "";
 
     invalidUserName = validateUserName(form.userName.value);

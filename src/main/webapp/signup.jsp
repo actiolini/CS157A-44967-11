@@ -59,7 +59,7 @@
                 <div class="col-lg">
                     <div class="card">
                         <div class="card-body">
-                            <form id="signUpForm" action="SignUp" method="POST" onsubmit="return validate(this)">
+                            <form id="signUpForm" action="SignUp" method="POST" onsubmit="return validateSignUp(this)">
                                 <div class="form-group">
                                     <label>Name</label><br>
                                     <input class="inputbox" type="text" name="userName" placeholder="Enter your name"

@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Iterator;
+import java.util.Enumeration;
 
 @WebServlet("/SignOut")
 public class SignOutServlet extends HttpServlet {
@@ -16,9 +16,9 @@ public class SignOutServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Iterator<String> attributes = session.getAttributeNames().asIterator();
-        while (attributes.hasNext()) {
-            session.removeAttribute(attributes.next());
+        Enumeration<String> attributes = session.getAttributeNames();
+        while (attributes.hasMoreElements()) {
+            session.removeAttribute(attributes.nextElement());
         }
         session.invalidate();
         response.sendRedirect("home.jsp");

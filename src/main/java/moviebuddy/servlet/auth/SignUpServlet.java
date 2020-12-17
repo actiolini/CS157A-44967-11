@@ -41,9 +41,9 @@ public class SignUpServlet extends HttpServlet {
             String invalidRePassword = Validation.validateRePassword(password, rePassword);
 
             String message = invalidUserName + invalidEmail + invalidPassword + invalidRePassword;
-            if (message.isEmpty() && userDAO.signUp(userName, email, password)) {
+            if (message.isEmpty() && userDAO.signUpRegisteredUser(userName, email, password).isEmpty()) {
                 // Sign up successfully
-                User user = userDAO.signIn(email, password);
+                User user = userDAO.signInCustomer(email, password);
                 HttpSession session = request.getSession();
                 session.setAttribute("accountId", user.getAccountId());
                 session.setAttribute("userName", user.getUserName());

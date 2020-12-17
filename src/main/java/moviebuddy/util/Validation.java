@@ -112,6 +112,15 @@ public class Validation {
         return "";
     }
 
+    public static String validateDouble(String number) {
+        try {
+            Double.parseDouble(number);
+        } catch (Exception e) {
+            return "Invalid double input\n";
+        }
+        return "";
+    }
+
     public static String validateDate(String date) {
         try {
             LocalDate.parse(date);
@@ -126,15 +135,6 @@ public class Validation {
             LocalTime.parse(time);
         } catch (Exception e) {
             return "Invalid time input\n";
-        }
-        return "";
-    }
-
-    public static String validateDouble(String number) {
-        try {
-            Double.parseDouble(number);
-        } catch (Exception e) {
-            return "Invalid double input\n";
         }
         return "";
     }
