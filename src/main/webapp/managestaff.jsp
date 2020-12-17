@@ -92,7 +92,6 @@
                             <td>N/A</td>
                         </tr>
                     </c:forEach>
-                    <tr></tr>
                 </c:if>
                 <c:forEach items="${staffUserList}" var="staff">
                     <tr>

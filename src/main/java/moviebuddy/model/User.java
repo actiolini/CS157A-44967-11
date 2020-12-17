@@ -16,6 +16,10 @@ public class User {
     private String role;
     private int theatre_id;
 
+    public User(int accountId){
+        this.accountId=accountId;
+    }
+
     public int getAccountId() {
         return accountId;
     }
@@ -62,10 +66,6 @@ public class User {
 
     public int getTheatre_id() {
         return theatre_id;
-    }
-
-    public void setAccountId(int accountId) {
-        this.accountId = accountId;
     }
 
     public void setUserName(String userName) {

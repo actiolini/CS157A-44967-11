@@ -30,13 +30,13 @@ public class StaffDeleteServlet extends HttpServlet {
             Object role = session.getAttribute("role");
             if (role != null && (role.equals("admin") || role.equals("manager"))) {
                 String staffId = Validation.sanitize(request.getParameter("staffId"));
-                User staff = userDAO.getStaffUser(staffId);
+                User staff = userDAO.getProviderByStaffId(staffId);
                 String errorMessage = "";
                 if (staff != null && !staff.getRole().equals("faculty") && role.equals("manager")) {
                     errorMessage = "Unauthorized deletion";
                 }
                 if (errorMessage.isEmpty()) {
-                    errorMessage = userDAO.deleteStaff(staffId);
+                    errorMessage = userDAO.deleteProvider(staffId);
                 }
                 if (!errorMessage.isEmpty()) {
                     session.setAttribute("errorMessage", errorMessage);

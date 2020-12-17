@@ -6,24 +6,237 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import java.util.List;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.time.LocalDate;
 
-import moviebuddy.util.DBConnection;
 import moviebuddy.util.Passwords;
+import moviebuddy.util.DBConnection;
+import moviebuddy.db.UserDB;
+import moviebuddy.db.RegisteredDB;
+import moviebuddy.db.MembershipDB;
+import moviebuddy.db.ProviderDB;
+import moviebuddy.db.RoleDB;
+import moviebuddy.db.EmployDB;
+import moviebuddy.db.TheatreDB;
 import moviebuddy.model.User;
 
 public class UserDAO {
 
-    public boolean signUp(String userName, String email, String password) throws Exception {
-        String INSERT_USER = "INSERT INTO user(type) VALUES('registered');";
-        String INSERT_REGISTERED_USER = "INSERT INTO registered_user(account_id, name, email, hashpw, salt) VALUES (LAST_INSERT_ID(), ?, ?, ?, ?);";
-        Connection conn = DBConnection.connect();
-        conn.setAutoCommit(false);
+    public User signInCustomer(String email, String password) throws Exception {
+        User user = getRegisteredUser(email);
+        if (user != null
+                && Passwords.isExpectedPassword(password.toCharArray(), user.getSalt(), user.getHashPassword())) {
+            return user;
+        }
+        return null;
+    }
+
+    public User signInProvider(String staffId, String password) throws Exception {
+        User user = getProviderByStaffId(staffId);
+        if (user != null
+                && Passwords.isExpectedPassword(password.toCharArray(), user.getSalt(), user.getHashPassword())) {
+            return user;
+        }
+        return null;
+    }
+
+    public User getRegisteredUser(String email) throws Exception {
+        String QUERY_REGISTERED_USER = String.format(
+            "SELECT %s, %s, %s, %s, %s, %s FROM %s WHERE %s=?;",
+            RegisteredDB.ACCOUNT_ID, RegisteredDB.NAME, RegisteredDB.EMAIL,
+            RegisteredDB.HASH_PASSWORD, RegisteredDB.SALT, RegisteredDB.ZIP_CODE,
+            RegisteredDB.TABLE, RegisteredDB.EMAIL
+        );
+
+        User user = null;
+        Connection conn =null;
+        PreparedStatement getRegisteredUser = null;
         try {
-            PreparedStatement insertUser = conn.prepareStatement(INSERT_USER);
+            conn = DBConnection.connect();
+            getRegisteredUser = conn.prepareStatement(QUERY_REGISTERED_USER);
+            getRegisteredUser.setString(1, email);
+            ResultSet res = getRegisteredUser.executeQuery();
+            while (res.next()) {
+                user = new User(res.getInt(RegisteredDB.ACCOUNT_ID));
+                user.setUserName(res.getString(RegisteredDB.NAME));
+                user.setEmail(res.getString(RegisteredDB.EMAIL));
+                user.setHashPassword(res.getBytes(RegisteredDB.HASH_PASSWORD));
+                user.setSalt(res.getBytes(RegisteredDB.SALT));
+                user.setZip(res.getString(RegisteredDB.ZIP_CODE));
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            DBConnection.close(getRegisteredUser);
+            DBConnection.close(conn);
+        }
+        return user;
+    }
+
+    public User getProviderByStaffId(String staffId) throws Exception {
+        String QUERY_PROVIDER_BY_ID = String.format(
+            "SELECT ru.%s, ru.%s, ru.%s, ru.%s, ru.%s, ru.%s, m.%s, m.%s, m.%s, p.%s, r.%s, e.%s FROM %s ru JOIN %s m ON m.%s=ru.%s JOIN %s p ON p.%s=m.%s JOIN %s r ON r.%s=p.%s LEFT OUTER JOIN %s e ON e.%s=p.%s WHERE p.%s=?;",
+            RegisteredDB.ACCOUNT_ID, RegisteredDB.NAME, RegisteredDB.EMAIL,
+            RegisteredDB.HASH_PASSWORD, RegisteredDB.SALT, RegisteredDB.ZIP_CODE,
+            MembershipDB.POINTS, MembershipDB.AUTO_RENEW, MembershipDB.END_DATE,
+            ProviderDB.STAFF_ID, RoleDB.TITLE, EmployDB.THEATRE_ID,
+            RegisteredDB.TABLE, MembershipDB.TABLE, MembershipDB.ACCOUNT_ID,
+            RegisteredDB.ACCOUNT_ID, ProviderDB.TABLE, ProviderDB.ACCOUNT_ID,
+            MembershipDB.ACCOUNT_ID, RoleDB.TABLE, RoleDB.ROLE_ID,
+            ProviderDB.ROLE_ID, EmployDB.TABLE, EmployDB.STAFF_ID,
+            ProviderDB.STAFF_ID, ProviderDB.STAFF_ID
+        );
+
+        User user = null;
+        Connection conn = null;
+        PreparedStatement getRegisteredUser = null;
+        try {
+            conn = DBConnection.connect();
+            getRegisteredUser = conn.prepareStatement(QUERY_PROVIDER_BY_ID);
+            getRegisteredUser.setString(1, staffId);
+            ResultSet res = getRegisteredUser.executeQuery();
+            while (res.next()) {
+                user = new User(res.getInt(RegisteredDB.ACCOUNT_ID));
+                user.setUserName(res.getString(RegisteredDB.NAME));
+                user.setEmail(res.getString(RegisteredDB.EMAIL));
+                user.setHashPassword(res.getBytes(RegisteredDB.HASH_PASSWORD));
+                user.setSalt(res.getBytes(RegisteredDB.SALT));
+                user.setZip(res.getString(RegisteredDB.ZIP_CODE));
+                user.setBuddyPoints(res.getInt(MembershipDB.POINTS));
+                user.setAutoRenew(res.getBoolean(MembershipDB.AUTO_RENEW));
+                user.setEndDate(LocalDate.parse(res.getString(MembershipDB.END_DATE)));
+                user.setStaffId(res.getInt(ProviderDB.STAFF_ID));
+                user.setRole(res.getString(RoleDB.TITLE));
+                user.setTheatre_id(res.getInt(EmployDB.THEATRE_ID));
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally{
+            DBConnection.close(getRegisteredUser);
+            DBConnection.close(conn);
+        }
+        return user;
+    }
+
+    public List<User> listAdminUsers() throws Exception {
+        String QUERY_ADMINS = String.format(
+            "SELECT p.%s, r.%s, ru.%s, ru.%s, ru.%s FROM %s p JOIN %s r ON r.%s=p.%s JOIN %s ru ON ru.%s=p.%s WHERE r.%s='admin' ORDER BY p.%s;",
+            ProviderDB.STAFF_ID, RoleDB.TITLE, RegisteredDB.ACCOUNT_ID,
+            RegisteredDB.NAME, RegisteredDB.EMAIL, ProviderDB.TABLE,
+            RoleDB.TABLE, RoleDB.ROLE_ID, ProviderDB.ROLE_ID,
+            RegisteredDB.TABLE, RegisteredDB.ACCOUNT_ID, ProviderDB.ACCOUNT_ID,
+            RoleDB.TITLE, ProviderDB.STAFF_ID
+        );
+
+        List<User> admins = new LinkedList<>();
+        Connection conn = null;
+        PreparedStatement queryAdmins = null;
+        try {
+            conn = DBConnection.connect();
+            queryAdmins = conn.prepareStatement(QUERY_ADMINS);
+            ResultSet res = queryAdmins.executeQuery();
+            while (res.next()) {
+                User admin = new User(res.getInt(RegisteredDB.ACCOUNT_ID));
+                admin.setUserName(res.getString(RegisteredDB.NAME));
+                admin.setEmail(res.getString(RegisteredDB.EMAIL));
+                admin.setStaffId(res.getInt(ProviderDB.STAFF_ID));
+                admin.setRole(res.getString(RoleDB.TITLE));
+                admins.add(admin);
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            DBConnection.close(queryAdmins);
+            DBConnection.close(conn);
+        }
+        return admins;
+    }
+
+    public List<User> listProviderByTheatreId(String theatreId) throws Exception {
+        String QUERY_PROVIDER_BY_THEATRE_ID = String.format(
+            "SELECT p.%s, r.%s, ru.%s, ru.%s, ru.%s FROM %s p JOIN %s r ON r.%s=p.%s JOIN %s ru ON ru.%s=p.%s JOIN %s e ON e.%s=p.%s WHERE e.%s=? ORDER BY r.%s DESC, ru.%s;",
+            ProviderDB.STAFF_ID, RoleDB.TITLE, RegisteredDB.ACCOUNT_ID,
+            RegisteredDB.NAME, RegisteredDB.EMAIL, ProviderDB.TABLE,
+            RoleDB.TABLE, RoleDB.ROLE_ID, ProviderDB.ROLE_ID,
+            RegisteredDB.TABLE, RegisteredDB.ACCOUNT_ID, ProviderDB.ACCOUNT_ID,
+            EmployDB.TABLE, EmployDB.STAFF_ID, ProviderDB.STAFF_ID,
+            EmployDB.THEATRE_ID, RoleDB.TITLE, RegisteredDB.NAME
+        );
+
+        List<User> staffs = new LinkedList<>();
+        Connection conn = null;
+        PreparedStatement queryProviderByTheatreId = null;
+        try {
+            conn = DBConnection.connect();
+            queryProviderByTheatreId = conn.prepareStatement(QUERY_PROVIDER_BY_THEATRE_ID);
+            queryProviderByTheatreId.setString(1, theatreId);
+            ResultSet res = queryProviderByTheatreId.executeQuery();
+            while (res.next()) {
+                User staff = new User(res.getInt(RegisteredDB.ACCOUNT_ID));
+                staff.setUserName(res.getString(RegisteredDB.NAME));
+                staff.setEmail(res.getString(RegisteredDB.EMAIL));
+                staff.setStaffId(res.getInt(ProviderDB.STAFF_ID));
+                staff.setRole(res.getString(RoleDB.TITLE));
+                staffs.add(staff);
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            DBConnection.close(queryProviderByTheatreId);
+            DBConnection.close(conn);
+        }
+        return staffs;
+    }
+
+    public int getEmployTheatreId(String staffId) throws Exception {
+        String QUERY_EMPLOY_THEATRE_ID = String.format(
+            "SELECT theatre_id FROM employ WHERE staff_id=?;",
+            EmployDB.THEATRE_ID, EmployDB.TABLE, EmployDB.STAFF_ID
+        );
+
+        int theatreId = 0;
+        Connection conn = null;
+        PreparedStatement queryEmployTheatreId = null;
+        try {
+            conn = DBConnection.connect();
+            queryEmployTheatreId = conn.prepareStatement(QUERY_EMPLOY_THEATRE_ID);
+            queryEmployTheatreId.setString(1, staffId);
+            ResultSet res = queryEmployTheatreId.executeQuery();
+            while (res.next()) {
+                theatreId = res.getInt(EmployDB.THEATRE_ID);
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            DBConnection.close(queryEmployTheatreId);
+            DBConnection.close(conn);
+        }
+        return theatreId;
+    }
+
+    public String signUpRegisteredUser(String userName, String email, String password) throws Exception {
+        String INSERT_USER = String.format(
+            "INSERT INTO %s(%s) VALUES(?);",
+            UserDB.TABLE, UserDB.USER_TYPE
+        );
+        String INSERT_REGISTERED_USER = String.format(
+            "INSERT INTO %s(%s, %s, %s, %s, %s) VALUES (LAST_INSERT_ID(), ?, ?, ?, ?);",
+            RegisteredDB.TABLE, RegisteredDB.ACCOUNT_ID, RegisteredDB.NAME,
+            RegisteredDB.EMAIL, RegisteredDB.HASH_PASSWORD, RegisteredDB.SALT
+        );
+
+        Connection conn = null;
+        PreparedStatement insertUser = null;
+        PreparedStatement insertRegisteredUser = null;
+        try {
+            conn = DBConnection.connect();
+            conn.setAutoCommit(false);
+
+            insertUser = conn.prepareStatement(INSERT_USER);
+            insertUser.setString(1, UserDB.USER_TYPE_REGISTERED);
             insertUser.executeUpdate();
-            PreparedStatement insertRegisteredUser = conn.prepareStatement(INSERT_REGISTERED_USER);
+
+            insertRegisteredUser = conn.prepareStatement(INSERT_REGISTERED_USER);
             insertRegisteredUser.setString(1, userName);
             insertRegisteredUser.setString(2, email);
             byte[] salt = Passwords.getSalt();
@@ -31,6 +244,7 @@ public class UserDAO {
             insertRegisteredUser.setBytes(3, hashpw);
             insertRegisteredUser.setBytes(4, salt);
             insertRegisteredUser.executeUpdate();
+
             conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -40,57 +254,58 @@ public class UserDAO {
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
-            return false;
+            return "Fail to sign up";
         } finally {
             conn.setAutoCommit(true);
+            DBConnection.close(insertUser);
+            DBConnection.close(insertRegisteredUser);
+            DBConnection.close(conn);
         }
-        return true;
+        return "";
     }
 
-    public User signIn(String email, String password) throws Exception {
-        User user = getRegisteredUser(email);
-        if (user != null
-                && Passwords.isExpectedPassword(password.toCharArray(), user.getSalt(), user.getHashPassword())) {
-            return user;
-        }
-        return null;
-    }
-
-    public User getRegisteredUser(String email) throws Exception {
-        String QUERY_REGISTERED_USER = "SELECT account_id, name, hashpw, salt, zip_code FROM registered_user WHERE email = ? ;";
-        Connection conn = DBConnection.connect();
-        PreparedStatement getRegisteredUser = conn.prepareStatement(QUERY_REGISTERED_USER);
-        getRegisteredUser.setString(1, email);
-        ResultSet res = getRegisteredUser.executeQuery();
-        User user = null;
-        while (res.next()) {
-            user = new User();
-            user.setAccountId(res.getInt("account_id"));
-            user.setUserName(res.getString("name"));
-            user.setEmail(email);
-            user.setHashPassword(res.getBytes("hashpw"));
-            user.setSalt(res.getBytes("salt"));
-            user.setZip(res.getString("zip_code"));
-        }
-        getRegisteredUser.close();
-        conn.close();
-        return user;
-    }
-
-    public String createStaff(String role, String theatreLocation, String userName, String email, String password)
+    public String signUpProvider(String role, String theatreLocation, String userName, String email, String password)
             throws Exception {
-        String INSERT_USER = "INSERT INTO user(type) VALUES('registered');";
-        String INSERT_REGISTERED_USER = "INSERT INTO registered_user(account_id, name, email, hashpw, salt) VALUES (LAST_INSERT_ID(), ?, ?, ?, ?);";
-        String INSERT_MEMBERSHIP_USER = "INSERT INTO membership(account_id, auto_renew) VALUES (LAST_INSERT_ID(), ?);";
-        String INSERT_STAFF = "INSERT INTO provider(account_id, role_id) VALUES (LAST_INSERT_ID(), (SELECT role_id FROM role WHERE title=?));";
-        String INSERT_EMPLOY = "INSERT INTO employ(staff_id, theatre_id) VALUES (LAST_INSERT_ID(), (SELECT theatre_id FROM theatre WHERE theatre_id=?));";
-        int AUTO_RENEW = 1;
-        Connection conn = DBConnection.connect();
-        conn.setAutoCommit(false);
+        String INSERT_USER = String.format(
+            "INSERT INTO %s(%s) VALUES(?);",
+            UserDB.TABLE, UserDB.USER_TYPE
+        );
+        String INSERT_REGISTERED_USER = String.format(
+            "INSERT INTO %s(%s, %s, %s, %s, %s) VALUES (LAST_INSERT_ID(), ?, ?, ?, ?);",
+            RegisteredDB.TABLE, RegisteredDB.ACCOUNT_ID, RegisteredDB.NAME,
+            RegisteredDB.EMAIL, RegisteredDB.HASH_PASSWORD, RegisteredDB.SALT
+        );
+        String INSERT_MEMBERSHIP_USER = String.format(
+            "INSERT INTO %s(%s, %s) VALUES (LAST_INSERT_ID(), ?);",
+            MembershipDB.TABLE, MembershipDB.ACCOUNT_ID, MembershipDB.AUTO_RENEW
+        );
+        String INSERT_PROVIDER = String.format(
+            "INSERT INTO %s(%s, %s) VALUES (LAST_INSERT_ID(), (SELECT %s FROM %s WHERE %s=?));",
+            ProviderDB.TABLE, ProviderDB.ACCOUNT_ID, ProviderDB.ROLE_ID,
+            RoleDB.ROLE_ID, RoleDB.TABLE, RoleDB.TITLE
+        );
+        String INSERT_EMPLOY = String.format(
+            "INSERT INTO %s(%s, %s) VALUES (LAST_INSERT_ID(), (SELECT %s FROM %s WHERE %s=?));",
+            EmployDB.TABLE, EmployDB.STAFF_ID, EmployDB.THEATRE_ID,
+            TheatreDB.THEATRE_ID, TheatreDB.TABLE, TheatreDB.THEATRE_ID
+        );
+
+        int autoRenew = 1;
+        Connection conn = null;
+        PreparedStatement insertUser = null;
+        PreparedStatement insertRegisteredUser = null;
+        PreparedStatement insertMembership = null;
+        PreparedStatement insertProvider = null;
+        PreparedStatement insertEmploy = null;
         try {
-            PreparedStatement insertUser = conn.prepareStatement(INSERT_USER);
+            conn = DBConnection.connect();
+            conn.setAutoCommit(false);
+
+            insertUser = conn.prepareStatement(INSERT_USER);
+            insertUser.setString(1, UserDB.USER_TYPE_REGISTERED);
             insertUser.executeUpdate();
-            PreparedStatement insertRegisteredUser = conn.prepareStatement(INSERT_REGISTERED_USER);
+
+            insertRegisteredUser = conn.prepareStatement(INSERT_REGISTERED_USER);
             insertRegisteredUser.setString(1, userName);
             insertRegisteredUser.setString(2, email);
             byte[] salt = Passwords.getSalt();
@@ -98,17 +313,21 @@ public class UserDAO {
             insertRegisteredUser.setBytes(3, hashpw);
             insertRegisteredUser.setBytes(4, salt);
             insertRegisteredUser.executeUpdate();
-            PreparedStatement insertMembershipUser = conn.prepareStatement(INSERT_MEMBERSHIP_USER);
-            insertMembershipUser.setInt(1, AUTO_RENEW);
-            insertMembershipUser.executeUpdate();
-            PreparedStatement insertStaff = conn.prepareStatement(INSERT_STAFF);
-            insertStaff.setString(1, role);
-            insertStaff.executeUpdate();
+
+            insertMembership = conn.prepareStatement(INSERT_MEMBERSHIP_USER);
+            insertMembership.setInt(1, autoRenew);
+            insertMembership.executeUpdate();
+
+            insertProvider = conn.prepareStatement(INSERT_PROVIDER);
+            insertProvider.setString(1, role);
+            insertProvider.executeUpdate();
+
             if (!theatreLocation.isEmpty()) {
-                PreparedStatement insertEmploy = conn.prepareStatement(INSERT_EMPLOY);
+                insertEmploy = conn.prepareStatement(INSERT_EMPLOY);
                 insertEmploy.setString(1, theatreLocation);
                 insertEmploy.executeUpdate();
             }
+
             conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -121,128 +340,81 @@ public class UserDAO {
             return "Fail to create staff user";
         } finally {
             conn.setAutoCommit(true);
+            DBConnection.close(insertUser);
+            DBConnection.close(insertRegisteredUser);
+            DBConnection.close(insertMembership);
+            DBConnection.close(insertProvider);
+            DBConnection.close(insertEmploy);
+            DBConnection.close(conn);
         }
         return "";
     }
 
-    public User signInStaff(String staffId, String password) throws Exception {
-        User user = getStaffUser(staffId);
-        if (user != null
-                && Passwords.isExpectedPassword(password.toCharArray(), user.getSalt(), user.getHashPassword())) {
-            return user;
-        }
-        return null;
-    }
+    public String deleteProvider(String staffId) throws Exception {
+        String DELETE_EMPLOY = String.format(
+            "DELETE FROM %s WHERE %s=?;",
+            EmployDB.TABLE, EmployDB.STAFF_ID
+        );
+        String QUERY_ACCOUNT_ID = String.format(
+            "SELECT %s FROM %s WHERE %s=?",
+            ProviderDB.ACCOUNT_ID, ProviderDB.TABLE, ProviderDB.STAFF_ID
+        );
+        String DELETE_PROVIDER = String.format(
+            "DELETE FROM %s WHERE %s=?;",
+            ProviderDB.TABLE, ProviderDB.ACCOUNT_ID
+        );
+        String DELETE_MEMBERSHIP = String.format(
+            "DELETE FROM %s WHERE %s=?;",
+            MembershipDB.TABLE, MembershipDB.ACCOUNT_ID
+        );
+        String DELETE_REGISTERED_USER = String.format(
+            "DELETE FROM %s WHERE %s=?;",
+            RegisteredDB.TABLE, RegisteredDB.ACCOUNT_ID
+        );
+        String DELETE_USER = String.format(
+            "DELETE FROM user WHERE account_id=?;",
+            UserDB.TABLE, UserDB.ACCOUNT_ID
+        );
 
-    public User getStaffUser(String staffId) throws Exception {
-        String QUERY_STAFF_USER = "SELECT ru.account_id, ru.name, ru.email, ru.hashpw, ru.salt, ru.zip_code, m.points, m.auto_renew, m.end_date, p.staff_id, r.title, e.theatre_id FROM registered_user ru JOIN membership m ON ru.account_id=m.account_id JOIN provider p ON p.account_id=m.account_id JOIN role r ON r.role_id=p.role_id LEFT OUTER JOIN employ e ON p.staff_id=e.staff_id WHERE p.staff_id=?;";
-        Connection conn = DBConnection.connect();
-        PreparedStatement getRegisteredUser = conn.prepareStatement(QUERY_STAFF_USER);
-        getRegisteredUser.setString(1, staffId);
-        ResultSet res = getRegisteredUser.executeQuery();
-        User user = null;
-        while (res.next()) {
-            user = new User();
-            user.setAccountId(res.getInt("account_id"));
-            user.setUserName(res.getString("name"));
-            user.setEmail(res.getString("email"));
-            user.setHashPassword(res.getBytes("hashpw"));
-            user.setSalt(res.getBytes("salt"));
-            user.setZip(res.getString("zip_code"));
-            user.setBuddyPoints(res.getInt("points"));
-            user.setAutoRenew(res.getBoolean("auto_renew"));
-            user.setEndDate(LocalDate.parse(res.getString("end_date")));
-            user.setStaffId(res.getInt("staff_id"));
-            user.setRole(res.getString("title"));
-            user.setTheatre_id(res.getInt("theatre_id"));
-        }
-        getRegisteredUser.close();
-        conn.close();
-        return user;
-    }
-
-    public List<User> listAdminUser() throws Exception {
-        String QUERY_ADMINS = "SELECT p.staff_id, ru.name, r.title, ru.email FROM provider p JOIN registered_user ru ON p.account_id = ru.account_id JOIN role r ON p.role_id = r.role_id WHERE r.title='admin' ORDER BY p.staff_id;";
-        Connection conn = DBConnection.connect();
-        PreparedStatement queryEmployees = conn.prepareStatement(QUERY_ADMINS);
-        ResultSet res = queryEmployees.executeQuery();
-        List<User> admins = new ArrayList<>();
-        while (res.next()) {
-            User admin = new User();
-            admin.setStaffId(res.getInt("staff_id"));
-            admin.setUserName(res.getString("name"));
-            admin.setRole(res.getString("title"));
-            admin.setEmail(res.getString("email"));
-            admins.add(admin);
-        }
-        return admins;
-    }
-
-    public List<User> listStaffByTheatreId(String theatreId) throws Exception {
-        String QUERY_EMPLOYEES = "SELECT p.staff_id, ru.name, r.title, ru.email FROM provider p JOIN registered_user ru ON p.account_id = ru.account_id JOIN role r ON p.role_id = r.role_id JOIN employ e ON p.staff_id = e.staff_id WHERE e.theatre_id = ? ORDER BY r.title DESC, ru.name ;";
-        Connection conn = DBConnection.connect();
-        PreparedStatement queryEmployees = conn.prepareStatement(QUERY_EMPLOYEES);
-        queryEmployees.setString(1, theatreId);
-        ResultSet res = queryEmployees.executeQuery();
-        List<User> staffs = new ArrayList<>();
-        while (res.next()) {
-            User staff = new User();
-            staff.setStaffId(res.getInt("staff_id"));
-            staff.setUserName(res.getString("name"));
-            staff.setRole(res.getString("title"));
-            staff.setEmail(res.getString("email"));
-            staffs.add(staff);
-        }
-        return staffs;
-    }
-
-    public int getEmployTheatreId(String staffId) throws Exception {
-        String QUERY_EMPLOY_THEATRE_ID = "SELECT theatre_id FROM employ WHERE staff_id=?;";
-        Connection conn = DBConnection.connect();
-        PreparedStatement queryEmployTheatreId = conn.prepareStatement(QUERY_EMPLOY_THEATRE_ID);
-        queryEmployTheatreId.setString(1, staffId);
-        ResultSet res = queryEmployTheatreId.executeQuery();
-        int theatreId = 0;
-        while (res.next()) {
-            theatreId = res.getInt("theatre_id");
-        }
-        queryEmployTheatreId.close();
-        conn.close();
-        return theatreId;
-    }
-
-    public String deleteStaff(String staffId) throws Exception {
-        String DELETE_EMPLOY = "DELETE FROM employ WHERE staff_id=?;";
-        String QUERY_ACCOUNT_ID = "SELECT account_id FROM provider WHERE staff_id=?";
-        String DELETE_PROVIDER = "DELETE FROM provider WHERE account_id=?;";
-        String DELETE_MEMBERSHIP = "DELETE FROM membership WHERE account_id=?;";
-        String DELETE_REGISTERED_USER = "DELETE FROM registered_user WHERE account_id=?;";
-        String DELETE_USER = "DELETE FROM user WHERE account_id=?;";
-        Connection conn = DBConnection.connect();
-        conn.setAutoCommit(false);
+        Connection conn = null;
+        PreparedStatement deleteEmploy = null;
+        PreparedStatement queryAccountId = null;
+        PreparedStatement deleteProvider = null;
+        PreparedStatement deleteMembership = null;
+        PreparedStatement deleteRegisteredUser = null;
+        PreparedStatement deleteUser = null;
         try {
-            PreparedStatement deleteEmploy = conn.prepareStatement(DELETE_EMPLOY);
+            conn = DBConnection.connect();
+            conn.setAutoCommit(false);
+
+            deleteEmploy = conn.prepareStatement(DELETE_EMPLOY);
             deleteEmploy.setString(1, staffId);
             deleteEmploy.executeUpdate();
-            PreparedStatement queryAccountId = conn.prepareStatement(QUERY_ACCOUNT_ID);
+
+            queryAccountId = conn.prepareStatement(QUERY_ACCOUNT_ID);
             queryAccountId.setString(1, staffId);
             ResultSet res = queryAccountId.executeQuery();
             String accountId = "";
             while (res.next()) {
-                accountId = res.getString("account_id");
+                accountId = res.getString(ProviderDB.ACCOUNT_ID);
             }
-            PreparedStatement deleteProvider = conn.prepareStatement(DELETE_PROVIDER);
+
+            deleteProvider = conn.prepareStatement(DELETE_PROVIDER);
             deleteProvider.setString(1, accountId);
             deleteProvider.executeUpdate();
-            PreparedStatement deleteMembership = conn.prepareStatement(DELETE_MEMBERSHIP);
+
+            deleteMembership = conn.prepareStatement(DELETE_MEMBERSHIP);
             deleteMembership.setString(1, accountId);
             deleteMembership.executeUpdate();
-            PreparedStatement deleteRegisteredUser = conn.prepareStatement(DELETE_REGISTERED_USER);
+
+            deleteRegisteredUser = conn.prepareStatement(DELETE_REGISTERED_USER);
             deleteRegisteredUser.setString(1, accountId);
             deleteRegisteredUser.executeUpdate();
-            PreparedStatement deleteUser = conn.prepareStatement(DELETE_USER);
+
+            deleteUser = conn.prepareStatement(DELETE_USER);
             deleteUser.setString(1, accountId);
             deleteUser.executeUpdate();
+
             conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -255,6 +427,13 @@ public class UserDAO {
             return "Fail to delete staff account";
         } finally {
             conn.setAutoCommit(true);
+            DBConnection.close(deleteEmploy);
+            DBConnection.close(queryAccountId);
+            DBConnection.close(deleteProvider);
+            DBConnection.close(deleteMembership);
+            DBConnection.close(deleteRegisteredUser);
+            DBConnection.close(deleteUser);
+            DBConnection.close(conn);
         }
         return "";
     }

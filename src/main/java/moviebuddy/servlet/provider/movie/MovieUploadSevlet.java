@@ -50,8 +50,7 @@ public class MovieUploadSevlet extends HttpServlet {
                     errorMessage = Validation.validateNumber(duration);
                 }
                 if (errorMessage.isEmpty()) {
-                    errorMessage = movieDAO.uploadMovie(title, releaseDate, duration, trailer, streamPoster, posterSize,
-                            description);
+                    errorMessage = movieDAO.uploadMovie(title, releaseDate, duration, trailer, streamPoster, posterSize, description);
                 }
                 if (errorMessage.isEmpty()) {
                     response.sendRedirect("managemovie.jsp");

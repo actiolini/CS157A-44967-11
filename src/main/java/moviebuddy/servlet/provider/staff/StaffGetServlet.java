@@ -42,7 +42,7 @@ public class StaffGetServlet extends HttpServlet {
             if (role != null && (role.equals("admin") || role.equals("manager"))) {
                 String theatreId = "";
                 if (role.equals("admin")) {
-                    List<User> admins = userDAO.listAdminUser();
+                    List<User> admins = userDAO.listAdminUsers();
                     request.setAttribute(ADMINS, admins);
                     if (session.getAttribute(SELECTED_THEATRE_ID) == null) {
                         List<Theatre> theatres = theatreDAO.listTheatres();
@@ -58,8 +58,10 @@ public class StaffGetServlet extends HttpServlet {
                     theatreId = session.getAttribute("employTheatreId").toString();
                 }
                 Theatre theatre = theatreDAO.getTheatreById(theatreId);
-                List<User> staffs = userDAO.listStaffByTheatreId(theatreId);
-                request.setAttribute(THEATRE_NAME, theatre.getTheatreName());
+                if(theatre != null){
+                    request.setAttribute(THEATRE_NAME, theatre.getTheatreName());
+                }
+                List<User> staffs = userDAO.listProviderByTheatreId(theatreId);
                 request.setAttribute(STAFFS, staffs);
             } else {
                 response.sendRedirect("home.jsp");
