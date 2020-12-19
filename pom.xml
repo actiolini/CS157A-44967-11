@@ -19,23 +19,35 @@
     <maven.compiler.target>11</maven.compiler.target>
   </properties>
 
-  <dependencies>
+  <dependencyManagement>
+    <dependencies>
+      <!-- AWS-SDK-BOM -->
+      <dependency>
+        <groupId>com.amazonaws</groupId>
+        <artifactId>aws-java-sdk-bom</artifactId>
+        <version>1.11.921</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
-    <!-- JSTL -->
+  <dependencies>
+    <!-- jstl -->
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>jstl</artifactId>
       <version>1.2</version>
     </dependency>
 
-    <!-- Sevlet -->
+    <!-- sevlet -->
     <dependency>
       <groupId>javax</groupId>
       <artifactId>javaee-web-api</artifactId>
       <version>8.0.1</version>
     </dependency>
 
-    <!-- JDBC -->
+    <!-- jdbc -->
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
@@ -49,11 +61,10 @@
       <version>1.13.1</version>
     </dependency>
 
-    <!-- aws-sdk-java-v1 -->
+    <!-- aws-s3 -->
     <dependency>
       <groupId>com.amazonaws</groupId>
-      <artifactId>aws-java-sdk</artifactId>
-      <version>1.11.896</version>
+      <artifactId>aws-java-sdk-s3</artifactId>
     </dependency>
 
     <!-- jaxb-api -->
