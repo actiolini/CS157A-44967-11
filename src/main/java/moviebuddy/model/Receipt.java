@@ -1,6 +1,5 @@
 package moviebuddy.model;
 
-import java.io.StringBufferInputStream;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
