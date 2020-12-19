@@ -41,63 +41,66 @@
     <title>Movie Buddy | Manage Theatre</title>
 </head>
 
-<body style="height: 100%; display: flex; flex-direction: column;">
-    <div style="flex: 1 0 auto;">
-        <!-- Navigation bar -->
-        <jsp:include page="/navbar.jsp" />
-
-        <!-- Page Content -->
-        <div class="container">
-            <h3>Theatre: ${roomTheatreName}</h3>
-            <hr>
-            <a class="inputAsLink" href="./manageroom.jsp">&#8249;
-                <span>Back</span>
-            </a>
-            <h1 class="display-3 text-center">Create room</h1>
-            <hr>
-            <div class="row">
-                <div class="col"></div>
-                <div class="col-4">
-                    <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
-                    <form action="RoomCreate" method="POST" onsubmit="return validateRoomForm(this)">
-                        <div class="form-group">
-                            <label>Room Number</label><span class="errormessage">*</span><br>
-                            <input class="inputbox" name="roomNumber" type="number" min="1"
-                                placeholder="Enter room number" value="${roomNumberUpload}" />
-                        </div>
-                        <div class="form-group">
-                            <label>Sections</label><span class="errormessage">*</span><br>
-                            <input class="inputbox" name="sections" type="number" min="1"
-                                placeholder="Number of sections" value="${roomSectionsUpload}" />
-                        </div>
-                        <div class="form-group">
-                            <label>Seats</label><span class="errormessage">*</span><br>
-                            <input class="inputbox" name="seats" type="number" min="1" placeholder="Seats per section"
-                                value="${roomSeatsUpload}" />
-                        </div>
-                        <div class="text-center">
-                            <input type="hidden" name="theatreId" value="${roomTheatreId}" />
-                            <input type="submit" class="btn btn-outline-info" value="Create">
-                        </div>
-                    </form>
+<body>
+    <!-- Navigation bar -->
+    <jsp:include page="/navbar.jsp" />
+    <div style="min-height: 60px;"></div>
+    <div id="custom-scroll">
+        <div class="main">
+            <!-- Page Content -->
+            <div class="container">
+                <h3>Theatre: ${roomTheatreName}</h3>
+                <hr>
+                <a class="inputAsLink" href="./manageroom.jsp">&#8249;
+                    <span>Back</span>
+                </a>
+                <h1 class="display-3 text-center">Create room</h1>
+                <hr>
+                <div class="row">
+                    <div class="col"></div>
+                    <div class="col-4">
+                        <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
+                        <form action="RoomCreate" method="POST" onsubmit="return validateRoomForm(this)">
+                            <div class="form-group">
+                                <label>Room Number</label><span class="errormessage">*</span><br>
+                                <input class="inputbox" name="roomNumber" type="number" min="1" placeholder="Enter room number"
+                                    value="${roomNumberUpload}" />
+                            </div>
+                            <div class="form-group">
+                                <label>Sections</label><span class="errormessage">*</span><br>
+                                <input class="inputbox" name="sections" type="number" min="1" placeholder="Number of sections"
+                                    value="${roomSectionsUpload}" />
+                            </div>
+                            <div class="form-group">
+                                <label>Seats</label><span class="errormessage">*</span><br>
+                                <input class="inputbox" name="seats" type="number" min="1" placeholder="Seats per section"
+                                    value="${roomSeatsUpload}" />
+                            </div>
+                            <div class="text-center">
+                                <input type="hidden" name="theatreId" value="${roomTheatreId}" />
+                                <input type="submit" class="btn btn-outline-info" value="Create">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col"></div>
                 </div>
-                <div class="col"></div>
             </div>
         </div>
-        <div style="flex-shrink: 0;">
+        <div class="footer">
             <hr>
             <p class="text-center">CS157A-Section01-Team11&copy;2020</p>
         </div>
+    </div>
 
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-            crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
-            crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+        crossorigin="anonymous"></script>
 
-        <script src="./JS/functions.js"></script>
-        <script src="./JS/validation.js"></script>
+    <script src="./JS/functions.js"></script>
+    <script src="./JS/validation.js"></script>
 </body>
 
 </html>

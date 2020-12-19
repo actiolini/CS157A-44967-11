@@ -37,53 +37,54 @@
     <title>Movie Buddy | Sign In</title>
 </head>
 
-<body style="height: 100%; display: flex; flex-direction: column;">
-    <div style="flex: 1 0 auto;">
-        <!-- Navigation bar -->
-        <jsp:include page="/navbar.jsp" />
-
-        <!-- Page Content -->
-        <div class="container">
-            <h1 class="display-3 text-center">Sign In as Faculty</h1>
-            <hr>
-            <br>
-            <div class="row">
-                <div class="col-lg"></div>
-                <div class="col-lg">
-                    <div class="card">
-                        <div class="card-body ">
-                            <form action="SignInStaff" method="POST" onsubmit="return validateSignIn(this)">
-                                <div class="form-group ">
-                                    <label>Staff ID Number</label><br>
-                                    <input class="inputbox" type="text" name="staffId"
-                                        placeholder="Enter staff ID number"
-                                        onkeyup="checkSignInInput(this, 'staffIdError')" value="${signinStaffId}">
-                                    <br>
-                                    <span id="staffIdError" class="errormessage"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label>Password</label><br>
-                                    <input class="inputbox" type="password" name="password" placeholder="Enter password"
-                                        onkeyup="checkSignInInput(this, 'passwordError')">
-                                    <br>
-                                    <span id="passwordError" class="errormessage"></span>
-                                </div>
-                                <div class="text-center">
-                                    <input type="submit" class="btn btn-primary" value="Sign In">
-                                </div>
-                            </form>
-                            <p id="signInError" class="errormessage">${errorMessage}</p>
-                            <a href="./signin.jsp">Not a faculty? Sign in as customer here</a>
+<body>
+    <!-- Navigation bar -->
+    <jsp:include page="/navbar.jsp" />
+    <div style="min-height: 60px;"></div>
+    <div id="custom-scroll">
+        <div class="main">
+            <!-- Page Content -->
+            <div class="container">
+                <h1 class="display-3 text-center">Sign In as Faculty</h1>
+                <hr>
+                <br>
+                <div class="row">
+                    <div class="col-lg"></div>
+                    <div class="col-lg">
+                        <div class="card">
+                            <div class="card-body ">
+                                <form action="SignInStaff" method="POST" onsubmit="return validateSignIn(this)">
+                                    <div class="form-group ">
+                                        <label>Staff ID Number</label><br>
+                                        <input class="inputbox" type="text" name="staffId" placeholder="Enter staff ID number"
+                                            onkeyup="checkSignInInput(this, 'staffIdError')" value="${signinStaffId}">
+                                        <br>
+                                        <span id="staffIdError" class="errormessage"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Password</label><br>
+                                        <input class="inputbox" type="password" name="password" placeholder="Enter password"
+                                            onkeyup="checkSignInInput(this, 'passwordError')">
+                                        <br>
+                                        <span id="passwordError" class="errormessage"></span>
+                                    </div>
+                                    <div class="text-center">
+                                        <input type="submit" class="btn btn-primary" value="Sign In">
+                                    </div>
+                                </form>
+                                <p id="signInError" class="errormessage">${errorMessage}</p>
+                                <a href="./signin.jsp">Not a faculty? Sign in as customer here</a>
+                            </div>
                         </div>
                     </div>
+                    <div class="col-lg"></div>
                 </div>
-                <div class="col-lg"></div>
             </div>
         </div>
-    </div>
-    <div style="flex-shrink: 0;">
-        <hr>
-        <p class="text-center">CS157A-Section01-Team11&copy;2020</p>
+        <div class="footer">
+            <hr>
+            <p class="text-center">CS157A-Section01-Team11&copy;2020</p>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

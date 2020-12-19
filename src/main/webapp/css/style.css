@@ -1,3 +1,43 @@
+body{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: hidden;
+}
+
+#custom-scroll{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+#custom-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+
+#custom-scroll::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px rgba(128, 128, 128, 0.5);
+  border-radius: 10px;
+}
+
+#custom-scroll::-webkit-scrollbar-thumb {
+  background: rgb(115, 115, 115, 0.75);
+  border-radius: 10px;
+}
+
+#custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgb(102, 102, 102, 0.75);
+}
+
+.main{
+    flex: 1 0 auto;
+}
+
+.footer{
+    flex-shrink: 0;
+}
+
 .formAsLink{
     margin-bottom: 0px;
 }

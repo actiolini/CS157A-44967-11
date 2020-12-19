@@ -36,73 +36,74 @@
     <title>Movie Buddy | Manage Theatre</title>
 </head>
 
-<body style="height: 100%; display: flex; flex-direction: column;">
-    <div style="flex: 1 0 auto;">
-        <!-- Navigation bar -->
-        <jsp:include page="/navbar.jsp" />
-
-        <!-- Page Content -->
-        <div class="container">
-            <h3>Theatre</h3>
-            <hr>
-            <div class="row">
-                <div class="col"></div>
-                <div class="col-6 text-center">
-                    <a href="./theatrecreate.jsp">
-                        <button type="button" class="btn btn-outline-info">Create Theatre</button>
-                    </a>
+<body>
+    <!-- Navigation bar -->
+    <jsp:include page="/navbar.jsp" />
+    <div style="min-height: 60px;"></div>
+    <div id="custom-scroll">
+        <div class="main">
+            <!-- Page Content -->
+            <div class="container">
+                <h3>Theatre</h3>
+                <hr>
+                <div class="row">
+                    <div class="col"></div>
+                    <div class="col-6 text-center">
+                        <a href="./theatrecreate.jsp">
+                            <button type="button" class="btn btn-outline-info">Create Theatre</button>
+                        </a>
+                    </div>
+                    <div class="col"></div>
                 </div>
-                <div class="col"></div>
-            </div>
-            <hr>
-            <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
-            <table>
-                <tr>
-                    <th>Theatre Name</th>
-                    <th>Address</th>
-                    <th>City</th>
-                    <th>State</th>
-                    <th>Country</th>
-                    <th>Zip</th>
-                    <th>Actions</th>
-                </tr>
-                <c:forEach items="${theatreList}" var="theatre">
+                <hr>
+                <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
+                <table>
                     <tr>
-                        <td>${theatre.getTheatreName()}</td>
-                        <td>${theatre.getAddress()}</td>
-                        <td>${theatre.getCity()}</td>
-                        <td>${theatre.getState()}</td>
-                        <td>${theatre.getCountry()}</td>
-                        <td>${theatre.getZip()}</td>
-                        <td>
-                            <div class="container">
-                                <form action="TicketPriceGet" method="POST" class="button">
-                                    <input type="hidden" name="theatreId" value="${theatre.getId()}" />
-                                    <input type="submit" class="btn btn-outline-info" value="Ticket Price" />
-                                </form>
-                                <form action="RoomGet" method="POST" class="button">
-                                    <input type="hidden" name="theatreId" value="${theatre.getId()}" />
-                                    <input type="submit" class="btn btn-outline-info" value="Room" />
-                                </form>
-                                <form action="TheatreLoadEdit" method="POST" class="button">
-                                    <input type="hidden" name="theatreId" value="${theatre.getId()}" />
-                                    <input type="submit" class="btn btn-outline-info" value="Edit" />
-                                </form>
-                                <form action="TheatreDelete" method="POST" class="button">
-                                    <input type="hidden" name="theatreId" value="${theatre.getId()}" />
-                                    <input type="submit" class="btn btn-outline-info" value="Delete" />
-                                </form>
-                            </div>
-                        </td>
+                        <th>Theatre Name</th>
+                        <th>Address</th>
+                        <th>City</th>
+                        <th>State</th>
+                        <th>Country</th>
+                        <th>Zip</th>
+                        <th>Actions</th>
                     </tr>
-                </c:forEach>
-            </table>
+                    <c:forEach items="${theatreList}" var="theatre">
+                        <tr>
+                            <td>${theatre.getTheatreName()}</td>
+                            <td>${theatre.getAddress()}</td>
+                            <td>${theatre.getCity()}</td>
+                            <td>${theatre.getState()}</td>
+                            <td>${theatre.getCountry()}</td>
+                            <td>${theatre.getZip()}</td>
+                            <td>
+                                <div class="container">
+                                    <form action="TicketPriceGet" method="POST" class="button">
+                                        <input type="hidden" name="theatreId" value="${theatre.getId()}" />
+                                        <input type="submit" class="btn btn-outline-info" value="Ticket Price" />
+                                    </form>
+                                    <form action="RoomGet" method="POST" class="button">
+                                        <input type="hidden" name="theatreId" value="${theatre.getId()}" />
+                                        <input type="submit" class="btn btn-outline-info" value="Room" />
+                                    </form>
+                                    <form action="TheatreLoadEdit" method="POST" class="button">
+                                        <input type="hidden" name="theatreId" value="${theatre.getId()}" />
+                                        <input type="submit" class="btn btn-outline-info" value="Edit" />
+                                    </form>
+                                    <form action="TheatreDelete" method="POST" class="button">
+                                        <input type="hidden" name="theatreId" value="${theatre.getId()}" />
+                                        <input type="submit" class="btn btn-outline-info" value="Delete" />
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </table>
+            </div>
         </div>
-    </div>
-    </div>
-    <div style="flex-shrink: 0;">
-        <hr>
-        <p class="text-center">CS157A-Section01-Team11&copy;2020</p>
+        <div class="footer">
+            <hr>
+            <p class="text-center">CS157A-Section01-Team11&copy;2020</p>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

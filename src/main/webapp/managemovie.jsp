@@ -36,90 +36,92 @@
     <title>Movie Buddy | Manage Movie</title>
 </head>
 
-<body style="height: 100%; display: flex; flex-direction: column;">
-    <div style="flex: 1 0 auto;">
-        <!-- Navigation bar -->
-        <jsp:include page="/navbar.jsp" />
-
-        <!-- Page Content -->
-        <div class="container">
-            <h3>Movie</h3>
-            <hr>
-            <c:if test="${isAdmin}">
-                <div class="row">
-                    <div class="col"></div>
-                    <div class="col-6 text-center">
-                        <a href="./movieupload.jsp">
-                            <button type="button" class="btn btn-outline-info">Upload Movie</button>
-                        </a>
-                    </div>
-                    <div class="col"></div>
-                </div>
+<body>
+    <!-- Navigation bar -->
+    <jsp:include page="/navbar.jsp" />
+    <div style="min-height: 60px;"></div>
+    <div id="custom-scroll">
+        <div class="main">
+            <!-- Page Content -->
+            <div class="container">
+                <h3>Movie</h3>
                 <hr>
-                <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
-            </c:if>
-            <c:forEach items="${movieList}" var="movie">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col">
-                                <h1>${movie.getTitle()}</h1>
-                            </div>
+                <c:if test="${isAdmin}">
+                    <div class="row">
+                        <div class="col"></div>
+                        <div class="col-6 text-center">
+                            <a href="./movieupload.jsp">
+                                <button type="button" class="btn btn-outline-info">Upload Movie</button>
+                            </a>
                         </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col col-lg-5">
-                                <div class="text-center">
-                                    <img src=${movie.getPoster()} class="rounded mx-auto w-100" alt="poster">
+                        <div class="col"></div>
+                    </div>
+                    <hr>
+                    <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
+                </c:if>
+                <c:forEach items="${movieList}" var="movie">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h1>${movie.getTitle()}</h1>
                                 </div>
                             </div>
-                            <div class="col">
-                                <ul class="list-inline">
-                                    <p><b>Length:</b> ${movie.getDuration()} minutes</p>
-                                    <p><b>Release Date:</b> ${movie.displayReleaseDate()}</p>
-                                </ul>
-                                <hr>
-                                <h3>Trailer</h3>
-                                <div class="embed-responsive embed-responsive-16by9">
-                                    <iframe width="907" height="510" src="${movie.getTrailer()}" frameborder="0"
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                        allowfullscreen></iframe>
+                            <hr>
+                            <div class="row">
+                                <div class="col col-lg-5">
+                                    <div class="text-center">
+                                        <img src=${movie.getPoster()} class="rounded mx-auto w-100" alt="poster">
+                                    </div>
                                 </div>
-                                <hr>
-                                <h3>Description</h3>
-                                <p>${movie.getDescription()}</p>
+                                <div class="col">
+                                    <ul class="list-inline">
+                                        <p><b>Length:</b> ${movie.getDuration()} minutes</p>
+                                        <p><b>Release Date:</b> ${movie.displayReleaseDate()}</p>
+                                    </ul>
+                                    <hr>
+                                    <h3>Trailer</h3>
+                                    <div class="embed-responsive embed-responsive-16by9">
+                                        <iframe width="907" height="510" src="${movie.getTrailer()}" frameborder="0"
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                            allowfullscreen></iframe>
+                                    </div>
+                                    <hr>
+                                    <h3>Description</h3>
+                                    <p>${movie.getDescription()}</p>
+                                </div>
                             </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col">
-                                <div class="container">
-                                    <form action="ScheduleGet" method="POST" class="button">
-                                        <input type="hidden" name="movieId" value=${movie.getId()} />
-                                        <input type="submit" class="btn btn-outline-info" value="Schedule" />
-                                    </form>
-                                    <c:if test="${isAdmin}">
-                                        <form action="MovieLoadEdit" method="POST" class="button">
+                            <hr>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="container">
+                                        <form action="ScheduleGet" method="POST" class="button">
                                             <input type="hidden" name="movieId" value=${movie.getId()} />
-                                            <input type="submit" class="btn btn-outline-info" value="Edit" />
+                                            <input type="submit" class="btn btn-outline-info" value="Schedule" />
                                         </form>
-                                        <form action="MovieDelete" method="POST" class="button">
-                                            <input type="hidden" name="movieId" value=${movie.getId()} />
-                                            <input type="submit" class="btn btn-outline-info" value="Delete" />
-                                        </form>
-                                    </c:if>
+                                        <c:if test="${isAdmin}">
+                                            <form action="MovieLoadEdit" method="POST" class="button">
+                                                <input type="hidden" name="movieId" value=${movie.getId()} />
+                                                <input type="submit" class="btn btn-outline-info" value="Edit" />
+                                            </form>
+                                            <form action="MovieDelete" method="POST" class="button">
+                                                <input type="hidden" name="movieId" value=${movie.getId()} />
+                                                <input type="submit" class="btn btn-outline-info" value="Delete" />
+                                            </form>
+                                        </c:if>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <br>
-            </c:forEach>
+                    <br>
+                </c:forEach>
+            </div>
         </div>
-    </div>
-    <div style="flex-shrink: 0;">
-        <hr>
-        <p class="text-center">CS157A-Section01-Team11&copy;2020</p>
+        <div class="footer">
+            <hr>
+            <p class="text-center">CS157A-Section01-Team11&copy;2020</p>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

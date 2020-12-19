@@ -36,63 +36,65 @@
     <title>Movie Buddy | Manage Theatre</title>
 </head>
 
-<body style="height: 100%; display: flex; flex-direction: column;">
-    <div style="flex: 1 0 auto;">
-        <!-- Navigation bar -->
-        <jsp:include page="/navbar.jsp" />
-
-        <!-- Page Content -->
-        <div class="container">
-            <h3>Theatre: ${roomTheatreName}</h3>
-            <hr>
-            <a class="inputAsLink" href="./managetheatre.jsp">&#8249;
-                <span>Back</span>
-            </a>
-            <div class="row">
-                <div class="col"></div>
-                <div class="col-6 text-center">
-                    <a href="./roomcreate.jsp">
-                        <button type="button" class="btn btn-outline-info">Add Room</button>
-                    </a>
+<body>
+    <!-- Navigation bar -->
+    <jsp:include page="/navbar.jsp" />
+    <div style="min-height: 60px;"></div>
+    <div id="custom-scroll">
+        <div class="main">
+            <!-- Page Content -->
+            <div class="container">
+                <h3>Theatre: ${roomTheatreName}</h3>
+                <hr>
+                <a class="inputAsLink" href="./managetheatre.jsp">&#8249;
+                    <span>Back</span>
+                </a>
+                <div class="row">
+                    <div class="col"></div>
+                    <div class="col-6 text-center">
+                        <a href="./roomcreate.jsp">
+                            <button type="button" class="btn btn-outline-info">Add Room</button>
+                        </a>
+                    </div>
+                    <div class="col"></div>
                 </div>
-                <div class="col"></div>
-            </div>
-            <hr>
-            <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
-            <table>
-                <tr>
-                    <th>Room Number</th>
-                    <th>Number of Rows</th>
-                    <th>Seats per Row</th>
-                    <th>Actions</th>
-                </tr>
-                <c:forEach items="${roomList}" var="room">
+                <hr>
+                <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
+                <table>
                     <tr>
-                        <td>${room.getRoomNumber()}</td>
-                        <td>${room.getNumberOfRows()}</td>
-                        <td>${room.getSeatsPerRow()}</td>
-                        <td>
-                            <div class="container">
-                                <form action="RoomLoadEdit" method="POST" class="button">
-                                    <input type="hidden" name="theatreId" value="${roomTheatreId}" />
-                                    <input type="hidden" name="roomNumber" value="${room.getRoomNumber()}" />
-                                    <input type="submit" class="btn btn-outline-info" value="Edit" />
-                                </form>
-                                <form action="RoomDelete" method="POST" class="button">
-                                    <input type="hidden" name="theatreId" value="${roomTheatreId}" />
-                                    <input type="hidden" name="roomNumber" value="${room.getRoomNumber()}" />
-                                    <input type="submit" class="btn btn-outline-info" value="Delete" />
-                                </form>
-                            </div>
-                        </td>
+                        <th>Room Number</th>
+                        <th>Number of Rows</th>
+                        <th>Seats per Row</th>
+                        <th>Actions</th>
                     </tr>
-                </c:forEach>
-            </table>
+                    <c:forEach items="${roomList}" var="room">
+                        <tr>
+                            <td>${room.getRoomNumber()}</td>
+                            <td>${room.getNumberOfRows()}</td>
+                            <td>${room.getSeatsPerRow()}</td>
+                            <td>
+                                <div class="container">
+                                    <form action="RoomLoadEdit" method="POST" class="button">
+                                        <input type="hidden" name="theatreId" value="${roomTheatreId}" />
+                                        <input type="hidden" name="roomNumber" value="${room.getRoomNumber()}" />
+                                        <input type="submit" class="btn btn-outline-info" value="Edit" />
+                                    </form>
+                                    <form action="RoomDelete" method="POST" class="button">
+                                        <input type="hidden" name="theatreId" value="${roomTheatreId}" />
+                                        <input type="hidden" name="roomNumber" value="${room.getRoomNumber()}" />
+                                        <input type="submit" class="btn btn-outline-info" value="Delete" />
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </table>
+            </div>
         </div>
-    </div>
-    <div style="flex-shrink: 0;">
-        <hr>
-        <p class="text-center">CS157A-Section01-Team11&copy;2020</p>
+        <div class="footer">
+            <hr>
+            <p class="text-center">CS157A-Section01-Team11&copy;2020</p>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

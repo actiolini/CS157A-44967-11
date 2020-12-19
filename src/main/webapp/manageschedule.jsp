@@ -43,95 +43,96 @@
     <title>Movie Buddy | Manage Schedule</title>
 </head>
 
-<body style="height: 100%; display: flex; flex-direction: column;"
-    onload="loadSelectedOption('defaultLocation', 'selectTheatreOption', '${selectTheatreId}');">
-    <div style="flex: 1 0 auto;">
-        <!-- Navigation bar -->
-        <jsp:include page="/navbar.jsp" />
-
-        <!-- Page Content -->
-        <div class="container">
-            <h3>Theatre: ${scheduleTheatreName}</h3>
-            <hr>
-            <a class="inputAsLink" href="./managemovie.jsp">&#8249;
-                <span>Back</span>
-            </a>
-            <h1 class="display-5 text-center">${scheduleMovieTitle}</h1>
-            <hr>
-            <c:if test="${isAdmin}">
-                <form id="selectTheatreForm" action="ScheduleGet" method="POST">
-                    <div class="form-group">
-                        <label>Theatre: </label>
-                        <select id="selectTheatreOption" name="selectTheatreOption" form="selectTheatreForm"
-                            onchange="submitOnChange('selectTheatreForm')">
-                            <option id="defaultLocation" hidden value="none">Select a theatre location
-                            </option>
-                            <c:forEach items="${theatreList}" var="theatre">
-                                <option value="${theatre.getId()}">${theatre.getTheatreName()}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
-                </form>
+<body onload="loadSelectedOption('defaultLocation', 'selectTheatreOption', '${selectTheatreId}');">
+    <!-- Navigation bar -->
+    <jsp:include page="/navbar.jsp" />
+    <div style="min-height: 60px;"></div>
+    <div id="custom-scroll">
+        <div class="main">
+            <!-- Page Content -->
+            <div class="container">
+                <h3>Theatre: ${scheduleTheatreName}</h3>
                 <hr>
-            </c:if>
-            <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
-            <div class="row">
-                <div class="col"></div>
-                <div class="col-8">
-                    <table>
-                        <tr>
-                            <th>Schedule Id</th>
-                            <th>Show Date</th>
-                            <th>Show Time</th>
-                            <th>Room</th>
-                            <th>Actions</th>
-                        </tr>
-                        <tr>
-                            <td>#</td>
-                            <td>
-                                <input form="addScheduleForm" style="width: 150px;" name="showDate" type="date"
-                                    value="${scheduleShowDateUpload}" />
-                            </td>
-                            <td>
-                                <input form="addScheduleForm" style="width: 80px;" name="showTime" type="time"
-                                    value="${scheduleShowTimeUpload}" />
-                            </td>
-                            <td>
-                                <input form="addScheduleForm" style="width: 60px;" name="roomNumber" type="number"
-                                    min="1" ; placeholder="#" value="${scheduleRoomNumberUpload}" />
-                            </td>
-                            <td>
-                                <form id="addScheduleForm" action="ScheduleAdd" method="POST" class="button"
-                                    onsubmit="return validateTicketPriceForm(this)">
-                                    <input type="hidden" name="theatreId" value="${scheduleTheatreId}" />
-                                    <input type="hidden" name="movieId" value="${scheduleMovieId}" />
-                                    <input type="submit" class="btn btn-outline-info" value="Add" />
-                                </form>
-                            </td>
-                        </tr>
-                        <c:forEach items="${scheduleList}" var="schedule">
+                <a class="inputAsLink" href="./managemovie.jsp">&#8249;
+                    <span>Back</span>
+                </a>
+                <h1 class="display-5 text-center">${scheduleMovieTitle}</h1>
+                <hr>
+                <c:if test="${isAdmin}">
+                    <form id="selectTheatreForm" action="ScheduleGet" method="POST">
+                        <div class="form-group">
+                            <label>Theatre: </label>
+                            <select id="selectTheatreOption" name="selectTheatreOption" form="selectTheatreForm"
+                                onchange="submitOnChange('selectTheatreForm')">
+                                <option id="defaultLocation" hidden value="none">Select a theatre location
+                                </option>
+                                <c:forEach items="${theatreList}" var="theatre">
+                                    <option value="${theatre.getId()}">${theatre.getTheatreName()}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                    </form>
+                    <hr>
+                </c:if>
+                <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
+                <div class="row">
+                    <div class="col"></div>
+                    <div class="col-8">
+                        <table>
                             <tr>
-                                <td>${schedule.getScheduleId()}</td>
-                                <td>${schedule.displayShowDate()}</td>
-                                <td>${schedule.getShowTime()}</td>
-                                <td>${schedule.getRoomNumber()}</td>
+                                <th>Schedule Id</th>
+                                <th>Show Date</th>
+                                <th>Show Time</th>
+                                <th>Room</th>
+                                <th>Actions</th>
+                            </tr>
+                            <tr>
+                                <td>#</td>
                                 <td>
-                                    <form action="ScheduleDelete" method="POST" class="button">
-                                        <input type="hidden" name="scheduleId" value="${schedule.getScheduleId()}" />
-                                        <input type="submit" class="btn btn-outline-info" value="Delete" />
+                                    <input form="addScheduleForm" style="width: 150px;" name="showDate" type="date"
+                                        value="${scheduleShowDateUpload}" />
+                                </td>
+                                <td>
+                                    <input form="addScheduleForm" style="width: 80px;" name="showTime" type="time"
+                                        value="${scheduleShowTimeUpload}" />
+                                </td>
+                                <td>
+                                    <input form="addScheduleForm" style="width: 60px;" name="roomNumber" type="number" min="1" ;
+                                        placeholder="#" value="${scheduleRoomNumberUpload}" />
+                                </td>
+                                <td>
+                                    <form id="addScheduleForm" action="ScheduleAdd" method="POST" class="button"
+                                        onsubmit="return validateTicketPriceForm(this)">
+                                        <input type="hidden" name="theatreId" value="${scheduleTheatreId}" />
+                                        <input type="hidden" name="movieId" value="${scheduleMovieId}" />
+                                        <input type="submit" class="btn btn-outline-info" value="Add" />
                                     </form>
                                 </td>
                             </tr>
-                        </c:forEach>
-                    </table>
+                            <c:forEach items="${scheduleList}" var="schedule">
+                                <tr>
+                                    <td>${schedule.getScheduleId()}</td>
+                                    <td>${schedule.displayShowDate()}</td>
+                                    <td>${schedule.getShowTime()}</td>
+                                    <td>${schedule.getRoomNumber()}</td>
+                                    <td>
+                                        <form action="ScheduleDelete" method="POST" class="button">
+                                            <input type="hidden" name="scheduleId" value="${schedule.getScheduleId()}" />
+                                            <input type="submit" class="btn btn-outline-info" value="Delete" />
+                                        </form>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </table>
+                    </div>
+                    <div class="col"></div>
                 </div>
-                <div class="col"></div>
             </div>
         </div>
-    </div>
-    <div style="flex-shrink: 0;">
-        <hr>
-        <p class="text-center">CS157A-Section01-Team11&copy;2020</p>
+        <div class="footer">
+            <hr>
+            <p class="text-center">CS157A-Section01-Team11&copy;2020</p>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

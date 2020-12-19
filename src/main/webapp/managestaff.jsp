@@ -37,89 +37,90 @@
     <title>Movie Buddy | Manage Staff</title>
 </head>
 
-<body style="height: 100%; display: flex; flex-direction: column;"
-    onload="loadSelectedOption('defaultLocation', 'selectTheatreOption', '${selectTheatreId}');">
-    <div style=" flex: 1 0 auto;">
-        <!-- Navigation bar -->
-        <jsp:include page="/navbar.jsp" />
-
-        <!-- Page Content -->
-        <div class="container">
-            <h3>Theatre: ${staffTheatreName}</h3>
-            <hr>
-            <div class="row">
-                <div class="col"></div>
-                <div class="col-6 text-center">
-                    <a href="./staffsignup.jsp">
-                        <button type="button" class="btn btn-outline-info">Create Faculty Account</button>
-                    </a>
-                </div>
-                <div class="col"></div>
-            </div>
-            <hr>
-            <c:if test="${isAdmin}">
-                <form id="selectTheatreForm" action="StaffGet" method="POST">
-                    <div class="form-group">
-                        <label>Theatre: </label>
-                        <select id="selectTheatreOption" name="selectTheatreOption" form="selectTheatreForm"
-                            onchange="submitOnChange('selectTheatreForm')">
-                            <option id="defaultLocation" hidden value="none">Select a theatre location
-                            </option>
-                            <c:forEach items="${theatreList}" var="theatre">
-                                <option value="${theatre.getId()}">${theatre.getTheatreName()}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
-                </form>
+<body onload="loadSelectedOption('defaultLocation', 'selectTheatreOption', '${selectTheatreId}');">
+    <!-- Navigation bar -->
+    <jsp:include page="/navbar.jsp" />
+    <div style="min-height: 60px;"></div>
+    <div id="custom-scroll">
+        <div class="main">
+            <!-- Page Content -->
+            <div class="container">
+                <h3>Theatre: ${staffTheatreName}</h3>
                 <hr>
-            </c:if>
-            <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
-            <table>
-                <tr>
-                    <th>Staff Id</th>
-                    <th>Name</th>
-                    <th>Role</th>
-                    <th>Email</th>
-                    <th>Actions</th>
-                </tr>
+                <div class="row">
+                    <div class="col"></div>
+                    <div class="col-6 text-center">
+                        <a href="./staffsignup.jsp">
+                            <button type="button" class="btn btn-outline-info">Create Faculty Account</button>
+                        </a>
+                    </div>
+                    <div class="col"></div>
+                </div>
+                <hr>
                 <c:if test="${isAdmin}">
-                    <c:forEach items="${adminUserList}" var="admin">
+                    <form id="selectTheatreForm" action="StaffGet" method="POST">
+                        <div class="form-group">
+                            <label>Theatre: </label>
+                            <select id="selectTheatreOption" name="selectTheatreOption" form="selectTheatreForm"
+                                onchange="submitOnChange('selectTheatreForm')">
+                                <option id="defaultLocation" hidden value="none">Select a theatre location
+                                </option>
+                                <c:forEach items="${theatreList}" var="theatre">
+                                    <option value="${theatre.getId()}">${theatre.getTheatreName()}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                    </form>
+                    <hr>
+                </c:if>
+                <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
+                <table>
+                    <tr>
+                        <th>Staff Id</th>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                    <c:if test="${isAdmin}">
+                        <c:forEach items="${adminUserList}" var="admin">
+                            <tr>
+                                <td>${admin.getStaffId()}</td>
+                                <td>${admin.getUserName()}</td>
+                                <td>${admin.getRole()}</td>
+                                <td>${admin.getEmail()}</td>
+                                <td>N/A</td>
+                            </tr>
+                        </c:forEach>
+                    </c:if>
+                    <c:forEach items="${staffUserList}" var="staff">
                         <tr>
-                            <td>${admin.getStaffId()}</td>
-                            <td>${admin.getUserName()}</td>
-                            <td>${admin.getRole()}</td>
-                            <td>${admin.getEmail()}</td>
-                            <td>N/A</td>
+                            <td>${staff.getStaffId()}</td>
+                            <td>${staff.getUserName()}</td>
+                            <td>${staff.getRole()}</td>
+                            <td>${staff.getEmail()}</td>
+                            <c:if test="${staff.getRole().equals('manager') && !isAdmin}">
+                                <td>N/A</td>
+                            </c:if>
+                            <c:if test="${staff.getRole().equals('faculty') || isAdmin}">
+                                <td>
+                                    <div class="container">
+                                        <form action="StaffDelete" method="POST" class="button">
+                                            <input type="hidden" name="staffId" value="${staff.getStaffId()}" />
+                                            <input type="submit" class="btn btn-outline-info" value="Delete" />
+                                        </form>
+                                    </div>
+                                </td>
+                            </c:if>
                         </tr>
                     </c:forEach>
-                </c:if>
-                <c:forEach items="${staffUserList}" var="staff">
-                    <tr>
-                        <td>${staff.getStaffId()}</td>
-                        <td>${staff.getUserName()}</td>
-                        <td>${staff.getRole()}</td>
-                        <td>${staff.getEmail()}</td>
-                        <c:if test="${staff.getRole().equals('manager') && !isAdmin}">
-                            <td>N/A</td>
-                        </c:if>
-                        <c:if test="${staff.getRole().equals('faculty') || isAdmin}">
-                            <td>
-                                <div class="container">
-                                    <form action="StaffDelete" method="POST" class="button">
-                                        <input type="hidden" name="staffId" value="${staff.getStaffId()}" />
-                                        <input type="submit" class="btn btn-outline-info" value="Delete" />
-                                    </form>
-                                </div>
-                            </td>
-                        </c:if>
-                    </tr>
-                </c:forEach>
-            </table>
+                </table>
+            </div>
         </div>
-    </div>
-    <div style="flex-shrink: 0;">
-        <hr>
-        <p class="text-center">CS157A-Section01-Team11&copy;2020</p>
+        <div class="footer">
+            <hr>
+            <p class="text-center">CS157A-Section01-Team11&copy;2020</p>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

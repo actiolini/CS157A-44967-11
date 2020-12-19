@@ -40,70 +40,71 @@
     <title>Movie Buddy | Ticket Price</title>
 </head>
 
-<body style="height: 100%; display: flex; flex-direction: column;">
-    <div style="flex: 1 0 auto;">
-        <!-- Navigation bar -->
-        <jsp:include page="/navbar.jsp" />
-
-        <!-- Page Content -->
-        <div class="container">
-            <h3>Theatre: ${ticketPriceTheatreName}</h3>
-            <hr>
-            <a class="inputAsLink" href="./managetheatre.jsp">&#8249;
-                <span>Back</span>
-            </a>
-            <h1 class="display-3 text-center">Ticket Prices</h1>
-            <hr>
-            <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
-            <div class="row">
-                <div class="col"></div>
-                <div class="col-5">
-                    <table>
-                        <tr>
-                            <th>Start time</th>
-                            <th>Price</th>
-                            <th>Actions</th>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input form="addTicketPriceForm" style="width: 80px;" name="startTime" type="time"
-                                    value="${ticketPriceStartTimeUpload}" />
-                            </td>
-                            <td>
-                                <input form="addTicketPriceForm" style="width: 80px;" name="price" type="number" min="0"
-                                    step="0.01" ; placeholder="11.50" value="${ticketPricePriceUpload}" />
-                            </td>
-                            <td>
-                                <form id="addTicketPriceForm" action="TicketPriceAdd" method="POST" class="button"
-                                    onsubmit="return validateTicketPriceForm(this)">
-                                    <input type="hidden" name="theatreId" value="${ticketPriceTheatreId}" />
-                                    <input type="submit" class="btn btn-outline-info" value="Add" />
-                                </form>
-                            </td>
-                        </tr>
-                        <c:forEach items="${ticketPriceList}" var="ticketPrice">
+<body>
+    <!-- Navigation bar -->
+    <jsp:include page="/navbar.jsp" />
+    <div style="min-height: 60px;"></div>
+    <div id="custom-scroll">
+        <div class="main">
+            <!-- Page Content -->
+            <div class="container">
+                <h3>Theatre: ${ticketPriceTheatreName}</h3>
+                <hr>
+                <a class="inputAsLink" href="./managetheatre.jsp">&#8249;
+                    <span>Back</span>
+                </a>
+                <h1 class="display-3 text-center">Ticket Prices</h1>
+                <hr>
+                <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
+                <div class="row">
+                    <div class="col"></div>
+                    <div class="col-5">
+                        <table>
                             <tr>
-                                <td>${ticketPrice.getStartTime()}</td>
-                                <td>$${ticketPrice.displayPrice()}</td>
+                                <th>Start time</th>
+                                <th>Price</th>
+                                <th>Actions</th>
+                            </tr>
+                            <tr>
                                 <td>
-                                    <form action="TicketPriceDelete" method="POST" class="button">
+                                    <input form="addTicketPriceForm" style="width: 80px;" name="startTime" type="time"
+                                        value="${ticketPriceStartTimeUpload}" />
+                                </td>
+                                <td>
+                                    <input form="addTicketPriceForm" style="width: 80px;" name="price" type="number" min="0"
+                                        step="0.01" ; placeholder="11.50" value="${ticketPricePriceUpload}" />
+                                </td>
+                                <td>
+                                    <form id="addTicketPriceForm" action="TicketPriceAdd" method="POST" class="button"
+                                        onsubmit="return validateTicketPriceForm(this)">
                                         <input type="hidden" name="theatreId" value="${ticketPriceTheatreId}" />
-                                        <input type="hidden" name="startTime" value="${ticketPrice.getStartTime()}" />
-                                        <input type="submit" class="btn btn-outline-info" value="Delete" />
+                                        <input type="submit" class="btn btn-outline-info" value="Add" />
                                     </form>
                                 </td>
                             </tr>
-                        </c:forEach>
-                    </table>
+                            <c:forEach items="${ticketPriceList}" var="ticketPrice">
+                                <tr>
+                                    <td>${ticketPrice.getStartTime()}</td>
+                                    <td>$${ticketPrice.displayPrice()}</td>
+                                    <td>
+                                        <form action="TicketPriceDelete" method="POST" class="button">
+                                            <input type="hidden" name="theatreId" value="${ticketPriceTheatreId}" />
+                                            <input type="hidden" name="startTime" value="${ticketPrice.getStartTime()}" />
+                                            <input type="submit" class="btn btn-outline-info" value="Delete" />
+                                        </form>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </table>
+                    </div>
+                    <div class="col"></div>
                 </div>
-                <div class="col"></div>
             </div>
         </div>
-    </div>
-    </div>
-    <div style="flex-shrink: 0;">
-        <hr>
-        <p class="text-center">CS157A-Section01-Team11&copy;2020</p>
+        <div class="footer">
+            <hr>
+            <p class="text-center">CS157A-Section01-Team11&copy;2020</p>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
