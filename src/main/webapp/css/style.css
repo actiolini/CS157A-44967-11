@@ -13,7 +13,7 @@ body{
 }
 
 #custom-scroll::-webkit-scrollbar {
-  width: 5px;
+  width: 8px;
 }
 
 #custom-scroll::-webkit-scrollbar-track {
