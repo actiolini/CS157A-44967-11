@@ -48,7 +48,7 @@
         aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <a class="navbar-brand" href="./${S.HOME_PAGE}">Movie Buddy</a>
+    <a class="navbar-brand" href="./${S.HOME_PAGE}"><b>Movie Buddy</b></a>
     <div class="collapse navbar-collapse" id="navbarToggler">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             <!-- Provider options -->
