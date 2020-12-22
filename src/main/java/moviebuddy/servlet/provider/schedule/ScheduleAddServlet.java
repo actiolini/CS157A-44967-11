@@ -36,7 +36,8 @@ public class ScheduleAddServlet extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             Object role = session.getAttribute(S.ROLE);
-            if (role != null && role.equals(S.ADMIN)) {
+            // Check authorized access as admin and manager
+            if (role != null && (role.equals(S.ADMIN) || role.equals(S.MANAGER))) {
                 String theatreId = "";
                 Object theatreIdObj = session.getAttribute(S.SCHEDULE_THEATRE_ID);
                 if (theatreIdObj != null) {
@@ -77,20 +78,25 @@ public class ScheduleAddServlet extends HttpServlet {
                 // errorMessage = Validation.checkScheduleConflict(schedule, interval);
                 // }
 
+                // Add movie schedule
                 if (errorMessage.isEmpty()) {
                     LocalTime endTime = LocalTime.parse(startTime).plusMinutes(movie.getDuration());
                     errorMessage = scheduleDAO.addSchedule(theatreId, roomNumber, movieId, showDate, startTime,
                             endTime.toString());
                 }
 
+                // Return previous inputs
                 if (!errorMessage.isEmpty()) {
                     session.setAttribute(S.SCHEDULE_SHOW_DATE_CREATE, showDate);
                     session.setAttribute(S.SCHEDULE_START_TIME_CREATE, startTime);
                     session.setAttribute(S.SCHEDULE_ROOM_NUMBER_CREATE, roomNumber);
                     session.setAttribute(S.ERROR_MESSAGE, errorMessage);
                 }
+
+                // Redirect to Manage Schedule page
                 response.sendRedirect(S.MANAGE_SCHEDULE_PAGE);
             } else {
+                // Redirect to Home page for unauthorized access
                 response.sendRedirect(S.HOME_PAGE);
             }
         } catch (Exception e) {
