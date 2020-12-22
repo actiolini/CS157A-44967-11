@@ -39,22 +39,29 @@ public class ScheduleGetServlet extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             Object role = session.getAttribute(S.ROLE);
+            // Check authorized access as admin and manager
             if (role != null && (role.equals(S.ADMIN) || role.equals(S.MANAGER))) {
+
+                // Retrieve current theatre id
                 String theatreId = "";
                 Object theatreIdObj = session.getAttribute(S.SCHEDULE_THEATRE_ID);
                 if (theatreIdObj != null) {
                     theatreId = theatreIdObj.toString();
                 }
+
+                // Retrieve current movie id
                 String movieId = "";
                 Object movieIdObj = session.getAttribute(S.SCHEDULE_MOVIE_ID);
                 if (movieIdObj != null) {
                     movieId = movieIdObj.toString();
                 }
+
                 if (role.equals(S.ADMIN)) {
                     // Retrieve list of theatres
                     RequestDispatcher rd = request.getRequestDispatcher("TheatreGet");
                     rd.include(request, response);
                 }
+
                 // Retrieve list of rooms
                 session.setAttribute(S.ROOM_THEATRE_ID, theatreId);
                 RequestDispatcher rd = request.getRequestDispatcher("RoomGet");
@@ -64,6 +71,7 @@ public class ScheduleGetServlet extends HttpServlet {
                 List<Schedule> schedules = scheduleDAO.listScheduleByMovie(theatreId, movieId);
                 session.setAttribute(S.SCHEDULE_LIST, schedules);
             } else {
+                // Redirect to Home page for unauthorized access
                 response.sendRedirect(S.HOME_PAGE);
             }
         } catch (Exception e) {
@@ -77,9 +85,13 @@ public class ScheduleGetServlet extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             Object role = session.getAttribute(S.ROLE);
+            // Check authorized access as admin and manager
             if (role != null && (role.equals(S.ADMIN) || role.equals(S.MANAGER))) {
                 String theatreId = "";
+
+                // Retrieve theatre id as admin
                 if (role.equals(S.ADMIN)) {
+                    // Initiate selected theatre id
                     if (session.getAttribute(S.SELECTED_THEATRE_ID) == null) {
                         List<Theatre> theatres = theatreDAO.listTheatres();
                         if (!theatres.isEmpty()) {
@@ -89,12 +101,16 @@ public class ScheduleGetServlet extends HttpServlet {
                         }
                     }
                     theatreId = session.getAttribute(S.SELECTED_THEATRE_ID).toString();
+
+                    // Retrieve current selected theatre id
                     String selectTheatreId = request.getParameter("selectTheatreOption");
                     if (selectTheatreId != null) {
                         theatreId = Validation.sanitize(selectTheatreId);
                         session.setAttribute(S.SELECTED_THEATRE_ID, theatreId);
                     }
                 }
+
+                // Retrieve theatre id as manager
                 if (role.equals(S.MANAGER)) {
                     theatreId = "";
                     Object theatreIdObj = session.getAttribute(S.EMPLOY_THEATRE_ID);
@@ -102,9 +118,13 @@ public class ScheduleGetServlet extends HttpServlet {
                         theatreId = theatreIdObj.toString();
                     }
                 }
+
+                // Set current theatre information in session
                 Theatre theatre = theatreDAO.getTheatreById(theatreId);
                 session.setAttribute(S.SCHEDULE_THEATRE_ID, theatreId);
                 session.setAttribute(S.SCHEDULE_THEATRE_NAME, theatre.getTheatreName());
+
+                // Set current movie information in session
                 String selectMovieId = request.getParameter("movieId");
                 if(selectMovieId != null){
                     String movieId = Validation.sanitize(selectMovieId);
@@ -112,8 +132,11 @@ public class ScheduleGetServlet extends HttpServlet {
                     session.setAttribute(S.SCHEDULE_MOVIE_ID, movieId);
                     session.setAttribute(S.SCHEDULE_MOVIE_TITLE, movie.getTitle());
                 }
+
+                // Redirect to Manage Schedule page
                 response.sendRedirect(S.MANAGE_SCHEDULE_PAGE);
             } else {
+                // Redirect to Home page for unauthorized access
                 response.sendRedirect(S.HOME_PAGE);
             }
         } catch (Exception e) {

@@ -28,14 +28,21 @@ public class ScheduleDeleteServlet extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             Object role = session.getAttribute(S.ROLE);
+            // Check authorized access as admin and manager
             if (role != null && (role.equals(S.ADMIN) || role.equals(S.MANAGER))) {
+                // Sanitize parameter
                 String scheduleId = Validation.sanitize(request.getParameter("scheduleId"));
+
+                // Delete schedule
                 String errorMessage = scheduleDAO.deleteSchedule(scheduleId);
                 if (!errorMessage.isEmpty()) {
                     session.setAttribute(S.ERROR_MESSAGE, errorMessage);
                 }
+
+                // Redirect to Manage Schedule page
                 response.sendRedirect(S.MANAGE_SCHEDULE_PAGE);
             } else {
+                // Redirect to Home page for unauthorized access
                 response.sendRedirect(S.HOME_PAGE);
             }
         } catch (Exception e) {
