@@ -11,6 +11,7 @@ import java.io.IOException;
 
 import moviebuddy.dao.ScheduleDAO;
 import moviebuddy.util.Validation;
+import moviebuddy.util.S;
 
 @WebServlet("/ScheduleDelete")
 public class ScheduleDeleteServlet extends HttpServlet {
@@ -26,20 +27,20 @@ public class ScheduleDeleteServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             HttpSession session = request.getSession();
-            Object role = session.getAttribute("role");
-            if (role != null && (role.equals("admin") || role.equals("manager"))) {
+            Object role = session.getAttribute(S.ROLE);
+            if (role != null && (role.equals(S.ADMIN) || role.equals(S.MANAGER))) {
                 String scheduleId = Validation.sanitize(request.getParameter("scheduleId"));
                 String errorMessage = scheduleDAO.deleteSchedule(scheduleId);
                 if (!errorMessage.isEmpty()) {
-                    session.setAttribute("errorMessage", errorMessage);
+                    session.setAttribute(S.ERROR_MESSAGE, errorMessage);
                 }
-                response.sendRedirect("manageschedule.jsp");
+                response.sendRedirect(S.MANAGE_SCHEDULE_PAGE);
             } else {
-                response.sendRedirect("home.jsp");
+                response.sendRedirect(S.HOME_PAGE);
             }
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("error.jsp");
+            response.sendRedirect(S.ERROR_PAGE);
         }
     }
 }

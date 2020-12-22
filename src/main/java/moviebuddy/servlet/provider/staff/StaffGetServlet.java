@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.RequestDispatcher;
 
 import java.io.IOException;
 import java.util.List;
@@ -15,16 +16,11 @@ import moviebuddy.dao.UserDAO;
 import moviebuddy.model.Theatre;
 import moviebuddy.model.User;
 import moviebuddy.util.Validation;
+import moviebuddy.util.S;
 
 @WebServlet("/StaffGet")
 public class StaffGetServlet extends HttpServlet {
     private static final long serialVersionUID = 5635940102912001720L;
-
-    private static final String SELECTED_THEATRE_ID = "selectTheatreId";
-    private static final String ADMINS = "adminUserList";
-
-    private static final String THEATRE_NAME = "staffTheatreName";
-    private static final String STAFFS = "staffUserList";
 
     private UserDAO userDAO;
     private TheatreDAO theatreDAO;
@@ -38,37 +34,58 @@ public class StaffGetServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             HttpSession session = request.getSession();
-            Object role = session.getAttribute("role");
-            if (role != null && (role.equals("admin") || role.equals("manager"))) {
+            Object role = session.getAttribute(S.ROLE);
+            // Check authorized access as admin and manager
+            if (role != null && (role.equals(S.ADMIN) || role.equals(S.MANAGER))) {
                 String theatreId = "";
-                if (role.equals("admin")) {
+
+                // Set theatre id as admin
+                if (role.equals(S.ADMIN)) {
+                    // Retrieve list of admins
                     List<User> admins = userDAO.listAdminUsers();
-                    request.setAttribute(ADMINS, admins);
-                    if (session.getAttribute(SELECTED_THEATRE_ID) == null) {
+                    session.setAttribute(S.ADMIN_LIST, admins);
+
+                    // Initiate selected theatre
+                    if (session.getAttribute(S.SELECTED_THEATRE_ID) == null) {
                         List<Theatre> theatres = theatreDAO.listTheatres();
                         if (!theatres.isEmpty()) {
-                            session.setAttribute(SELECTED_THEATRE_ID, theatres.get(0).getId());
+                            session.setAttribute(S.SELECTED_THEATRE_ID, theatres.get(0).getId());
                         } else {
-                            session.setAttribute(SELECTED_THEATRE_ID, "");
+                            session.setAttribute(S.SELECTED_THEATRE_ID, "");
                         }
                     }
-                    theatreId = session.getAttribute(SELECTED_THEATRE_ID).toString();
+                    theatreId = session.getAttribute(S.SELECTED_THEATRE_ID).toString();
+
+                    // Retrieve list of theatres
+                    RequestDispatcher rd = request.getRequestDispatcher("TheatreGet");
+                    rd.include(request, response);
                 }
-                if (role.equals("manager")) {
-                    theatreId = session.getAttribute("employTheatreId").toString();
+
+                // Set theatre id as manager
+                if (role.equals(S.MANAGER)) {
+                    theatreId = "";
+                    Object theatreIdObj = session.getAttribute(S.EMPLOY_THEATRE_ID);
+                    if (theatreIdObj != null) {
+                        theatreId = theatreIdObj.toString();
+                    }
                 }
+
+                // Set theatre name in session
                 Theatre theatre = theatreDAO.getTheatreById(theatreId);
-                if(theatre != null){
-                    request.setAttribute(THEATRE_NAME, theatre.getTheatreName());
+                if (theatre != null) {
+                    session.setAttribute(S.SELECTED_THEATRE_NAME, theatre.getTheatreName());
                 }
+
+                // Retrieve list of staffs
                 List<User> staffs = userDAO.listProviderByTheatreId(theatreId);
-                request.setAttribute(STAFFS, staffs);
+                session.setAttribute(S.STAFF_LIST, staffs);
             } else {
-                response.sendRedirect("home.jsp");
+                // Redirect to Home page for unauthorized access
+                response.sendRedirect(S.HOME_PAGE);
             }
         } catch (Exception e) {
-            response.sendRedirect("error.jsp");
             e.printStackTrace();
+            response.sendRedirect(S.ERROR_PAGE);
         }
     }
 
@@ -76,17 +93,24 @@ public class StaffGetServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             HttpSession session = request.getSession();
-            Object role = session.getAttribute("role");
-            if (role != null && role.equals("admin")) {
+            Object role = session.getAttribute(S.ROLE);
+            // Check authorized access as admin
+            if (role != null && role.equals(S.ADMIN)) {
+                // Sanitize parameter
                 String theatreId = Validation.sanitize(request.getParameter("selectTheatreOption"));
-                session.setAttribute(SELECTED_THEATRE_ID, theatreId);
-                response.sendRedirect("managestaff.jsp");
+
+                // Set selected theatre in session
+                session.setAttribute(S.SELECTED_THEATRE_ID, theatreId);
+
+                // Redirect to Manage Staff page
+                response.sendRedirect(S.MANAGE_STAFF_PAGE);
             } else {
-                response.sendRedirect("home.jsp");
+                // Redirect to Home page for unauthorize access
+                response.sendRedirect(S.HOME_PAGE);
             }
         } catch (Exception e) {
-            response.sendRedirect("error.jsp");
             e.printStackTrace();
+            response.sendRedirect(S.ERROR_PAGE);
         }
     }
 }
