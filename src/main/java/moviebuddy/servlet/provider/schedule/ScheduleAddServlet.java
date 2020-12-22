@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.time.LocalTime;
 import java.util.List;
 
+import moviebuddy.dao.TheatreDAO;
 import moviebuddy.dao.MovieDAO;
 import moviebuddy.dao.ScheduleDAO;
 import moviebuddy.model.Movie;
@@ -23,10 +24,12 @@ import moviebuddy.util.S;
 public class ScheduleAddServlet extends HttpServlet {
     private static final long serialVersionUID = -9166508971254120994L;
 
+    private TheatreDAO theatreDAO;
     private MovieDAO movieDAO;
     private ScheduleDAO scheduleDAO;
 
     public void init() {
+        theatreDAO = new TheatreDAO();
         movieDAO = new MovieDAO();
         scheduleDAO = new ScheduleDAO();
     }
@@ -38,16 +41,20 @@ public class ScheduleAddServlet extends HttpServlet {
             Object role = session.getAttribute(S.ROLE);
             // Check authorized access as admin and manager
             if (role != null && (role.equals(S.ADMIN) || role.equals(S.MANAGER))) {
+                // Retrieve current theatre id
                 String theatreId = "";
                 Object theatreIdObj = session.getAttribute(S.SCHEDULE_THEATRE_ID);
                 if (theatreIdObj != null) {
                     theatreId = theatreIdObj.toString();
                 }
+
+                // Retrieve current movie id
                 String movieId = "";
                 Object movieIdObj = session.getAttribute(S.SCHEDULE_MOVIE_ID);
                 if (movieIdObj != null) {
                     movieId = movieIdObj.toString();
                 }
+
                 // Sanitize user inputs
                 String showDate = Validation.sanitize(request.getParameter("showDate"));
                 String startTime = Validation.sanitize(request.getParameter("startTime"));
@@ -55,7 +62,9 @@ public class ScheduleAddServlet extends HttpServlet {
 
                 // Validate user inputs
                 String errorMessage = Validation.validateScheduleForm(showDate, startTime, roomNumber);
-                //check for valid room number
+                if(errorMessage.isEmpty() && theatreDAO.getRoomById(theatreId, roomNumber) == null){
+                    errorMessage = "Room number does not exist";
+                }
 
                 Movie movie = movieDAO.getMovieById(movieId);
                 // Check for time conflict
