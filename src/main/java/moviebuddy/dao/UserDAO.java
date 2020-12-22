@@ -214,7 +214,7 @@ public class UserDAO {
         return theatreId;
     }
 
-    public String signUpRegisteredUser(String userName, String email, String password) throws Exception {
+    public String createRegisteredUser(String userName, String email, String password) throws Exception {
         String INSERT_USER = String.format(
             "INSERT INTO %s(%s) VALUES(?);",
             UserDB.TABLE, UserDB.USER_TYPE
@@ -254,7 +254,7 @@ public class UserDAO {
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
-            return "Fail to sign up";
+            return "Fail to create account";
         } finally {
             conn.setAutoCommit(true);
             DBConnection.close(insertUser);
@@ -264,7 +264,7 @@ public class UserDAO {
         return "";
     }
 
-    public String signUpProvider(String role, String theatreLocation, String userName, String email, String password)
+    public String createProvider(String role, String theatreLocation, String userName, String email, String password)
             throws Exception {
         String INSERT_USER = String.format(
             "INSERT INTO %s(%s) VALUES(?);",
