@@ -17,7 +17,6 @@
     }
 
     // Set authentication status
-    request.setAttribute("signedOut", true);
     request.setAttribute("signedIn", false);
     request.setAttribute("isProvider", false);
     request.setAttribute("isAdmin", false);
@@ -26,7 +25,6 @@
     Object accountId = session.getAttribute(S.ACCOUNT_ID);
     Object currentSession = session.getAttribute(S.CURRENT_SESSION);
     if(accountId != null && currentSession.equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr()))){
-        request.setAttribute("signedOut", false);
         request.setAttribute("signedIn", true);
         request.setAttribute("userName", session.getAttribute(S.USERNAME));
         request.setAttribute("zipcode", session.getAttribute(S.ZIPCODE));
@@ -76,19 +74,21 @@
                 </form>
             </li>
         </ul>
-        <!-- Signed Out -->
-        <c:if test="${signedOut}">
-            <a class="nav-link" href="./${S.SIGN_IN_PAGE}">Sign In</a>
-            <a class="nav-link" href="./${S.SIGN_UP_PAGE}">Sign Up</a>
-        </c:if>
-        <!-- Signed In -->
-        <c:if test="${signedIn}">
-            <form action="" method="POST" class="formAsLink">
-                <input class="inputAsLink" type="submit" value="${userName}">
-            </form>
-            <form action="SignOut" method="POST" class="formAsLink">
-                <input class="inputAsLink" type="submit" value="Sign Out">
-            </form>
-        </c:if>
+        <c:choose>
+            <c:when test="${signedIn}">
+                <!-- Signed In -->
+                <form action="" method="POST" class="formAsLink">
+                    <input class="inputAsLink" type="submit" value="${userName}">
+                </form>
+                <form action="SignOut" method="POST" class="formAsLink">
+                    <input class="inputAsLink" type="submit" value="Sign Out">
+                </form>
+            </c:when>
+            <c:otherwise>
+                <!-- Signed Out -->
+                <a class="nav-link" href="./${S.SIGN_IN_PAGE}">Sign In</a>
+                <a class="nav-link" href="./${S.SIGN_UP_PAGE}">Sign Up</a>
+            </c:otherwise>
+        </c:choose>
     </div>
 </nav>
