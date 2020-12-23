@@ -11,6 +11,7 @@ import java.time.LocalDate;
 
 import moviebuddy.util.Passwords;
 import moviebuddy.util.DBConnection;
+import moviebuddy.util.S;
 import moviebuddy.db.UserDB;
 import moviebuddy.db.RegisteredDB;
 import moviebuddy.db.MembershipDB;
@@ -348,7 +349,7 @@ public class UserDAO {
             insertProvider.setString(1, role);
             insertProvider.executeUpdate();
 
-            if (!(theatreLocation.isEmpty() || theatreLocation.equals("none"))) {
+            if (!role.equals(S.ADMIN)) {
                 insertEmploy = conn.prepareStatement(INSERT_EMPLOY);
                 insertEmploy.setString(1, theatreLocation);
                 insertEmploy.executeUpdate();
