@@ -39,7 +39,7 @@ public class StaffDeleteServlet extends HttpServlet {
 
                 // Check authorized deletion as manager
                 String errorMessage = "";
-                if (staff != null && !staff.getRole().equals(S.FACULTY) && role.equals(S.MANAGER)) {
+                if (role.equals(S.MANAGER) && staff != null && !staff.getRole().equals(S.FACULTY)) {
                     errorMessage = "Unauthorized deletion";
                 }
 
