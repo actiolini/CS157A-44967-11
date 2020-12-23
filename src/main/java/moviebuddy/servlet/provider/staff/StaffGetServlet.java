@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.RequestDispatcher;
 
 import java.io.IOException;
 import java.util.List;
@@ -55,10 +54,6 @@ public class StaffGetServlet extends HttpServlet {
                         }
                     }
                     theatreId = session.getAttribute(S.SELECTED_THEATRE_ID).toString();
-
-                    // Retrieve list of theatres
-                    RequestDispatcher rd = request.getRequestDispatcher("TheatreGet");
-                    rd.include(request, response);
                 }
 
                 // Set theatre id as manager

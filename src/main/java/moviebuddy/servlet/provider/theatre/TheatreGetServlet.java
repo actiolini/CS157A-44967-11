@@ -9,7 +9,6 @@ import javax.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.LinkedList;
 
 import moviebuddy.dao.TheatreDAO;
 import moviebuddy.model.Theatre;
@@ -28,26 +27,9 @@ public class TheatreGetServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            List<Theatre> theatres = new LinkedList<>();
+            // Retrieve list of theatres
             HttpSession session = request.getSession();
-            Object role = session.getAttribute(S.ROLE);
-
-            // Retrieve list of theatres for admin
-            if (role != null && role.equals(S.ADMIN)) {
-                theatres = theatreDAO.listTheatres();
-            }
-
-            // Retieve theatre information for manager
-            if (role != null && role.equals(S.MANAGER)) {
-                String employTheatreId = "";
-                Object employIdObj = session.getAttribute(S.EMPLOY_THEATRE_ID);
-                if (employIdObj != null) {
-                    employTheatreId = employIdObj.toString();
-                }
-                Theatre theatre = theatreDAO.getTheatreById(employTheatreId);
-                theatres.add(theatre);
-            }
-
+            List<Theatre> theatres = theatreDAO.listTheatres();
             session.setAttribute(S.THEATRE_LIST, theatres);
         } catch (Exception e) {
             e.printStackTrace();

@@ -56,12 +56,6 @@ public class ScheduleGetServlet extends HttpServlet {
                     movieId = movieIdObj.toString();
                 }
 
-                if (role.equals(S.ADMIN)) {
-                    // Retrieve list of theatres
-                    RequestDispatcher rd = request.getRequestDispatcher("TheatreGet");
-                    rd.include(request, response);
-                }
-
                 // Retrieve list of rooms
                 session.setAttribute(S.ROOM_THEATRE_ID, theatreId);
                 RequestDispatcher rd = request.getRequestDispatcher("RoomGet");
