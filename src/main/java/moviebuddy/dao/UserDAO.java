@@ -19,6 +19,7 @@ import moviebuddy.db.RoleDB;
 import moviebuddy.db.EmployDB;
 import moviebuddy.db.TheatreDB;
 import moviebuddy.model.User;
+import moviebuddy.model.Role;
 
 public class UserDAO {
 
@@ -186,6 +187,33 @@ public class UserDAO {
             DBConnection.close(conn);
         }
         return staffs;
+    }
+
+    public List<Role> listRoles() throws Exception {
+        String QUERY_ROLES = String.format(
+                "SELECT %s, %s FROM %s;",
+                RoleDB.ROLE_ID, RoleDB.TITLE, RoleDB.TABLE
+        );
+
+        List<Role> roles = new LinkedList<>();
+        Connection conn = null;
+        PreparedStatement queryRoles = null;
+        try {
+            conn = DBConnection.connect();
+            queryRoles = conn.prepareStatement(QUERY_ROLES);
+            ResultSet res = queryRoles.executeQuery();
+            while (res.next()) {
+                Role role = new Role(res.getInt(RoleDB.ROLE_ID));
+                role.setTitle(res.getString(RoleDB.TITLE));
+                roles.add(role);
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            DBConnection.close(queryRoles);
+            DBConnection.close(conn);
+        }
+        return roles;
     }
 
     public int getEmployTheatreId(String staffId) throws Exception {

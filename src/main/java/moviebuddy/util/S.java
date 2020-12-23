@@ -30,6 +30,7 @@ public class S {
     public static final String CURRENT_SESSION = "currentSession";
 
     // role
+    public static final String ROLE_LIST = "roleList";
     public static final String ADMIN = "admin";
     public static final String MANAGER = "manager";
     public static final String FACULTY = "faculty";
