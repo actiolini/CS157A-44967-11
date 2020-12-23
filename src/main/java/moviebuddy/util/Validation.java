@@ -240,7 +240,7 @@ public class Validation {
     }
 
     public static String validateTheatreLocation(String location) {
-        if (location.isEmpty() || location.equals("none")) {
+        if (location.equals("none")) {
             return "Please select a theatre location\n";
         }
         return "";

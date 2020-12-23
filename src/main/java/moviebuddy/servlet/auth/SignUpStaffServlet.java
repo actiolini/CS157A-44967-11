@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import moviebuddy.dao.UserDAO;
+import moviebuddy.dao.TheatreDAO;
 import moviebuddy.util.Validation;
 import moviebuddy.util.S;
 
@@ -17,9 +18,11 @@ public class SignUpStaffServlet extends HttpServlet {
     private static final long serialVersionUID = 6851275245718964069L;
 
     private UserDAO userDAO;
+    private TheatreDAO theatreDAO;
 
     public void init() {
         userDAO = new UserDAO();
+        theatreDAO = new TheatreDAO();
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -30,39 +33,38 @@ public class SignUpStaffServlet extends HttpServlet {
             // Check authorized access as admin or manager
             if (role != null && (role.equals(S.ADMIN) || role.equals(S.MANAGER))) {
                 // Sanitize user inputs
-                String roleInput = Validation.sanitize(request.getParameter("role"));
-                String locationInput = Validation.sanitize(request.getParameter("theatreLocation"));
-                String userName = Validation.sanitize(request.getParameter("userName"));
-                String email = Validation.sanitize(request.getParameter("email"));
-                String password = Validation.sanitize(request.getParameter("password"));
-
-                // Validate user inputs
-                String errorMessage = Validation.validateStaffSignUpForm(roleInput, locationInput, userName, email,
-                        password);
-                if (errorMessage.isEmpty() && userDAO.getRegisteredUser(email) != null) {
-                    errorMessage = "Email is already registered";
+                String roleInput = "";
+                String locationInput = "";
+                if (role.equals(S.ADMIN)) {
+                    roleInput = Validation.sanitize(request.getParameter("role"));
+                    locationInput = Validation.sanitize(request.getParameter("theatreLocation"));
                 }
-
-                // Create staff account as admin
-                if (errorMessage.isEmpty() && role.equals(S.ADMIN)) {
-                    errorMessage = userDAO.createProvider(roleInput, locationInput, userName, email, password);
-                }
-
-                // Create staff account as manager
-                if (errorMessage.isEmpty() && role.equals(S.MANAGER)
-                        && !(roleInput.equals(S.ADMIN) || roleInput.equals(S.MANAGER))) {
+                if (role.equals(S.MANAGER)) {
+                    roleInput = S.FACULTY;
                     // Retrieve employ theatre id
                     String employTheatreId = "";
                     Object employIdObj = session.getAttribute(S.EMPLOY_THEATRE_ID);
                     if (employIdObj != null) {
                         employTheatreId = employIdObj.toString();
                     }
-                    // Validate theatre location input
-                    if (employTheatreId.equals(locationInput)) {
-                        errorMessage = userDAO.createProvider(roleInput, locationInput, userName, email, password);
-                    } else {
-                        errorMessage = "Unable to add staff to a different theatre";
-                    }
+                    locationInput = employTheatreId;
+                }
+                String userName = Validation.sanitize(request.getParameter("userName"));
+                String email = Validation.sanitize(request.getParameter("email"));
+                String password = Validation.sanitize(request.getParameter("password"));
+
+                // Validate user inputs
+                String errorMessage = Validation.validateStaffSignUpForm(roleInput, locationInput, userName, email, password);
+                if (errorMessage.isEmpty() && !locationInput.equals("none") && theatreDAO.getTheatreById(locationInput) == null) {
+                    errorMessage = "Theatre location does not exist";
+                }
+                if (errorMessage.isEmpty() && userDAO.getRegisteredUser(email) != null) {
+                    errorMessage = "Email is already registered";
+                }
+
+                // Create staff account
+                if (errorMessage.isEmpty()) {
+                    errorMessage = userDAO.createProvider(roleInput, locationInput, userName, email, password);
                 }
 
                 if (errorMessage.isEmpty()) {

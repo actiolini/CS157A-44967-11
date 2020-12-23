@@ -7,15 +7,11 @@ function validateSignUp(form) {
 
     invalidUserName = validateUserName(form.userName.value);
     document.getElementById("userNameError").innerHTML = invalidUserName;
-
-    invalidPassword = validatePassword(form.password.value);
-    document.getElementById("passwordError").innerHTML = invalidPassword;
-
-    invalidRePassword = validateRePassword(form.password.value, form.rePassword.value);
-    document.getElementById("rePasswordError").innerHTML = invalidRePassword;
+    fail += invalidUserName;
 
     invalidEmail = validateEmail(form.email.value);
     document.getElementById('emailError').innerHTML = invalidEmail;
+    fail += invalidEmail;
     if (invalidEmail == "") {
         findRegisteredEmail(form.email.name + "=" + form.email.value).then((result => {
             document.getElementById('emailError').innerHTML = result;
@@ -26,9 +22,12 @@ function validateSignUp(form) {
         }));
     }
 
-    fail += invalidUserName;
-    fail += invalidEmail;
+    invalidPassword = validatePassword(form.password.value);
+    document.getElementById("passwordError").innerHTML = invalidPassword;
     fail += invalidPassword;
+
+    invalidRePassword = validateRePassword(form.password.value, form.rePassword.value);
+    document.getElementById("rePasswordError").innerHTML = invalidRePassword;
     fail += invalidRePassword;
     return false;
 }
@@ -75,25 +74,29 @@ function checkRePassword(formId, errorId) {
     return invalidRePassword;
 }
 
-function validateStaffSignUp(form) {
+function validateStaffSignUp(form, isAdmin) {
     fail = "";
 
-    invalidRole = validateRole(form.role.value);
-    document.getElementById("roleError").innerHTML = invalidRole;
-    invalidLocation = "";
-    if (invalidRole == "" && form.role.value != "admin") {
-        invalidLocation = validateTheatreLocation(form.theatreLocation.value);
+    if (isAdmin){
+        invalidRole = validateRole(form.role.value);
+        document.getElementById("roleError").innerHTML = invalidRole;
+        fail += invalidRole;
+
+        invalidLocation = "";
+        if (invalidRole == "" && form.role.value != "admin") {
+            invalidLocation = validateTheatreLocation(form.theatreLocation.value);
+        }
+        document.getElementById("theatreLocationError").innerHTML = invalidLocation;
+        fail += invalidLocation;
     }
-    document.getElementById("theatreLocationError").innerHTML = invalidLocation;
 
     invalidUserName = validateUserName(form.userName.value);
     document.getElementById("userNameError").innerHTML = invalidUserName;
-
-    invalidPassword = validatePassword(form.password.value);
-    document.getElementById("passwordError").innerHTML = invalidPassword;
+    fail += invalidUserName;
 
     invalidEmail = validateEmail(form.email.value);
     document.getElementById('emailError').innerHTML = invalidEmail;
+    fail += invalidEmail;
     if (invalidEmail == "") {
         findRegisteredEmail(form.email.name + "=" + form.email.value).then((result => {
             document.getElementById('emailError').innerHTML = result;
@@ -104,10 +107,8 @@ function validateStaffSignUp(form) {
         }));
     }
 
-    fail += invalidRole;
-    fail += invalidLocation;
-    fail += invalidUserName;
-    fail += invalidEmail;
+    invalidPassword = validatePassword(form.password.value);
+    document.getElementById("passwordError").innerHTML = invalidPassword;
     fail += invalidPassword;
     return false;
 }

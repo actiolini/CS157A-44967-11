@@ -17,7 +17,6 @@ import moviebuddy.db.MembershipDB;
 import moviebuddy.db.ProviderDB;
 import moviebuddy.db.RoleDB;
 import moviebuddy.db.EmployDB;
-import moviebuddy.db.TheatreDB;
 import moviebuddy.model.User;
 import moviebuddy.model.Role;
 
@@ -313,9 +312,8 @@ public class UserDAO {
             RoleDB.ROLE_ID, RoleDB.TABLE, RoleDB.TITLE
         );
         String INSERT_EMPLOY = String.format(
-            "INSERT INTO %s(%s, %s) VALUES (LAST_INSERT_ID(), (SELECT %s FROM %s WHERE %s=?));",
-            EmployDB.TABLE, EmployDB.STAFF_ID, EmployDB.THEATRE_ID,
-            TheatreDB.THEATRE_ID, TheatreDB.TABLE, TheatreDB.THEATRE_ID
+            "INSERT INTO %s(%s, %s) VALUES (LAST_INSERT_ID(), ?);",
+            EmployDB.TABLE, EmployDB.STAFF_ID, EmployDB.THEATRE_ID
         );
 
         int autoRenew = 1;
@@ -350,7 +348,7 @@ public class UserDAO {
             insertProvider.setString(1, role);
             insertProvider.executeUpdate();
 
-            if (!theatreLocation.isEmpty()) {
+            if (!(theatreLocation.isEmpty() || theatreLocation.equals("none"))) {
                 insertEmploy = conn.prepareStatement(INSERT_EMPLOY);
                 insertEmploy.setString(1, theatreLocation);
                 insertEmploy.executeUpdate();
