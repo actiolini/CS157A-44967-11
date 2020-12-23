@@ -124,20 +124,22 @@
                             <td>${staff.getRole()}</td>
                             <!-- Email -->
                             <td>${staff.getEmail()}</td>
-                            <c:if test="${staff.getRole().equals(S.MANAGER) && !isAdmin}">
-                                <td>N/A</td>
-                            </c:if>
-                            <c:if test="${staff.getRole().equals(S.FACULTY) || isAdmin}">
-                                <td>
-                                    <div class="container">
-                                        <!-- Delete staff account -->
-                                        <form action="StaffDelete" method="POST" class="button">
-                                            <input type="hidden" name="staffId" value="${staff.getStaffId()}" />
-                                            <input type="submit" class="btn btn-outline-info" value="Delete" />
-                                        </form>
-                                    </div>
-                                </td>
-                            </c:if>
+                            <c:choose>
+                                <c:when test="${staff.getRole().equals(S.MANAGER) && !isAdmin}">
+                                    <td>N/A</td>
+                                </c:when>
+                                <c:otherwise>
+                                    <td>
+                                        <div class="container">
+                                            <!-- Delete staff account -->
+                                            <form action="StaffDelete" method="POST" class="button">
+                                                <input type="hidden" name="staffId" value="${staff.getStaffId()}" />
+                                                <input type="submit" class="btn btn-outline-info" value="Delete" />
+                                            </form>
+                                        </div>
+                                    </td>
+                                </c:otherwise>
+                            </c:choose>
                         </tr>
                     </c:forEach>
                 </table>

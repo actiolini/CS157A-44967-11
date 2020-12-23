@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="moviebuddy.util.Passwords" %>
 <%@ page import="moviebuddy.util.S" %>
+<jsp:include page="/RoleGet" />
 <jsp:include page="/TheatreGet" />
 <%
     response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
@@ -26,11 +27,15 @@
         response.sendRedirect(S.HOME_PAGE);
     }
 
+    request.setAttribute("roleList", session.getAttribute(S.ROLE_LIST));
+    request.setAttribute("theatreList", session.getAttribute(S.THEATRE_LIST));
     request.setAttribute("roleInput", session.getAttribute(S.SIGN_UP_STAFF_ROLE));
     request.setAttribute("locationInput", session.getAttribute(S.SIGN_UP_STAFF_LOCATION));
     request.setAttribute("userNameInput", session.getAttribute(S.SIGN_UP_STAFF_USERNAME));
-    request.setAttribute("EmailInput", session.getAttribute(S.SIGN_UP_STAFF_EMAIL));
+    request.setAttribute("emailInput", session.getAttribute(S.SIGN_UP_STAFF_EMAIL));
     request.setAttribute("errorMessage", session.getAttribute(S.ERROR_MESSAGE));
+    session.removeAttribute(S.ROLE_LIST);
+    session.removeAttribute(S.THEATRE_LIST);
     session.removeAttribute(S.SIGN_UP_STAFF_ROLE);
     session.removeAttribute(S.SIGN_UP_STAFF_LOCATION);
     session.removeAttribute(S.SIGN_UP_STAFF_USERNAME);
@@ -67,36 +72,36 @@
                     <div class="col-lg"></div>
                     <div class="col-lg">
                         <!-- Create staff account form -->
-                        <form id="signUpStaffForm" action="SignUpStaff" method="POST" onsubmit="return validateStaffSignUp(this)">
-                            <!-- Input role -->
-                            <div class="form-group">
-                                <label>Role</label><br>
-                                <select id="role" class="inputbox" name="role" form="signUpStaffForm"
-                                    onchange="checkRole(this, 'roleError', 'theatreLocationInput')">
-                                    <option id="defaultRole" hidden value="none">Select a role</option>
-                                    <c:if test="${isAdmin}">
-                                        <option value="${S.ADMIN}">Admin</option>
-                                        <option value="${S.MANAGER}">Manager</option>
-                                    </c:if>
-                                    <option value="${S.FACULTY}">Faculty</option>
-                                </select>
-                                <!-- Role error -->
-                                <span id="roleError" class="errormessage"></span>
-                            </div>
-                            <!-- Input location -->
-                            <div class="form-group" id="theatreLocationInput">
-                                <label>Theatre Location</label><br>
-                                <select id="theatreLocation" class="inputbox" name="theatreLocation" form="signUpStaffForm"
-                                    onchange="checkTheatreLocation(this, 'theatreLocationError')">
-                                    <option id="defaultLocation" hidden value="none">Select a theatre location
-                                    </option>
-                                    <c:forEach items="${theatreList}" var="theatre">
-                                        <option value="${theatre.getId()}">${theatre.getTheatreName()}</option>
-                                    </c:forEach>
-                                </select>
-                                <!-- Location error -->
-                                <span id="theatreLocationError" class="errormessage"></span>
-                            </div>
+                        <form id="signUpStaffForm" action="SignUpStaff" method="POST" onsubmit="return validateStaffSignUp(this, '${isAdmin}')">
+                            <c:if test="${isAdmin}">
+                                <!-- Input role -->
+                                <div class="form-group">
+                                    <label>Role</label><br>
+                                    <select id="role" class="inputbox" name="role" form="signUpStaffForm"
+                                        onchange="checkRole(this, 'roleError', 'theatreLocationInput')">
+                                        <option id="defaultRole" hidden value="none">Select a role</option>
+                                        <c:forEach items="${roleList}" var="role">
+                                            <option value="${role.getTitle()}">${role.getTitle()}</option>
+                                        </c:forEach>
+                                    </select>
+                                    <!-- Role error -->
+                                    <span id="roleError" class="errormessage"></span>
+                                </div>
+                                <!-- Input location -->
+                                <div class="form-group" id="theatreLocationInput">
+                                    <label>Theatre Location</label><br>
+                                    <select id="theatreLocation" class="inputbox" name="theatreLocation" form="signUpStaffForm"
+                                        onchange="checkTheatreLocation(this, 'theatreLocationError')">
+                                        <option id="defaultLocation" hidden value="none">Select a theatre location
+                                        </option>
+                                        <c:forEach items="${theatreList}" var="theatre">
+                                            <option value="${theatre.getId()}">${theatre.getTheatreName()}</option>
+                                        </c:forEach>
+                                    </select>
+                                    <!-- Location error -->
+                                    <span id="theatreLocationError" class="errormessage"></span>
+                                </div>
+                            </c:if>
                             <!-- Input name -->
                             <div class="form-group">
                                 <label>Name</label><br>
@@ -110,7 +115,7 @@
                             <div class="form-group">
                                 <label>Email</label><br>
                                 <input name="email" class="inputbox" type="text" placeholder="Enter email"
-                                    onkeyup="checkEmail(this, 'emailError')" value="${EmailInput}">
+                                    onkeyup="checkEmail(this, 'emailError')" value="${emailInput}">
                                 <br>
                                 <!-- Email error -->
                                 <span id="emailError" class="errormessage"></span>
