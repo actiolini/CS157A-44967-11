@@ -14,7 +14,6 @@ import moviebuddy.dao.TheatreDAO;
 import moviebuddy.dao.UserDAO;
 import moviebuddy.model.Theatre;
 import moviebuddy.model.User;
-import moviebuddy.util.Validation;
 import moviebuddy.util.S;
 
 @WebServlet("/StaffGet")
@@ -76,31 +75,6 @@ public class StaffGetServlet extends HttpServlet {
                 session.setAttribute(S.STAFF_LIST, staffs);
             } else {
                 // Redirect to Home page for unauthorized access
-                response.sendRedirect(S.HOME_PAGE);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.sendRedirect(S.ERROR_PAGE);
-        }
-    }
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        try {
-            HttpSession session = request.getSession();
-            Object role = session.getAttribute(S.ROLE);
-            // Check authorized access as admin
-            if (role != null && role.equals(S.ADMIN)) {
-                // Sanitize parameter
-                String theatreId = Validation.sanitize(request.getParameter("selectTheatreOption"));
-
-                // Set selected theatre in session
-                session.setAttribute(S.SELECTED_THEATRE_ID, theatreId);
-
-                // Redirect to Manage Staff page
-                response.sendRedirect(S.MANAGE_STAFF_PAGE);
-            } else {
-                // Redirect to Home page for unauthorize access
                 response.sendRedirect(S.HOME_PAGE);
             }
         } catch (Exception e) {

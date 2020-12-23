@@ -76,13 +76,12 @@
                 <hr>
                 <!-- List of theatre options -->
                 <c:if test="${isAdmin}">
-                    <form id="selectTheatreForm" action="StaffGet" method="POST">
+                    <form id="selectTheatreForm" action="SelectTheatre" method="POST">
                         <div class="form-group">
                             <label>Theatre: </label>
                             <select id="selectTheatreOption" name="selectTheatreOption" form="selectTheatreForm"
                                 onchange="submitForm('selectTheatreForm')">
-                                <option id="defaultLocation" hidden value="none">Select a theatre location
-                                </option>
+                                <option id="defaultLocation" hidden value="none">Select a theatre location</option>
                                 <c:forEach items="${theatreList}" var="theatre">
                                     <option value="${theatre.getId()}">${theatre.getTheatreName()}</option>
                                 </c:forEach>
