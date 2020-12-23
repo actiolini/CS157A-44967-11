@@ -28,11 +28,10 @@
     }
 
     request.setAttribute("selectTheatreId", session.getAttribute(S.SELECTED_THEATRE_ID));
-    request.setAttribute("theatreId", session.getAttribute(S.SCHEDULE_THEATRE_ID));
-    request.setAttribute("theatreName", session.getAttribute(S.SCHEDULE_THEATRE_NAME));
     request.setAttribute("movieId", session.getAttribute(S.SCHEDULE_MOVIE_ID));
-    request.setAttribute("movieTitle", session.getAttribute(S.SCHEDULE_MOVIE_TITLE));
 
+    request.setAttribute("theatreName", session.getAttribute(S.SELECTED_THEATRE_NAME));
+    request.setAttribute("movieTitle", session.getAttribute(S.SCHEDULE_MOVIE_TITLE));
     request.setAttribute("theatreList", session.getAttribute(S.THEATRE_LIST));
     request.setAttribute("roomList", session.getAttribute(S.ROOM_LIST));
     request.setAttribute("scheduleList", session.getAttribute(S.SCHEDULE_LIST));
@@ -40,6 +39,8 @@
     request.setAttribute("startTimeInput", session.getAttribute(S.SCHEDULE_START_TIME_CREATE));
     request.setAttribute("roomNumberInput", session.getAttribute(S.SCHEDULE_ROOM_NUMBER_CREATE));
     request.setAttribute("errorMessage", session.getAttribute(S.ERROR_MESSAGE));
+    session.removeAttribute(S.SELECTED_THEATRE_NAME);
+    session.removeAttribute(S.SCHEDULE_MOVIE_TITLE);
     session.removeAttribute(S.THEATRE_LIST);
     session.removeAttribute(S.ROOM_LIST);
     session.removeAttribute(S.SCHEDULE_LIST);
@@ -79,7 +80,7 @@
                 <hr>
                 <!-- List of theatre options -->
                 <c:if test="${isAdmin}">
-                    <form id="selectTheatreForm" action="ScheduleGet" method="POST">
+                    <form id="selectTheatreForm" action="SelectTheatre" method="POST">
                         <div class="form-group">
                             <label>Theatre: </label>
                             <select id="selectTheatreOption" name="selectTheatreOption" form="selectTheatreForm"
@@ -131,7 +132,6 @@
                                     <!-- Add schedule form -->
                                     <form id="addScheduleForm" action="ScheduleAdd" method="POST" class="button"
                                         onsubmit="return validateScheduleForm(this)">
-                                        <input type="hidden" name="theatreId" value="${theatreId}" />
                                         <input type="hidden" name="movieId" value="${movieId}" />
                                         <input type="submit" class="btn btn-outline-info" value="Add" />
                                     </form>

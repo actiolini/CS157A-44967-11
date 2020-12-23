@@ -134,8 +134,6 @@ public class S {
     public static final String MOVIE_EDIT_DESCRIPTION = "movieDescriptionEdit";
 
     // manage schedule
-    public static final String SCHEDULE_THEATRE_ID = "scheduleTheatreId";
-    public static final String SCHEDULE_THEATRE_NAME = "scheduleTheatreName";
     public static final String SCHEDULE_MOVIE_ID = "scheduleMovieId";
     public static final String SCHEDULE_MOVIE_TITLE = "scheduleMovieTitle";
     public static final String SCHEDULE_LIST = "scheduleList";

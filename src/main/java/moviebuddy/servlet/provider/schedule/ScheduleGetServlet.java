@@ -41,12 +41,29 @@ public class ScheduleGetServlet extends HttpServlet {
             Object role = session.getAttribute(S.ROLE);
             // Check authorized access as admin and manager
             if (role != null && (role.equals(S.ADMIN) || role.equals(S.MANAGER))) {
-
-                // Retrieve current theatre id
                 String theatreId = "";
-                Object theatreIdObj = session.getAttribute(S.SCHEDULE_THEATRE_ID);
-                if (theatreIdObj != null) {
-                    theatreId = theatreIdObj.toString();
+
+                // Set theatre id as admin
+                if (role.equals(S.ADMIN)) {
+                    // Initiate selected theatre
+                    if (session.getAttribute(S.SELECTED_THEATRE_ID) == null) {
+                        List<Theatre> theatres = theatreDAO.listTheatres();
+                        if (!theatres.isEmpty()) {
+                            session.setAttribute(S.SELECTED_THEATRE_ID, theatres.get(0).getId());
+                        } else {
+                            session.setAttribute(S.SELECTED_THEATRE_ID, "");
+                        }
+                    }
+                    theatreId = session.getAttribute(S.SELECTED_THEATRE_ID).toString();
+                }
+
+                // Set theatre id as manager
+                if (role.equals(S.MANAGER)) {
+                    theatreId = "";
+                    Object theatreIdObj = session.getAttribute(S.EMPLOY_THEATRE_ID);
+                    if (theatreIdObj != null) {
+                        theatreId = theatreIdObj.toString();
+                    }
                 }
 
                 // Retrieve current movie id
@@ -54,6 +71,18 @@ public class ScheduleGetServlet extends HttpServlet {
                 Object movieIdObj = session.getAttribute(S.SCHEDULE_MOVIE_ID);
                 if (movieIdObj != null) {
                     movieId = movieIdObj.toString();
+                }
+
+                // Set theatre name in session
+                Theatre theatre = theatreDAO.getTheatreById(theatreId);
+                if (theatre != null) {
+                    session.setAttribute(S.SELECTED_THEATRE_NAME, theatre.getTheatreName());
+                }
+
+                // Set movie title in session
+                Movie movie = movieDAO.getMovieById(movieId);
+                if (movie != null) {
+                    session.setAttribute(S.SCHEDULE_MOVIE_TITLE, movie.getTitle());
                 }
 
                 // Retrieve list of rooms
@@ -81,51 +110,11 @@ public class ScheduleGetServlet extends HttpServlet {
             Object role = session.getAttribute(S.ROLE);
             // Check authorized access as admin and manager
             if (role != null && (role.equals(S.ADMIN) || role.equals(S.MANAGER))) {
-                String theatreId = "";
+                //Sanitize parameter
+                String movieId = Validation.sanitize(request.getParameter("movieId"));
 
-                // Retrieve theatre id as admin
-                if (role.equals(S.ADMIN)) {
-                    // Initiate selected theatre id
-                    if (session.getAttribute(S.SELECTED_THEATRE_ID) == null) {
-                        List<Theatre> theatres = theatreDAO.listTheatres();
-                        if (!theatres.isEmpty()) {
-                            session.setAttribute(S.SELECTED_THEATRE_ID, theatres.get(0).getId());
-                        } else {
-                            session.setAttribute(S.SELECTED_THEATRE_ID, "");
-                        }
-                    }
-                    theatreId = session.getAttribute(S.SELECTED_THEATRE_ID).toString();
-
-                    // Retrieve current selected theatre id
-                    String selectTheatreId = request.getParameter("selectTheatreOption");
-                    if (selectTheatreId != null) {
-                        theatreId = Validation.sanitize(selectTheatreId);
-                        session.setAttribute(S.SELECTED_THEATRE_ID, theatreId);
-                    }
-                }
-
-                // Retrieve theatre id as manager
-                if (role.equals(S.MANAGER)) {
-                    theatreId = "";
-                    Object theatreIdObj = session.getAttribute(S.EMPLOY_THEATRE_ID);
-                    if (theatreIdObj != null) {
-                        theatreId = theatreIdObj.toString();
-                    }
-                }
-
-                // Set current theatre information in session
-                Theatre theatre = theatreDAO.getTheatreById(theatreId);
-                session.setAttribute(S.SCHEDULE_THEATRE_ID, theatreId);
-                session.setAttribute(S.SCHEDULE_THEATRE_NAME, theatre.getTheatreName());
-
-                // Set current movie information in session
-                String selectMovieId = request.getParameter("movieId");
-                if(selectMovieId != null){
-                    String movieId = Validation.sanitize(selectMovieId);
-                    Movie movie = movieDAO.getMovieById(movieId);
-                    session.setAttribute(S.SCHEDULE_MOVIE_ID, movieId);
-                    session.setAttribute(S.SCHEDULE_MOVIE_TITLE, movie.getTitle());
-                }
+                // Set current movie id in session
+                session.setAttribute(S.SCHEDULE_MOVIE_ID, movieId);
 
                 // Redirect to Manage Schedule page
                 response.sendRedirect(S.MANAGE_SCHEDULE_PAGE);
