@@ -9,7 +9,6 @@ import javax.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.time.LocalTime;
-import java.util.List;
 
 import moviebuddy.dao.TheatreDAO;
 import moviebuddy.dao.MovieDAO;
@@ -97,10 +96,9 @@ public class ScheduleAddServlet extends HttpServlet {
                 // Add movie schedule
                 if (errorMessage.isEmpty()) {
                     LocalTime endTime = LocalTime.parse(startTime).plusMinutes(movie.getDuration());
-                    errorMessage = theatreId + ", " + roomNumber + ", " + movieId + ", " + showDate + ", " + startTime + "-" + endTime;
-                    // errorMessage = scheduleDAO.addSchedule(theatreId, roomNumber, movieId,
-                    // showDate, startTime,
-                    // endTime.toString());
+                    errorMessage = scheduleDAO.addSchedule(theatreId, roomNumber, movieId,
+                    showDate, startTime,
+                    endTime.toString());
                 }
 
                 // Return previous inputs

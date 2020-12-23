@@ -26,10 +26,10 @@ public class ScheduleDAO {
         String QUERY_SCHEDULES = String.format(
             "SELECT sc.%s, sc.%s, sc.%s, sc.%s, sc.%s, sc.%s, m.%s FROM %s sc JOIN %s m ON m.%s=sc.%s WHERE sc.%s=? AND sc.%s=? ORDER BY sc.%s, sc.%s;",
             ScheduleDB.SCHEDULE_ID, ScheduleDB.THEATRE_ID, ScheduleDB.ROOM_NUMBER,
-            ScheduleDB.MOVIE_ID, ScheduleDB.SHOW_DATE, ScheduleDB.SHOW_TIME,
+            ScheduleDB.MOVIE_ID, ScheduleDB.SHOW_DATE, ScheduleDB.START_TIME,
             MovieDB.DURATION, ScheduleDB.TABLE, MovieDB.TABLE,
             MovieDB.MOVIE_ID, ScheduleDB.MOVIE_ID, ScheduleDB.THEATRE_ID,
-            ScheduleDB.MOVIE_ID, ScheduleDB.SHOW_DATE, ScheduleDB.SHOW_TIME
+            ScheduleDB.MOVIE_ID, ScheduleDB.SHOW_DATE, ScheduleDB.START_TIME
         );
 
         List<Schedule> schedules = new LinkedList<>();
@@ -47,7 +47,7 @@ public class ScheduleDAO {
                 schedule.setRoomNumber(res.getInt(ScheduleDB.ROOM_NUMBER));
                 schedule.setMovieId(res.getInt(ScheduleDB.MOVIE_ID));
                 schedule.setShowDate(LocalDate.parse(res.getString(ScheduleDB.SHOW_DATE)));
-                LocalTime startTime = LocalTime.parse(res.getString(ScheduleDB.SHOW_TIME));
+                LocalTime startTime = LocalTime.parse(res.getString(ScheduleDB.START_TIME));
                 LocalTime endTime = startTime.plusMinutes(res.getInt(MovieDB.DURATION));
                 schedule.setShowTime(startTime, endTime);
                 schedules.add(schedule);
@@ -123,12 +123,48 @@ public class ScheduleDAO {
         return null;
     }
 
-    public String addSchedule(String theatreId, String roomNumber, String movieId, String showDate, String startTime)
+    public Schedule getScheduleById(String scheduleId) throws Exception {
+        String QUERY_SCHEDULE = String.format(
+            "SELECT %s, %s, %s, %s, %s, %s, %s FROM %s WHERE %s=?;",
+            ScheduleDB.SCHEDULE_ID, ScheduleDB.THEATRE_ID, ScheduleDB.MOVIE_ID,
+            ScheduleDB.ROOM_NUMBER, ScheduleDB.SHOW_DATE, ScheduleDB.START_TIME,
+            ScheduleDB.END_TIME, ScheduleDB.TABLE, ScheduleDB.SCHEDULE_ID
+        );
+
+        Schedule schedule = null;
+        Connection conn = null;
+        PreparedStatement querySchedule = null;
+        try {
+            conn = DBConnection.connect();
+            querySchedule = conn.prepareStatement(QUERY_SCHEDULE);
+            querySchedule.setString(1, scheduleId);
+            ResultSet res = querySchedule.executeQuery();
+            while (res.next()) {
+                schedule = new Schedule(res.getInt(ScheduleDB.SCHEDULE_ID));
+                schedule.setTheatreId(res.getInt(ScheduleDB.THEATRE_ID));
+                schedule.setMovieId(res.getInt(ScheduleDB.MOVIE_ID));
+                schedule.setRoomNumber(res.getInt(ScheduleDB.ROOM_NUMBER));
+                schedule.setShowDate(LocalDate.parse(res.getString(ScheduleDB.SHOW_DATE)));
+                LocalTime startTime = LocalTime.parse(res.getString(ScheduleDB.START_TIME));
+                LocalTime endTime = LocalTime.parse(res.getString(ScheduleDB.END_TIME));
+                schedule.setShowTime(startTime, endTime);
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            DBConnection.close(querySchedule);
+            DBConnection.close(conn);
+        }
+        return schedule;
+    }
+
+    public String addSchedule(String theatreId, String roomNumber, String movieId, String showDate, String startTime, String endTime)
             throws Exception {
         String INSERT_SCHEDULE = String.format(
-            "INSERT INTO %s (%s, %s, %s, %s, %s) VALUES (?,?,?,?,?);",
+            "INSERT INTO %s (%s, %s, %s, %s, %s, %s) VALUES (?,?,?,?,?,?);",
             ScheduleDB.TABLE, ScheduleDB.THEATRE_ID, ScheduleDB.ROOM_NUMBER,
-            ScheduleDB.MOVIE_ID, ScheduleDB.SHOW_DATE, ScheduleDB.SHOW_TIME
+            ScheduleDB.MOVIE_ID, ScheduleDB.SHOW_DATE, ScheduleDB.START_TIME,
+            ScheduleDB.END_TIME
         );
         String QUERY_SCHEDULE_ID = String.format(
             "SELECT LAST_INSERT_ID() as %s;",
@@ -140,7 +176,7 @@ public class ScheduleDAO {
             RoomDB.THEATRE_ID, RoomDB.ROOM_NUMBER
         );
         String INSERT_TICKET = String.format(
-            "INSERT INTO %s (%s, %s) VALUES (?, ?);",
+            "INSERT INTO %s (%s, %s) VALUES ",
             TicketDB.TABLE, TicketDB.SCHEDULE_ID, TicketDB.SEAT_NUMBER
         );
 
@@ -159,6 +195,7 @@ public class ScheduleDAO {
             insertSchedule.setString(3, movieId);
             insertSchedule.setString(4, showDate);
             insertSchedule.setString(5, startTime);
+            insertSchedule.setString(6, endTime);
             insertSchedule.executeUpdate();
 
             String scheduleId = "";
@@ -178,16 +215,18 @@ public class ScheduleDAO {
                 seats = resRoomCap.getInt(RoomDB.SEATS);
             }
 
-            insertTicket = conn.prepareStatement(INSERT_TICKET);
             for (int i = 0; i < sections; i++) {
-                char sectionLetter = (char) ('A' + i);
-                for (int j = 1; j <= seats; j++) {
-                    String seatNumber = sectionLetter + ((j < 10) ? "0" : "") + j;
-                    insertTicket.setString(1, scheduleId);
-                    insertTicket.setString(2, seatNumber);
-                    insertTicket.executeUpdate();
+                for (int j = 0; j < seats; j++) {
+                    char row = (char) ('A' + i);
+                    int col = j + 1;
+                    String seatNumber = row + ((col < 10) ? "0" : "") + col;
+                    INSERT_TICKET += String.format("(%s,'%s')%s",
+                    scheduleId, seatNumber, j < (seats - 1) ? "," : "");
                 }
+                INSERT_TICKET += i < (sections - 1) ? "," : ";";
             }
+            insertTicket = conn.prepareStatement(INSERT_TICKET);
+            insertTicket.executeUpdate();
 
             conn.commit();
         } catch (SQLException e) {

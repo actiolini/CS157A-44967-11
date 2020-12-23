@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import moviebuddy.dao.ScheduleDAO;
+import moviebuddy.model.Schedule;
 import moviebuddy.util.Validation;
 import moviebuddy.util.S;
 
@@ -33,8 +34,27 @@ public class ScheduleDeleteServlet extends HttpServlet {
                 // Sanitize parameter
                 String scheduleId = Validation.sanitize(request.getParameter("scheduleId"));
 
+                // Check authorized deletion as manager
+                String errorMessage = "";
+                if(role.equals(S.MANAGER)) {
+                    String theatreId = "";
+                    Object theatreIdObj = session.getAttribute(S.EMPLOY_THEATRE_ID);
+                    if (theatreIdObj != null) {
+                        theatreId = theatreIdObj.toString();
+                    }
+
+                    // Retrieve schedule information
+                    Schedule schedule = scheduleDAO.getScheduleById(scheduleId);
+
+                    if(theatreId.isEmpty() || !theatreId.equals(schedule.getTheatreId() + "")){
+                        errorMessage = "Unauthorized deletion";
+                    }
+                }
+
                 // Delete schedule
-                String errorMessage = scheduleDAO.deleteSchedule(scheduleId);
+                if(errorMessage.isEmpty()){
+                    errorMessage = scheduleDAO.deleteSchedule(scheduleId);
+                }
                 if (!errorMessage.isEmpty()) {
                     session.setAttribute(S.ERROR_MESSAGE, errorMessage);
                 }
