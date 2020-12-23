@@ -54,8 +54,7 @@
     <title>Movie Buddy | Manage Staff</title>
 </head>
 
-<body onload="loadSelectedOption('defaultRole', 'role', '${roleInput}');
-        loadSelectedOption('defaultLocation', 'theatreLocation', '${locationInput}');">
+<body>
     <!-- Navigation bar -->
     <jsp:include page="./${S.NAV_BAR_PAGE}" />
     <div style="min-height: 60px;"></div>
@@ -155,6 +154,16 @@
 
     <script src="./JS/functions.js"></script>
     <script src="./JS/validation.js"></script>
+    <c:if test="${isAdmin}">
+        <!-- Load previous inputs -->
+        <script>
+            loadSelectedOption("defaultRole", "role", "${roleInput}");
+            loadSelectedOption("defaultLocation", "theatreLocation", "${locationInput}");
+            if("${roleInput}" != ""){
+                checkRole(document.getElementById("role"), "roleError", "theatreLocationInput");
+            }
+        </script>
+    </c:if>
 </body>
 
 </html>

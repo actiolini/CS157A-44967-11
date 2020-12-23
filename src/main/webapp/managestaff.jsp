@@ -52,7 +52,7 @@
     <title>Movie Buddy | Manage Staff</title>
 </head>
 
-<body onload="loadSelectedOption('defaultLocation', 'selectTheatreOption', '${selectTheatreId}');">
+<body>
     <!-- Navigation bar -->
     <jsp:include page="./${S.NAV_BAR_PAGE}" />
     <div style="min-height: 60px;"></div>
@@ -160,6 +160,12 @@
 
     <script src="./JS/functions.js"></script>
     <script src="./JS/validation.js"></script>
+    <c:if test="${isAdmin}">
+        <!-- Load selected theatre -->
+        <script>
+            loadSelectedOption("defaultLocation", "selectTheatreOption", "${selectTheatreId}");
+        </script>
+    </c:if>
 </body>
 
 </html>

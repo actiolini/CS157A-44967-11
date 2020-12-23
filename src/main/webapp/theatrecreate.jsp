@@ -55,7 +55,7 @@
     <title>Movie Buddy | Manage Theatre</title>
 </head>
 
-<body onload="loadSelectedOption('default', 'state', '${stateInput}')">
+<body>
     <!-- Navigation bar -->
     <jsp:include page="./${S.NAV_BAR_PAGE}" />
     <div style="min-height: 60px;"></div>
@@ -194,6 +194,9 @@
 
     <script src="./JS/functions.js"></script>
     <script src="./JS/validation.js"></script>
+    <script>
+        loadSelectedOption("default", "state", "${stateInput}");
+    </script>
 </body>
 
 </html>
