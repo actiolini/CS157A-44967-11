@@ -159,7 +159,7 @@
         <script>
             loadSelectedOption("defaultRole", "role", "${roleInput}");
             loadSelectedOption("defaultLocation", "theatreLocation", "${locationInput}");
-            if("${roleInput}" != ""){
+            if("${roleInput}" != "") {
                 checkRole(document.getElementById("role"), "roleError", "theatreLocationInput");
             }
         </script>
