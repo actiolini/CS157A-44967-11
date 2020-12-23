@@ -20,7 +20,7 @@ public class Validation {
     }
 
     public static String sanitize(String input) {
-        return Jsoup.clean(input.trim(), Whitelist.none());
+        return input != null ? Jsoup.clean(input.trim(), Whitelist.none()) : "";
     }
 
     public static String validateSignUpForm(String userName, String email, String password, String rePassword) {
