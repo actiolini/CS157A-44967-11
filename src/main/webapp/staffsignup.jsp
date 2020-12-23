@@ -78,7 +78,7 @@
                                     <label>Role</label><br>
                                     <select id="role" class="inputbox" name="role" form="signUpStaffForm"
                                         onchange="checkRole(this, 'roleError', 'theatreLocationInput')">
-                                        <option id="defaultRole" hidden value="none">Select a role</option>
+                                        <option id="defaultRole" hidden value="">Select a role</option>
                                         <c:forEach items="${roleList}" var="role">
                                             <option value="${role.getTitle()}">${role.getTitle()}</option>
                                         </c:forEach>
@@ -91,7 +91,7 @@
                                     <label>Theatre Location</label><br>
                                     <select id="theatreLocation" class="inputbox" name="theatreLocation" form="signUpStaffForm"
                                         onchange="checkTheatreLocation(this, 'theatreLocationError')">
-                                        <option id="defaultLocation" hidden value="none">Select a theatre location
+                                        <option id="defaultLocation" hidden value="">Select a theatre location
                                         </option>
                                         <c:forEach items="${theatreList}" var="theatre">
                                             <option value="${theatre.getId()}">${theatre.getTheatreName()}</option>

@@ -55,7 +55,7 @@ public class SignUpStaffServlet extends HttpServlet {
 
                 // Validate user inputs
                 String errorMessage = Validation.validateStaffSignUpForm(roleInput, locationInput, userName, email, password);
-                if (errorMessage.isEmpty() && !locationInput.equals("none") && theatreDAO.getTheatreById(locationInput) == null) {
+                if (errorMessage.isEmpty() && !locationInput.isEmpty() && theatreDAO.getTheatreById(locationInput) == null) {
                     errorMessage = "Theatre location does not exist";
                 }
                 if (errorMessage.isEmpty() && userDAO.getRegisteredUser(email) != null) {

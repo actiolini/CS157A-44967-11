@@ -178,7 +178,7 @@ function validateTheatreForm(form) {
     zip = form.zip.value;
     errorId = document.getElementById("errorMessage");
     errorId.innerHTML = fail = "";
-    if (theatreName == "" || address == "" || city == "" || state == "none" || country == "" || zip == "") {
+    if (theatreName == "" || address == "" || city == "" || state == "" || country == "" || zip == "") {
         errorId.innerHTML = errorMessage = "* required fields\n";
         fail += errorMessage;
     }
@@ -339,7 +339,7 @@ function validateScheduleForm(form) {
         errorId.innerHTML = "Please enter start time";
         return false;
     }
-    if (roomNumber == "none") {
+    if (roomNumber == "") {
         errorId.innerHTML = "Please select a room";
         return false;
     }
@@ -377,7 +377,7 @@ function validateRePassword(password, rePassword) {
 }
 
 function validateRole(role) {
-    if (role == "none") {
+    if (role == "") {
         return "Please select a role\n";
     }
     if (!(role == "admin" || role == "manager" || role == "faculty")) {
@@ -387,7 +387,7 @@ function validateRole(role) {
 }
 
 function validateTheatreLocation(location) {
-    if (location == "" || location == "none") {
+    if (location == "") {
         return "Please select a theatre location\n";
     }
     return "";

@@ -85,7 +85,7 @@
                             <label>Theatre: </label>
                             <select id="selectTheatreOption" name="selectTheatreOption" form="selectTheatreForm"
                                 onchange="submitForm('selectTheatreForm')">
-                                <option id="defaultLocation" hidden value="none">Select a theatre location</option>
+                                <option id="defaultLocation" hidden value="">Select a theatre location</option>
                                 <c:forEach items="${theatreList}" var="theatre">
                                     <option value="${theatre.getId()}">${theatre.getTheatreName()}</option>
                                 </c:forEach>
@@ -122,7 +122,7 @@
                                 <td>
                                     <!-- List of room options -->
                                     <select id="roomNumber" name="roomNumber" form="addScheduleForm">
-                                        <option id="defaultRoom" hidden value="none">Select a room</option>
+                                        <option id="defaultRoom" hidden value="">Select a room</option>
                                         <c:forEach items="${roomList}" var="room">
                                             <option value="${room.getRoomNumber()}">Room ${room.getRoomNumber()}</option>
                                         </c:forEach>

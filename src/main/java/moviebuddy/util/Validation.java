@@ -87,7 +87,7 @@ public class Validation {
 
     public static String validateTheatreForm(String theatreName, String address, String city, String state,
             String country, String zip) {
-        if (theatreName.isEmpty() || address.isEmpty() || city.isEmpty() || state.equals("none") || country.isEmpty()
+        if (theatreName.isEmpty() || address.isEmpty() || city.isEmpty() || state.isEmpty() || country.isEmpty()
                 || zip.isEmpty()) {
             return "* required fields";
         }
@@ -165,7 +165,7 @@ public class Validation {
         if(!errorMessage.isEmpty()){
             return errorMessage;
         }
-        if(roomNumber.equals("none")){
+        if(roomNumber.isEmpty()){
             return "Please select a room";
         }
         return "";
@@ -230,7 +230,7 @@ public class Validation {
     }
 
     public static String validateRole(String role) {
-        if (role.equals("none")) {
+        if (role.isEmpty()) {
             return "Please select a role\n";
         }
         if (!(role.equals("admin") || role.equals("manager") || role.equals("faculty"))) {
@@ -240,7 +240,7 @@ public class Validation {
     }
 
     public static String validateTheatreLocation(String location) {
-        if (location.equals("none")) {
+        if (location.isEmpty()) {
             return "Please select a theatre location\n";
         }
         return "";

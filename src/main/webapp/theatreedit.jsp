@@ -103,7 +103,7 @@
                             <div class="form-group">
                                 <label>State</label><span class="errormessage">*</span><br>
                                 <select id="state" class="inputbox" name="state">
-                                    <option id="default" hidden selected value="none">Select a State</option>
+                                    <option id="default" hidden selected value="">Select a State</option>
                                     <option value="AL">Alabama</option>
                                     <option value="AK">Alaska</option>
                                     <option value="AZ">Arizona</option>
