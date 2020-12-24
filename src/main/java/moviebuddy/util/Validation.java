@@ -70,17 +70,17 @@ public class Validation {
 
     public static String validateSignInForm(String email, String password) {
         if (email.isEmpty()) {
-            return "Please enter your email\n";
+            return "Please enter your email";
         }
         return "";
     }
 
     public static String validateStaffSignInForm(String staffId, String password) {
         if (staffId.isEmpty()) {
-            return "Please enter your staff ID number\n";
+            return "Please enter your staff ID number";
         }
         if (!validateStaffId(staffId).isEmpty()) {
-            return "Invalid staff ID/password! Please try again\n";
+            return "Invalid staff ID/password! Please try again";
         }
         return "";
     }
