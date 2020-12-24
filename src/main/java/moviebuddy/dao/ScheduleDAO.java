@@ -12,7 +12,6 @@ import java.time.LocalTime;
 
 import moviebuddy.util.DBConnection;
 import moviebuddy.db.RoomDB;
-import moviebuddy.db.MovieDB;
 import moviebuddy.db.ScheduleDB;
 import moviebuddy.db.TicketDB;
 import moviebuddy.model.Schedule;
@@ -22,13 +21,12 @@ import moviebuddy.model.Ticket;
 
 public class ScheduleDAO {
 
-    public List<Schedule> listScheduleByMovie(String theatreId, String movieId) throws Exception {
+    public List<Schedule> listScheduleByMovieId(String theatreId, String movieId) throws Exception {
         String QUERY_SCHEDULES = String.format(
-            "SELECT sc.%s, sc.%s, sc.%s, sc.%s, sc.%s, sc.%s, m.%s FROM %s sc JOIN %s m ON m.%s=sc.%s WHERE sc.%s=? AND sc.%s=? ORDER BY sc.%s, sc.%s;",
+            "SELECT %s, %s, %s, %s, %s, %s, %s FROM %s WHERE %s=? AND %s=? ORDER BY %s, %s;",
             ScheduleDB.SCHEDULE_ID, ScheduleDB.THEATRE_ID, ScheduleDB.ROOM_NUMBER,
             ScheduleDB.MOVIE_ID, ScheduleDB.SHOW_DATE, ScheduleDB.START_TIME,
-            MovieDB.DURATION, ScheduleDB.TABLE, MovieDB.TABLE,
-            MovieDB.MOVIE_ID, ScheduleDB.MOVIE_ID, ScheduleDB.THEATRE_ID,
+            ScheduleDB.END_TIME, ScheduleDB.TABLE, ScheduleDB.THEATRE_ID,
             ScheduleDB.MOVIE_ID, ScheduleDB.SHOW_DATE, ScheduleDB.START_TIME
         );
 
@@ -47,9 +45,8 @@ public class ScheduleDAO {
                 schedule.setRoomNumber(res.getInt(ScheduleDB.ROOM_NUMBER));
                 schedule.setMovieId(res.getInt(ScheduleDB.MOVIE_ID));
                 schedule.setShowDate(LocalDate.parse(res.getString(ScheduleDB.SHOW_DATE)));
-                LocalTime startTime = LocalTime.parse(res.getString(ScheduleDB.START_TIME));
-                LocalTime endTime = startTime.plusMinutes(res.getInt(MovieDB.DURATION));
-                schedule.setShowTime(startTime, endTime);
+                schedule.setStartTime(LocalTime.parse(res.getString(ScheduleDB.START_TIME)));
+                schedule.setEndTime(LocalTime.parse(res.getString(ScheduleDB.END_TIME)));
                 schedules.add(schedule);
             }
         } catch (Exception e) {
@@ -58,69 +55,69 @@ public class ScheduleDAO {
             DBConnection.close(querySchedules);
             DBConnection.close(conn);
         }
-        return schedules;
-    }
-
-    public List<Schedule> listScheduleByMovieDate(String theatreId, String movieId, String showDate) throws Exception {
-        String QUERY_SCHEDULES = "SELECT schedule_id, show_time, room_number FROM schedule WHERE theatre_id=? AND movie_id=? AND show_date=? ORDER BY show_time;";
-
-        List<Schedule> schedules = new LinkedList<>();
-        Connection conn = null;
-        PreparedStatement querySchedules = null;
-        try {
-            conn = DBConnection.connect();
-            querySchedules = conn.prepareStatement(QUERY_SCHEDULES);
-            querySchedules.setString(1, theatreId);
-            querySchedules.setString(2, movieId);
-            querySchedules.setString(3, showDate);
-            ResultSet res2 = querySchedules.executeQuery();
-            while (res2.next()) {
-                Schedule schedule = new Schedule(res2.getInt("schedule_id"));
-                schedule.setTheatreId(Integer.parseInt(theatreId));
-                schedule.setMovieId(Integer.parseInt(movieId));
-                schedule.setRoomNumber(res2.getInt("room_number"));
-                schedule.setShowDate(LocalDate.parse(showDate));
-                LocalTime startTime = LocalTime.parse(res2.getString("show_time"));
-                LocalTime endTime = startTime.plusMinutes(0);
-                schedule.setShowTime(startTime, endTime);
-                schedules.add(schedule);
-            }
-        } catch (Exception e) {
-            throw e;
-        } finally {
-            DBConnection.close(querySchedules);
-            DBConnection.close(conn);
-        }
-        return schedules;
-    }
-
-    public List<Schedule> listScheduleByRoomDate(String theatreId, String roomNumber, String showDate)
-            throws Exception {
-        String QUERY_SCHEDULES = "SELECT ms.schedule_id, ms.movie_id, ms.show_time, ms.room_number, m.duration FROM schedule ms JOIN movie m ON ms.movie_id=m.movie_id WHERE theatre_id=? AND room_number=? AND show_date=?;";
-        Connection conn = DBConnection.connect();
-        PreparedStatement querySchedules = conn.prepareStatement(QUERY_SCHEDULES);
-        querySchedules.setString(1, theatreId);
-        querySchedules.setString(2, roomNumber);
-        querySchedules.setString(3, showDate);
-        ResultSet res = querySchedules.executeQuery();
-        List<Schedule> schedules = new LinkedList<>();
-        while (res.next()) {
-            Schedule schedule = new Schedule(res.getInt("schedule_id"));
-            schedule.setTheatreId(Integer.parseInt(theatreId));
-            schedule.setMovieId(res.getInt("movie_id"));
-            schedule.setRoomNumber(res.getInt("room_number"));
-            schedule.setShowDate(LocalDate.parse(showDate));
-            LocalTime startTime = LocalTime.parse(res.getString("show_time"));
-            LocalTime endTime = startTime.plusMinutes(res.getInt("duration"));
-            schedule.setShowTime(startTime, endTime);
-            schedules.add(schedule);
-        }
-        conn.close();
         return schedules;
     }
 
     public List<ScheduledDate> listScheduledDates() throws Exception{
         return null;
+    }
+
+    public Schedule getScheduleConflict(String theatreId, String showDate, String movieId,String roomNumber, String startTime, String endTime) throws Exception {
+        String QUERY_CONFLICT_SCHEUDLES = String.format(
+            "SELECT %s, %s, %s, %s, %s, %s, %s FROM %s WHERE %s=? AND (%s=? OR %s=?) AND ((? < ? AND ((%s=? AND (%s < %s AND %s >= ? AND %s <= ?) OR (%s > %s AND %s <= ?)) OR (%s=DATE_ADD(?, INTERVAL -1 DAY) AND %s > %s AND %s >= ?))) OR (? > ? AND ((%s=? AND (%s < %s AND %s >= ?) OR (%s > %s)) OR (%s=DATE_ADD(?, INTERVAL 1 DAY) AND %s <= ?)))) LIMIT 1;",
+            ScheduleDB.SCHEDULE_ID, ScheduleDB.THEATRE_ID, ScheduleDB.MOVIE_ID,
+            ScheduleDB.ROOM_NUMBER, ScheduleDB.SHOW_DATE, ScheduleDB.START_TIME,
+            ScheduleDB.END_TIME, ScheduleDB.TABLE, ScheduleDB.THEATRE_ID,
+            ScheduleDB.MOVIE_ID, ScheduleDB.ROOM_NUMBER, ScheduleDB.SHOW_DATE,
+            ScheduleDB.START_TIME, ScheduleDB.END_TIME, ScheduleDB.END_TIME,
+            ScheduleDB.START_TIME, ScheduleDB.START_TIME, ScheduleDB.END_TIME,
+            ScheduleDB.START_TIME, ScheduleDB.SHOW_DATE, ScheduleDB.START_TIME,
+            ScheduleDB.END_TIME, ScheduleDB.END_TIME, ScheduleDB.SHOW_DATE,
+            ScheduleDB.START_TIME, ScheduleDB.END_TIME, ScheduleDB.END_TIME,
+            ScheduleDB.START_TIME, ScheduleDB.END_TIME, ScheduleDB.SHOW_DATE,
+            ScheduleDB.START_TIME
+        );
+
+        Schedule schedule = null;
+        Connection conn = null;
+        PreparedStatement queryConflictSchedule = null;
+        try {
+            conn = DBConnection.connect();
+            queryConflictSchedule = conn.prepareStatement(QUERY_CONFLICT_SCHEUDLES);
+            queryConflictSchedule.setString(1, theatreId);
+            queryConflictSchedule.setString(2, movieId);
+            queryConflictSchedule.setString(3, roomNumber);
+            queryConflictSchedule.setString(4, startTime);
+            queryConflictSchedule.setString(5, endTime);
+            queryConflictSchedule.setString(6, showDate);
+            queryConflictSchedule.setString(7, startTime);
+            queryConflictSchedule.setString(8, endTime);
+            queryConflictSchedule.setString(9, endTime);
+            queryConflictSchedule.setString(10, showDate);
+            queryConflictSchedule.setString(11, startTime);
+            queryConflictSchedule.setString(12, startTime);
+            queryConflictSchedule.setString(13, endTime);
+            queryConflictSchedule.setString(14, showDate);
+            queryConflictSchedule.setString(15, startTime);
+            queryConflictSchedule.setString(16, showDate);
+            queryConflictSchedule.setString(17, endTime);
+            ResultSet res = queryConflictSchedule.executeQuery();
+            while (res.next()) {
+                schedule = new Schedule(res.getInt(ScheduleDB.SCHEDULE_ID));
+                schedule.setTheatreId(res.getInt(ScheduleDB.THEATRE_ID));
+                schedule.setMovieId(res.getInt(ScheduleDB.MOVIE_ID));
+                schedule.setRoomNumber(res.getInt(ScheduleDB.ROOM_NUMBER));
+                schedule.setShowDate(LocalDate.parse(res.getString(ScheduleDB.SHOW_DATE)));
+                schedule.setStartTime(LocalTime.parse(res.getString(ScheduleDB.START_TIME)));
+                schedule.setEndTime(LocalTime.parse(res.getString(ScheduleDB.END_TIME)));
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            DBConnection.close(queryConflictSchedule);
+            DBConnection.close(conn);
+        }
+        return schedule;
     }
 
     public Schedule getScheduleById(String scheduleId) throws Exception {
@@ -145,9 +142,8 @@ public class ScheduleDAO {
                 schedule.setMovieId(res.getInt(ScheduleDB.MOVIE_ID));
                 schedule.setRoomNumber(res.getInt(ScheduleDB.ROOM_NUMBER));
                 schedule.setShowDate(LocalDate.parse(res.getString(ScheduleDB.SHOW_DATE)));
-                LocalTime startTime = LocalTime.parse(res.getString(ScheduleDB.START_TIME));
-                LocalTime endTime = LocalTime.parse(res.getString(ScheduleDB.END_TIME));
-                schedule.setShowTime(startTime, endTime);
+                schedule.setStartTime(LocalTime.parse(res.getString(ScheduleDB.START_TIME)));
+                schedule.setEndTime(LocalTime.parse(res.getString(ScheduleDB.END_TIME)));
             }
         } catch (Exception e) {
             throw e;

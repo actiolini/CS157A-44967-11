@@ -149,7 +149,7 @@
                                     <!-- Show date -->
                                     <td>${schedule.displayShowDate()}</td>
                                     <!-- Show time -->
-                                    <td>${schedule.getShowTime()}</td>
+                                    <td>${schedule.getStartTime()}-${schedule.getEndTime()}</td>
                                     <!-- Room number -->
                                     <td>Room ${schedule.getRoomNumber()}</td>
                                     <td>

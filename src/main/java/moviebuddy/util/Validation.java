@@ -286,18 +286,4 @@ public class Validation {
         }
         return "";
     }
-
-    // public static String checkScheduleConflict(List<Schedule> schedule, ShowTime
-    // interval) {
-    // for (Schedule s : schedule) {
-    // ShowTime st = s.getShowTime();
-    // if (interval.isConflict(st)) {
-    // String message = String.format("Time conflict - Schedule ID: %s on %s at
-    // %s-%s room: %s", s.getScheduleId(),
-    // s.displayShowDate(), st.getStartTime(), st.getEndTime(), s.getRoomNumber());
-    // return message;
-    // }
-    // }
-    // return "";
-    // }
 }

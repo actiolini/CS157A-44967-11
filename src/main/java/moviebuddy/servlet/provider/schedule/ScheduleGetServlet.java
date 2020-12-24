@@ -91,7 +91,7 @@ public class ScheduleGetServlet extends HttpServlet {
                 rd.include(request, response);
 
                 // Retrieve list of schedules
-                List<Schedule> schedules = scheduleDAO.listScheduleByMovie(theatreId, movieId);
+                List<Schedule> schedules = scheduleDAO.listScheduleByMovieId(theatreId, movieId);
                 session.setAttribute(S.SCHEDULE_LIST, schedules);
             } else {
                 // Redirect to Home page for unauthorized access
