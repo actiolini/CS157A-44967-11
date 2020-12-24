@@ -95,7 +95,11 @@
                     <hr>
                 </c:if>
                 <!-- Error message -->
-                <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
+                <div class="errormessagePadding">
+                    <div class="errormessageWrapper">
+                        <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col"></div>
                     <div class="col-8">

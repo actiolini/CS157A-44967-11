@@ -65,6 +65,17 @@ body{
     width: 100%;
 }
 
+.errormessagePadding {
+    position: relative;
+    padding-bottom: 24px;
+    margin-bottom: 16px;
+}
+
+.errormessageWrapper {
+    position: absolute;
+    width: 100%;
+}
+
 .errormessage {
     color: red;
 }

@@ -67,7 +67,11 @@
                 <h1 class="display-3 text-center">Ticket Prices</h1>
                 <hr>
                 <!-- Error message -->
-                <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
+                <div class="errormessagePadding">
+                    <div class="errormessageWrapper">
+                        <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col"></div>
                     <div class="col-5">
