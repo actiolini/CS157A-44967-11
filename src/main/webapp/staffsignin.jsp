@@ -82,7 +82,7 @@
                                 </form>
                                 <!-- Error message -->
                                 <p class="text-center errormessage">${errorMessage}</p>
-                                <a href="./${S.SIGN_IN_PAGE}">Not a faculty? Sign in as customer here</a>
+                                <a href="./${S.SIGN_IN_PAGE}">Not a staff? Sign in as customer here</a>
                             </div>
                         </div>
                     </div>

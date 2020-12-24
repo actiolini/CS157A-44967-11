@@ -62,7 +62,7 @@
                 <a class="inputAsLink" href="./${S.MANAGE_ROOM_PAGE}">&#8249;
                     <span>Back</span>
                 </a>
-                <h1 class="display-3 text-center">Update room</h1>
+                <h1 class="display-3 text-center">Update Room Information</h1>
                 <hr>
                 <div class="row">
                     <div class="col"></div>

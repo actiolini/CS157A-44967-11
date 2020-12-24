@@ -84,7 +84,7 @@
                                 <p class="text-center errormessage">${errorMessage}</p>
                                 <a href="./${S.SIGN_UP_PAGE}">Create an account</a>
                                 <hr>
-                                <a href="./${S.STAFF_SIGN_IN_PAGE}">One of us? Sign in as faculty</a>
+                                <a href="./${S.STAFF_SIGN_IN_PAGE}">One of us? Sign in as staff member</a>
                             </div>
                         </div>
                     </div>

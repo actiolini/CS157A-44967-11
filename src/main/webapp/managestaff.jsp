@@ -68,7 +68,7 @@
                     <div class="col"></div>
                     <div class="col-6 text-center">
                         <a href="./${S.STAFF_SIGN_UP_PAGE}">
-                            <button type="button" class="btn btn-outline-info">Create Faculty Account</button>
+                            <button type="button" class="btn btn-outline-info">Create Staff Account</button>
                         </a>
                     </div>
                     <div class="col"></div>

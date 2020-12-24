@@ -66,7 +66,7 @@
                 <a class="inputAsLink" href="./${S.MANAGE_ROOM_PAGE}">&#8249;
                     <span>Back</span>
                 </a>
-                <h1 class="display-3 text-center">Create room</h1>
+                <h1 class="display-3 text-center">Create Room</h1>
                 <hr>
                 <div class="row">
                     <div class="col"></div>

@@ -58,7 +58,7 @@
                     <div class="col"></div>
                     <div class="col-6 text-center">
                         <a href="./${S.THEATRE_CREATE_PAGE}">
-                            <button type="button" class="btn btn-outline-info">Create Theatre</button>
+                            <button type="button" class="btn btn-outline-info">Add Theatre</button>
                         </a>
                     </div>
                     <div class="col"></div>

@@ -59,7 +59,7 @@
                         <div class="col"></div>
                         <div class="col-6 text-center">
                             <a href="./${S.MOVIE_CREATE_PAGE}">
-                                <button type="button" class="btn btn-outline-info">Upload Movie</button>
+                                <button type="button" class="btn btn-outline-info">Add Movie</button>
                             </a>
                         </div>
                         <div class="col"></div>
