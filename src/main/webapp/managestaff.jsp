@@ -91,56 +91,58 @@
                 </c:if>
                 <!-- Error message -->
                 <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
-                <table>
-                    <tr>
-                        <th>Staff Id</th>
-                        <th>Name</th>
-                        <th>Role</th>
-                        <th>Email</th>
-                        <th>Actions</th>
-                    </tr>
-                    <!-- List of admins -->
-                    <c:if test="${isAdmin}">
-                        <c:forEach items="${adminList}" var="admin">
+                <div style="overflow-x:auto;">
+                    <table>
+                        <tr>
+                            <th>Staff Id</th>
+                            <th>Name</th>
+                            <th>Role</th>
+                            <th>Email</th>
+                            <th>Actions</th>
+                        </tr>
+                        <!-- List of admins -->
+                        <c:if test="${isAdmin}">
+                            <c:forEach items="${adminList}" var="admin">
+                                <tr>
+                                    <td>${admin.getStaffId()}</td>
+                                    <td>${admin.getUserName()}</td>
+                                    <td>${admin.getRole()}</td>
+                                    <td>${admin.getEmail()}</td>
+                                    <td>N/A</td>
+                                </tr>
+                            </c:forEach>
+                        </c:if>
+                        <!-- List of staffs -->
+                        <c:forEach items="${staffList}" var="staff">
                             <tr>
-                                <td>${admin.getStaffId()}</td>
-                                <td>${admin.getUserName()}</td>
-                                <td>${admin.getRole()}</td>
-                                <td>${admin.getEmail()}</td>
-                                <td>N/A</td>
+                                <!-- Staff id -->
+                                <td>${staff.getStaffId()}</td>
+                                <!-- User name -->
+                                <td>${staff.getUserName()}</td>
+                                <!-- Role -->
+                                <td>${staff.getRole()}</td>
+                                <!-- Email -->
+                                <td>${staff.getEmail()}</td>
+                                <c:choose>
+                                    <c:when test="${staff.getRole().equals(S.MANAGER) && !isAdmin}">
+                                        <td>N/A</td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <td>
+                                            <div class="container">
+                                                <!-- Delete staff account -->
+                                                <form action="StaffDelete" method="POST" class="button">
+                                                    <input type="hidden" name="staffId" value="${staff.getStaffId()}" />
+                                                    <input type="submit" class="btn btn-outline-info" value="Delete" />
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </c:otherwise>
+                                </c:choose>
                             </tr>
                         </c:forEach>
-                    </c:if>
-                    <!-- List of staffs -->
-                    <c:forEach items="${staffList}" var="staff">
-                        <tr>
-                            <!-- Staff id -->
-                            <td>${staff.getStaffId()}</td>
-                            <!-- User name -->
-                            <td>${staff.getUserName()}</td>
-                            <!-- Role -->
-                            <td>${staff.getRole()}</td>
-                            <!-- Email -->
-                            <td>${staff.getEmail()}</td>
-                            <c:choose>
-                                <c:when test="${staff.getRole().equals(S.MANAGER) && !isAdmin}">
-                                    <td>N/A</td>
-                                </c:when>
-                                <c:otherwise>
-                                    <td>
-                                        <div class="container">
-                                            <!-- Delete staff account -->
-                                            <form action="StaffDelete" method="POST" class="button">
-                                                <input type="hidden" name="staffId" value="${staff.getStaffId()}" />
-                                                <input type="submit" class="btn btn-outline-info" value="Delete" />
-                                            </form>
-                                        </div>
-                                    </td>
-                                </c:otherwise>
-                            </c:choose>
-                        </tr>
-                    </c:forEach>
-                </table>
+                    </table>
+                </div>
             </div>
         </div>
         <!-- Footer -->

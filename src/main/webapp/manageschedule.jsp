@@ -110,6 +110,7 @@
                 <div class="row">
                     <div class="col-xl-2"></div>
                     <div class="col-xl">
+                        <div style="overflow-x:auto;">
                         <table>
                             <tr>
                                 <th>Schedule</th>
@@ -122,13 +123,11 @@
                                 <td>#</td>
                                 <td>
                                     <!-- Input show date -->
-                                    <input form="addScheduleForm" style="width: 150px;" name="showDate" type="date"
-                                        value="${showDateInput}" />
+                                    <input form="addScheduleForm" style="width: 150px;" name="showDate" type="date" value="${showDateInput}" />
                                 </td>
                                 <td>
                                     <!-- Input start time -->
-                                    <input form="addScheduleForm" style="width: 80px;" name="startTime" type="time"
-                                        value="${startTimeInput}" />
+                                    <input form="addScheduleForm" style="width: 80px;" name="startTime" type="time" value="${startTimeInput}" />
                                 </td>
                                 <td>
                                     <!-- List of room options -->
@@ -169,6 +168,7 @@
                                 </tr>
                             </c:forEach>
                         </table>
+                        </div>
                     </div>
                     <div class="col-xl-2"></div>
                 </div>

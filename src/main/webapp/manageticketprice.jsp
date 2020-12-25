@@ -74,50 +74,52 @@
                 <div class="row">
                     <div class="col-md"></div>
                     <div class="col-md">
-                        <table>
-                            <tr>
-                                <th>Start time</th>
-                                <th>Price</th>
-                                <th>Actions</th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <!-- Input start time -->
-                                    <input form="addTicketPriceForm" style="width: 80px;" name="startTime" type="time"
-                                        value="${startTimeInput}" />
-                                </td>
-                                <td>
-                                    <!-- Input price -->
-                                    <input form="addTicketPriceForm" style="width: 80px;" name="price" type="number" min="0"
-                                        step="0.01" ; placeholder="11.50" value="${priceInput}" />
-                                </td>
-                                <td>
-                                    <!-- Add ticket price -->
-                                    <form id="addTicketPriceForm" action="TicketPriceAdd" method="POST" class="button"
-                                        onsubmit="return validateTicketPriceForm(this)">
-                                        <input type="hidden" name="theatreId" value="${theatreId}" />
-                                        <input type="submit" class="btn btn-outline-info" value="Add" />
-                                    </form>
-                                </td>
-                            </tr>
-                            <!-- List of ticket prices -->
-                            <c:forEach items="${ticketPriceList}" var="ticketPrice">
+                        <div style="overflow-x:auto;">
+                            <table>
                                 <tr>
-                                    <!-- Start time -->
-                                    <td>${ticketPrice.getStartTime()}</td>
-                                    <!-- Ticket price -->
-                                    <td>$${ticketPrice.displayPrice()}</td>
+                                    <th>Start time</th>
+                                    <th>Price</th>
+                                    <th>Actions</th>
+                                </tr>
+                                <tr>
                                     <td>
-                                        <!-- Delete ticket price -->
-                                        <form action="TicketPriceDelete" method="POST" class="button">
+                                        <!-- Input start time -->
+                                        <input form="addTicketPriceForm" style="width: 80px;" name="startTime" type="time"
+                                            value="${startTimeInput}" />
+                                    </td>
+                                    <td>
+                                        <!-- Input price -->
+                                        <input form="addTicketPriceForm" style="width: 80px;" name="price" type="number" min="0" step="0.01" ;
+                                            placeholder="11.50" value="${priceInput}" />
+                                    </td>
+                                    <td>
+                                        <!-- Add ticket price -->
+                                        <form id="addTicketPriceForm" action="TicketPriceAdd" method="POST" class="button"
+                                            onsubmit="return validateTicketPriceForm(this)">
                                             <input type="hidden" name="theatreId" value="${theatreId}" />
-                                            <input type="hidden" name="startTime" value="${ticketPrice.getStartTime()}" />
-                                            <input type="submit" class="btn btn-outline-info" value="Delete" />
+                                            <input type="submit" class="btn btn-outline-info" value="Add" />
                                         </form>
                                     </td>
                                 </tr>
-                            </c:forEach>
-                        </table>
+                                <!-- List of ticket prices -->
+                                <c:forEach items="${ticketPriceList}" var="ticketPrice">
+                                    <tr>
+                                        <!-- Start time -->
+                                        <td>${ticketPrice.getStartTime()}</td>
+                                        <!-- Ticket price -->
+                                        <td>$${ticketPrice.displayPrice()}</td>
+                                        <td>
+                                            <!-- Delete ticket price -->
+                                            <form action="TicketPriceDelete" method="POST" class="button">
+                                                <input type="hidden" name="theatreId" value="${theatreId}" />
+                                                <input type="hidden" name="startTime" value="${ticketPrice.getStartTime()}" />
+                                                <input type="submit" class="btn btn-outline-info" value="Delete" />
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </table>
+                        </div>
                     </div>
                     <div class="col-md"></div>
                 </div>
