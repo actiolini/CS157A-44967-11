@@ -64,7 +64,7 @@ public class ScheduleDAO {
 
     public Schedule getScheduleConflict(String theatreId, String showDate, String movieId,String roomNumber, String startTime, String endTime) throws Exception {
         String QUERY_CONFLICT_SCHEUDLES = String.format(
-            "SELECT %s, %s, %s, %s, %s, %s, %s FROM %s WHERE %s=? AND (%s=? OR %s=?) AND ((? < ? AND ((%s=? AND (%s < %s AND %s >= ? AND %s <= ?) OR (%s > %s AND %s <= ?)) OR (%s=DATE_ADD(?, INTERVAL -1 DAY) AND %s > %s AND %s >= ?))) OR (? > ? AND ((%s=? AND (%s < %s AND %s >= ?) OR (%s > %s)) OR (%s=DATE_ADD(?, INTERVAL 1 DAY) AND %s <= ?)))) LIMIT 1;",
+            "SELECT %s, %s, %s, %s, %s, %s, %s FROM %s WHERE %s=? AND (%s=? OR %s=?) AND ((? < ? AND ((%s=? AND ((%s < %s AND %s >= ? AND %s <= ?) OR (%s > %s AND %s <= ?))) OR (%s=DATE_ADD(?, INTERVAL -1 DAY) AND %s > %s AND %s >= ?))) OR (? > ? AND ((%s=? AND ((%s < %s AND %s >= ?) OR (%s > %s))) OR (%s=DATE_ADD(?, INTERVAL 1 DAY) AND %s <= ?)))) LIMIT 1;",
             ScheduleDB.SCHEDULE_ID, ScheduleDB.THEATRE_ID, ScheduleDB.MOVIE_ID,
             ScheduleDB.ROOM_NUMBER, ScheduleDB.SHOW_DATE, ScheduleDB.START_TIME,
             ScheduleDB.END_TIME, ScheduleDB.TABLE, ScheduleDB.THEATRE_ID,
