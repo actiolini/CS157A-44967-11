@@ -64,7 +64,6 @@
 <body>
     <!-- Navigation bar -->
     <jsp:include page="./${S.NAV_BAR_PAGE}" />
-    <div style="min-height: 60px;"></div>
     <div id="custom-scroll">
         <div class="main">
             <!-- Page content -->

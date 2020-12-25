@@ -4,6 +4,10 @@ body {
     flex-direction: column;
 }
 
+.navbarPadding {
+    min-height: 55px;
+}
+
 #custom-scroll {
     height: 100%;
     display: flex;
@@ -30,6 +34,7 @@ body {
 }
 
 .main {
+    padding-top: 10px;
     flex: 1 0 auto;
 }
 

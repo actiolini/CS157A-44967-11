@@ -92,3 +92,4 @@
         </c:choose>
     </div>
 </nav>
+<div class="navbarPadding"></div>
