@@ -68,8 +68,8 @@
                 <h1 class="display-3 text-center">Create Room</h1>
                 <hr>
                 <div class="row">
-                    <div class="col"></div>
-                    <div class="col-4">
+                    <div class="col-md-4"></div>
+                    <div class="col-md">
                         <!-- Error message -->
                         <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
                         <!-- Upload room information form -->
@@ -101,7 +101,7 @@
                             </div>
                         </form>
                     </div>
-                    <div class="col"></div>
+                    <div class="col-md-4"></div>
                 </div>
             </div>
         </div>

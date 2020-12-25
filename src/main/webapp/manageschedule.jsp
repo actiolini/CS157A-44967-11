@@ -100,8 +100,8 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col"></div>
-                    <div class="col-8">
+                    <div class="col-xl-2"></div>
+                    <div class="col-xl">
                         <table>
                             <tr>
                                 <th>Schedule Id</th>
@@ -162,7 +162,7 @@
                             </c:forEach>
                         </table>
                     </div>
-                    <div class="col"></div>
+                    <div class="col-xl-2"></div>
                 </div>
             </div>
         </div>

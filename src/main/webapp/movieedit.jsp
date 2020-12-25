@@ -64,8 +64,8 @@
                     <span>Back</span>
                 </a>
                 <div class="row">
-                    <div class="col"></div>
-                    <div class="col-6">
+                    <div class="col-lg-3"></div>
+                    <div class="col-lg">
                         <!-- Error message -->
                         <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
                         <!-- Edit movie information form -->
@@ -130,7 +130,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col"></div>
+                    <div class="col-lg-3"></div>
                 </div>
             </div>
         </div>

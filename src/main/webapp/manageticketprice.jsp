@@ -72,8 +72,8 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col"></div>
-                    <div class="col-5">
+                    <div class="col-md"></div>
+                    <div class="col-md">
                         <table>
                             <tr>
                                 <th>Start time</th>
@@ -119,7 +119,7 @@
                             </c:forEach>
                         </table>
                     </div>
-                    <div class="col"></div>
+                    <div class="col-md"></div>
                 </div>
             </div>
         </div>
