@@ -86,7 +86,7 @@ public class ScheduleAddServlet extends HttpServlet {
                 if (errorMessage.isEmpty()) {
                     Schedule schedule = scheduleDAO.getScheduleConflict(theatreId, showDate, movieId, roomNumber, startTime, endTime);
                     if (schedule != null) {
-                        errorMessage = String.format("Time conflict - Schedule Id#%s on %s at %s-%s Room#%s", schedule.getScheduleId(), schedule.displayShowDate(), schedule.getStartTime(), schedule.getEndTime(), schedule.getRoomNumber());
+                        errorMessage = String.format("Time conflict - Movie#%s | Schedule#%s on %s at %s-%s Room#%s", schedule.getMovieId(), schedule.getScheduleId(), schedule.displayShowDate(), schedule.getStartTime(), schedule.getEndTime(), schedule.getRoomNumber());
                     }
                 }
 
