@@ -135,7 +135,7 @@ public class S {
 
     // manage schedule
     public static final String SCHEDULE_MOVIE_ID = "scheduleMovieId";
-    public static final String SCHEDULE_MOVIE_TITLE = "scheduleMovieTitle";
+    public static final String SCHEDULE_MOVIE_INFO = "scheduleMovieInfo";
     public static final String SCHEDULE_LIST = "scheduleList";
     public static final String SCHEDULE_SHOW_DATE_CREATE = "scheduleShowDateCreate";
     public static final String SCHEDULE_START_TIME_CREATE = "scheduleStartTimeCreate";

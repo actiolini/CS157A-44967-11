@@ -82,7 +82,7 @@ public class ScheduleGetServlet extends HttpServlet {
                 // Set movie title in session
                 Movie movie = movieDAO.getMovieById(movieId);
                 if (movie != null) {
-                    session.setAttribute(S.SCHEDULE_MOVIE_TITLE, movie.getTitle());
+                    session.setAttribute(S.SCHEDULE_MOVIE_INFO, movie);
                 }
 
                 // Retrieve list of rooms

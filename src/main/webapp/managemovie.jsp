@@ -72,19 +72,20 @@
                         <div class="card-body">
                             <div class="row">
                                 <!-- Movie title -->
-                                <div class="col">
-                                    <h1>${movie.getTitle()}</h1>
+                                <div class="col-lg">
+                                    <h5>#${movie.getId()}</h5>
+                                    <h4>${movie.getTitle()}</h4>
                                 </div>
                             </div>
                             <hr>
                             <div class="row">
                                 <!-- Movie poster -->
-                                <div class="col col-lg-5">
+                                <div class="col-lg-5">
                                     <div class="text-center">
                                         <img src=${movie.getPoster()} class="rounded mx-auto w-100" alt="poster">
                                     </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-lg">
                                     <ul class="list-inline">
                                         <!-- Movie length -->
                                         <p><b>Length:</b> ${movie.getDuration()} minutes</p>

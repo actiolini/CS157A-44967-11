@@ -31,7 +31,7 @@
     request.setAttribute("movieId", session.getAttribute(S.SCHEDULE_MOVIE_ID));
 
     request.setAttribute("theatreName", session.getAttribute(S.SELECTED_THEATRE_NAME));
-    request.setAttribute("movieTitle", session.getAttribute(S.SCHEDULE_MOVIE_TITLE));
+    request.setAttribute("movie", session.getAttribute(S.SCHEDULE_MOVIE_INFO));
     request.setAttribute("theatreList", session.getAttribute(S.THEATRE_LIST));
     request.setAttribute("roomList", session.getAttribute(S.ROOM_LIST));
     request.setAttribute("scheduleList", session.getAttribute(S.SCHEDULE_LIST));
@@ -40,7 +40,7 @@
     request.setAttribute("roomNumberInput", session.getAttribute(S.SCHEDULE_ROOM_NUMBER_CREATE));
     request.setAttribute("errorMessage", session.getAttribute(S.ERROR_MESSAGE));
     session.removeAttribute(S.SELECTED_THEATRE_NAME);
-    session.removeAttribute(S.SCHEDULE_MOVIE_TITLE);
+    session.removeAttribute(S.SCHEDULE_MOVIE_INFO);
     session.removeAttribute(S.THEATRE_LIST);
     session.removeAttribute(S.ROOM_LIST);
     session.removeAttribute(S.SCHEDULE_LIST);
@@ -74,8 +74,16 @@
                 <a class="inputAsLink" href="./${S.MANAGE_MOVIE_PAGE}">&#8249;
                     <span>Back</span>
                 </a>
-                <!-- Current movie title -->
-                <h1 class="display-5 text-center">${movieTitle}</h1>
+                <!-- Current movie information -->
+                <div class="row">
+                    <div class="col-sm-2">
+                        <h4 style="margin-top:20px">#${movie.getId()}</h4>
+                    </div>
+                    <div class="col-sm">
+                        <h1 class="display-5 text-center">${movie.getTitle()}</h1>
+                    </div>
+                    <div class="col-sm-2"></div>
+                </div>
                 <hr>
                 <!-- List of theatre options -->
                 <c:if test="${isAdmin}">
@@ -104,7 +112,7 @@
                     <div class="col-xl">
                         <table>
                             <tr>
-                                <th>Schedule Id</th>
+                                <th>Schedule</th>
                                 <th>Show Date</th>
                                 <th>Show Time</th>
                                 <th>Room</th>
