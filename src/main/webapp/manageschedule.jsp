@@ -110,7 +110,6 @@
                 <div class="row">
                     <div class="col-xl-2"></div>
                     <div class="col-xl">
-                        <div style="overflow-x:auto;">
                         <table>
                             <tr>
                                 <th>Schedule</th>
@@ -168,7 +167,6 @@
                                 </tr>
                             </c:forEach>
                         </table>
-                        </div>
                     </div>
                     <div class="col-xl-2"></div>
                 </div>

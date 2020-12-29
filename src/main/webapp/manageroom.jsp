@@ -75,42 +75,40 @@
                 <div class="row">
                     <div class="col-lg-1"></div>
                     <div class="col-lg">
-                        <div style="overflow-x:auto;">
-                            <table>
+                        <table>
+                            <tr>
+                                <th>Room Number</th>
+                                <th>Number of Sections</th>
+                                <th>Seats per Section</th>
+                                <th>Actions</th>
+                            </tr>
+                            <c:forEach items="${roomList}" var="room">
                                 <tr>
-                                    <th>Room Number</th>
-                                    <th>Number of Sections</th>
-                                    <th>Seats per Section</th>
-                                    <th>Actions</th>
+                                    <!-- Room number -->
+                                    <td>${room.getRoomNumber()}</td>
+                                    <!-- Number of sections -->
+                                    <td>${room.getNumberOfRows()}</td>
+                                    <!-- Number of seats per section -->
+                                    <td>${room.getSeatsPerRow()}</td>
+                                    <td>
+                                        <div class="container">
+                                            <!-- Edit room information -->
+                                            <form action="RoomLoadEdit" method="POST" class="button">
+                                                <input type="hidden" name="theatreId" value="${theatreId}" />
+                                                <input type="hidden" name="roomNumber" value="${room.getRoomNumber()}" />
+                                                <input type="submit" class="btn btn-outline-info" value="Edit" />
+                                            </form>
+                                            <!-- Delete room information -->
+                                            <form action="RoomDelete" method="POST" class="button">
+                                                <input type="hidden" name="theatreId" value="${theatreId}" />
+                                                <input type="hidden" name="roomNumber" value="${room.getRoomNumber()}" />
+                                                <input type="submit" class="btn btn-outline-info" value="Delete" />
+                                            </form>
+                                        </div>
+                                    </td>
                                 </tr>
-                                <c:forEach items="${roomList}" var="room">
-                                    <tr>
-                                        <!-- Room number -->
-                                        <td>${room.getRoomNumber()}</td>
-                                        <!-- Number of sections -->
-                                        <td>${room.getNumberOfRows()}</td>
-                                        <!-- Number of seats per section -->
-                                        <td>${room.getSeatsPerRow()}</td>
-                                        <td>
-                                            <div class="container">
-                                                <!-- Edit room information -->
-                                                <form action="RoomLoadEdit" method="POST" class="button">
-                                                    <input type="hidden" name="theatreId" value="${theatreId}" />
-                                                    <input type="hidden" name="roomNumber" value="${room.getRoomNumber()}" />
-                                                    <input type="submit" class="btn btn-outline-info" value="Edit" />
-                                                </form>
-                                                <!-- Delete room information -->
-                                                <form action="RoomDelete" method="POST" class="button">
-                                                    <input type="hidden" name="theatreId" value="${theatreId}" />
-                                                    <input type="hidden" name="roomNumber" value="${room.getRoomNumber()}" />
-                                                    <input type="submit" class="btn btn-outline-info" value="Delete" />
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </c:forEach>
-                            </table>
-                        </div>
+                            </c:forEach>
+                        </table>
                     </div>
                     <div class="col-lg-1"></div>
                 </div>
