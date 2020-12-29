@@ -52,7 +52,7 @@
                 <br>
                 <div class="row">
                     <div class="col-lg"></div>
-                    <div class="col-lg">
+                    <div class="col-lg-5">
                         <div class="card">
                             <div class="card-body ">
                                 <!-- Sign in as staff form -->

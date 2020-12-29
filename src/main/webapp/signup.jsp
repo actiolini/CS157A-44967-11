@@ -51,9 +51,10 @@
             <div class="container">
                 <h1 class="display-3 text-center">Sign Up</h1>
                 <hr>
+                <br>
                 <div class="row">
                     <div class="col-lg"></div>
-                    <div class="col-lg">
+                    <div class="col-lg-5">
                         <div class="card">
                             <div class="card-body">
                                 <!-- Sign up form -->

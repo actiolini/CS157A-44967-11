@@ -68,71 +68,75 @@
                 </a>
                 <div class="row">
                     <div class="col-lg"></div>
-                    <div class="col-lg">
-                        <!-- Create staff account form -->
-                        <form id="staffCreateForm" action="StaffCreate" method="POST" onsubmit="return validateStaffSignUp(this, '${isAdmin}')">
-                            <c:if test="${isAdmin}">
-                                <!-- Input role -->
-                                <div class="form-group">
-                                    <label>Role</label><br>
-                                    <select id="role" class="inputbox" name="role" form="staffCreateForm"
-                                        onchange="checkRole(this, 'roleError', 'theatreLocationInput')">
-                                        <option id="defaultRole" hidden value="">Select a role</option>
-                                        <c:forEach items="${roleList}" var="role">
-                                            <option value="${role.getTitle()}">${role.getTitle()}</option>
-                                        </c:forEach>
-                                    </select>
-                                    <!-- Role error -->
-                                    <span id="roleError" class="errormessage"></span>
-                                </div>
-                                <!-- Input location -->
-                                <div class="form-group" id="theatreLocationInput">
-                                    <label>Theatre Location</label><br>
-                                    <select id="theatreLocation" class="inputbox" name="theatreLocation" form="staffCreateForm"
-                                        onchange="checkTheatreLocation(this, 'theatreLocationError')">
-                                        <option id="defaultLocation" hidden value="">Select a theatre location
-                                        </option>
-                                        <c:forEach items="${theatreList}" var="theatre">
-                                            <option value="${theatre.getId()}">${theatre.getTheatreName()}</option>
-                                        </c:forEach>
-                                    </select>
-                                    <!-- Location error -->
-                                    <span id="theatreLocationError" class="errormessage"></span>
-                                </div>
-                            </c:if>
-                            <!-- Input name -->
-                            <div class="form-group">
-                                <label>Name</label><br>
-                                <input class="inputbox" type="text" name="userName" placeholder="Enter your name"
-                                    onkeyup="checkName(this, 'userNameError')" value="${userNameInput}">
-                                <br>
-                                <!-- Name error -->
-                                <span id="userNameError" class="errormessage"></span>
+                    <div class="col-lg-5">
+                        <div class="card">
+                            <div class="card-body">
+                                <!-- Create staff account form -->
+                                <form id="staffCreateForm" action="StaffCreate" method="POST" onsubmit="return validateStaffSignUp(this, '${isAdmin}')">
+                                    <c:if test="${isAdmin}">
+                                        <!-- Input role -->
+                                        <div class="form-group">
+                                            <label>Role</label><br>
+                                            <select id="role" class="inputbox" name="role" form="staffCreateForm"
+                                                onchange="checkRole(this, 'roleError', 'theatreLocationInput')">
+                                                <option id="defaultRole" hidden value="">Select a role</option>
+                                                <c:forEach items="${roleList}" var="role">
+                                                    <option value="${role.getTitle()}">${role.getTitle()}</option>
+                                                </c:forEach>
+                                            </select>
+                                            <!-- Role error -->
+                                            <span id="roleError" class="errormessage"></span>
+                                        </div>
+                                        <!-- Input location -->
+                                        <div class="form-group" id="theatreLocationInput">
+                                            <label>Theatre Location</label><br>
+                                            <select id="theatreLocation" class="inputbox" name="theatreLocation" form="staffCreateForm"
+                                                onchange="checkTheatreLocation(this, 'theatreLocationError')">
+                                                <option id="defaultLocation" hidden value="">Select a theatre location
+                                                </option>
+                                                <c:forEach items="${theatreList}" var="theatre">
+                                                    <option value="${theatre.getId()}">${theatre.getTheatreName()}</option>
+                                                </c:forEach>
+                                            </select>
+                                            <!-- Location error -->
+                                            <span id="theatreLocationError" class="errormessage"></span>
+                                        </div>
+                                    </c:if>
+                                    <!-- Input name -->
+                                    <div class="form-group">
+                                        <label>Name</label><br>
+                                        <input class="inputbox" type="text" name="userName" placeholder="Enter your name"
+                                            onkeyup="checkName(this, 'userNameError')" value="${userNameInput}">
+                                        <br>
+                                        <!-- Name error -->
+                                        <span id="userNameError" class="errormessage"></span>
+                                    </div>
+                                    <!-- Input email -->
+                                    <div class="form-group">
+                                        <label>Email</label><br>
+                                        <input name="email" class="inputbox" type="text" placeholder="Enter email"
+                                            onkeyup="checkEmail(this, 'emailError')" value="${emailInput}">
+                                        <br>
+                                        <!-- Email error -->
+                                        <span id="emailError" class="errormessage"></span>
+                                    </div>
+                                    <!-- Input password -->
+                                    <div class="form-group">
+                                        <label>Password</label><br>
+                                        <input name="password" class="inputbox" type="password" placeholder="Enter password"
+                                            onkeyup="checkPassword(this, 'passwordError')">
+                                        <br>
+                                        <!-- Password error -->
+                                        <span id="passwordError" class="errormessage"></span>
+                                    </div>
+                                    <div class="text-center">
+                                        <input type="submit" class="btn btn-primary" value="Create Account">
+                                    </div>
+                                </form>
+                                <!-- Error message -->
+                                <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
                             </div>
-                            <!-- Input email -->
-                            <div class="form-group">
-                                <label>Email</label><br>
-                                <input name="email" class="inputbox" type="text" placeholder="Enter email"
-                                    onkeyup="checkEmail(this, 'emailError')" value="${emailInput}">
-                                <br>
-                                <!-- Email error -->
-                                <span id="emailError" class="errormessage"></span>
-                            </div>
-                            <!-- Input password -->
-                            <div class="form-group">
-                                <label>Password</label><br>
-                                <input name="password" class="inputbox" type="password" placeholder="Enter password"
-                                    onkeyup="checkPassword(this, 'passwordError')">
-                                <br>
-                                <!-- Password error -->
-                                <span id="passwordError" class="errormessage"></span>
-                            </div>
-                            <div class="text-center">
-                                <input type="submit" class="btn btn-primary" value="Create Account">
-                            </div>
-                        </form>
-                        <!-- Error message -->
-                        <p class="text-center errormessage" id="errorMessage">${errorMessage}</p>
+                        </div>
                     </div>
                     <div class="col-lg"></div>
                 </div>
