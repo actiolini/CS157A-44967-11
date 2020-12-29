@@ -58,7 +58,7 @@ public class MovieEditServlet extends HttpServlet {
 
                     if (errorMessage.isEmpty()) {
                         // Redirect to Manage Movie page
-                        response.sendRedirect(S.MANAGE_MOVIE_PAGE);
+                        response.sendRedirect(S.MOVIE_PAGE);
                     } else {
                         // Back to Edit Movie page with previous inputs
                         session.setAttribute(S.MOVIE_EDIT_TITLE, title);
@@ -73,7 +73,7 @@ public class MovieEditServlet extends HttpServlet {
 
                 // Cancel action
                 if (request.getParameter("action").equals("cancel")) {
-                    response.sendRedirect(S.MANAGE_MOVIE_PAGE);
+                    response.sendRedirect(S.MOVIE_PAGE);
                 }
             } else {
                 // Redirect to Home page for unauthorized access

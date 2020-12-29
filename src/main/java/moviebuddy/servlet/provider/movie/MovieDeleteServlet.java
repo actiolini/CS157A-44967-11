@@ -39,7 +39,7 @@ public class MovieDeleteServlet extends HttpServlet {
                 }
 
                 // Redirect to Manage Movie page
-                response.sendRedirect(S.MANAGE_MOVIE_PAGE);
+                response.sendRedirect(S.MOVIE_PAGE);
             } else {
                 // Redirect to Home page for unauthorized access
                 response.sendRedirect(S.HOME_PAGE);

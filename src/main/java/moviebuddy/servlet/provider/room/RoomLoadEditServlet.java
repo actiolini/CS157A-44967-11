@@ -48,7 +48,7 @@ public class RoomLoadEditServlet extends HttpServlet {
                     response.sendRedirect(S.ROOM_EDIT_PAGE);
                 } else {
                     // Redirect to Manage Room page
-                    response.sendRedirect(S.MANAGE_ROOM_PAGE);
+                    response.sendRedirect(S.ROOM_PAGE);
                 }
             } else {
                 // Redirect to Home page for unauthorized access

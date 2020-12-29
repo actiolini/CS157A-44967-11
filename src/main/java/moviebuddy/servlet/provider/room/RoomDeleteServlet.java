@@ -41,7 +41,7 @@ public class RoomDeleteServlet extends HttpServlet {
                 }
 
                 // Redirect to Manage Room page
-                response.sendRedirect(S.MANAGE_ROOM_PAGE);
+                response.sendRedirect(S.ROOM_PAGE);
             } else {
                 // Redirect to Home page for unauthorized access
                 response.sendRedirect(S.HOME_PAGE);

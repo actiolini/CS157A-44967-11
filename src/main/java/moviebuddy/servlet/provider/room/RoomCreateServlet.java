@@ -49,7 +49,7 @@ public class RoomCreateServlet extends HttpServlet {
 
                 if (errorMessage.isEmpty()) {
                     // Redirect to Manage Room page
-                    response.sendRedirect(S.MANAGE_ROOM_PAGE);
+                    response.sendRedirect(S.ROOM_PAGE);
                 } else {
                     // Back to Create Room page with previous inputs
                     session.setAttribute(S.ROOM_CREATE_NUMBER, roomNumber);

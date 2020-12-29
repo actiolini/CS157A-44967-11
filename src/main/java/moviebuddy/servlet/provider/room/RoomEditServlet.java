@@ -57,7 +57,7 @@ public class RoomEditServlet extends HttpServlet {
 
                     if (errorMessage.isEmpty()) {
                         // Redirect to Manage Room page
-                        response.sendRedirect(S.MANAGE_ROOM_PAGE);
+                        response.sendRedirect(S.ROOM_PAGE);
                     } else {
                         // Back to Edit Room page with previous inputs
                         session.setAttribute(S.ROOM_EDIT_NUMBER, roomNumber);
@@ -71,7 +71,7 @@ public class RoomEditServlet extends HttpServlet {
                 // Cancel action
                 if (request.getParameter("action").equals("cancel")) {
                     // Redirect to Manage Room page
-                    response.sendRedirect(S.MANAGE_ROOM_PAGE);
+                    response.sendRedirect(S.ROOM_PAGE);
                 }
             } else {
                 // Redirect to Home page for unauthorized access

@@ -63,19 +63,19 @@
             <div class="container">
                 <h1 class="display-3 text-center">Create Staff Account</h1>
                 <hr>
-                <a class="inputAsLink" href="./${S.MANAGE_STAFF_PAGE}">&#8249;
+                <a class="inputAsLink" href="./${S.STAFF_PAGE}">&#8249;
                     <span>Back</span>
                 </a>
                 <div class="row">
                     <div class="col-lg"></div>
                     <div class="col-lg">
                         <!-- Create staff account form -->
-                        <form id="signUpStaffForm" action="SignUpStaff" method="POST" onsubmit="return validateStaffSignUp(this, '${isAdmin}')">
+                        <form id="staffCreateForm" action="StaffCreate" method="POST" onsubmit="return validateStaffSignUp(this, '${isAdmin}')">
                             <c:if test="${isAdmin}">
                                 <!-- Input role -->
                                 <div class="form-group">
                                     <label>Role</label><br>
-                                    <select id="role" class="inputbox" name="role" form="signUpStaffForm"
+                                    <select id="role" class="inputbox" name="role" form="staffCreateForm"
                                         onchange="checkRole(this, 'roleError', 'theatreLocationInput')">
                                         <option id="defaultRole" hidden value="">Select a role</option>
                                         <c:forEach items="${roleList}" var="role">
@@ -88,7 +88,7 @@
                                 <!-- Input location -->
                                 <div class="form-group" id="theatreLocationInput">
                                     <label>Theatre Location</label><br>
-                                    <select id="theatreLocation" class="inputbox" name="theatreLocation" form="signUpStaffForm"
+                                    <select id="theatreLocation" class="inputbox" name="theatreLocation" form="staffCreateForm"
                                         onchange="checkTheatreLocation(this, 'theatreLocationError')">
                                         <option id="defaultLocation" hidden value="">Select a theatre location
                                         </option>

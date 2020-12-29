@@ -59,7 +59,7 @@
                 <hr>
                 <h1 class="display-3 text-center">Update Theatre Information</h1>
                 <hr>
-                <a class="inputAsLink" href="./${S.MANAGE_THEATRE_PAGE}">&#8249;
+                <a class="inputAsLink" href="./${S.THEATRE_PAGE}">&#8249;
                     <span>Back</span>
                 </a>
                 <div class="row">

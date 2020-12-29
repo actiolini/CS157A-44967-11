@@ -105,7 +105,7 @@ public class ScheduleAddServlet extends HttpServlet {
                 }
 
                 // Redirect to Manage Schedule page
-                response.sendRedirect(S.MANAGE_SCHEDULE_PAGE);
+                response.sendRedirect(S.MOVIE_SCHEDULE_PAGE);
             } else {
                 // Redirect to Home page for unauthorized access
                 response.sendRedirect(S.HOME_PAGE);

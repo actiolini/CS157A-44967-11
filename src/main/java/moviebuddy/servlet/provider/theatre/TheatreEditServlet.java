@@ -54,13 +54,12 @@ public class TheatreEditServlet extends HttpServlet {
 
                     // Update theatre information
                     if (errorMessage.isEmpty()) {
-                        errorMessage = theatreDAO.updateTheatre(theatreId, theatreName, address, city, state, country,
-                                zip);
+                        errorMessage = theatreDAO.updateTheatre(theatreId, theatreName, address, city, state, country, zip);
                     }
 
                     if (errorMessage.isEmpty()) {
                         // Redirect to Manage Theatre page
-                        response.sendRedirect(S.MANAGE_THEATRE_PAGE);
+                        response.sendRedirect(S.THEATRE_PAGE);
                     } else {
                         // Back to Edit Theatre page with previous inputs
                         session.setAttribute(S.THEATRE_EDIT_NAME, theatreName);
@@ -76,7 +75,7 @@ public class TheatreEditServlet extends HttpServlet {
 
                 // Cancel action
                 if (request.getParameter("action").equals("cancel")) {
-                    response.sendRedirect(S.MANAGE_THEATRE_PAGE);
+                    response.sendRedirect(S.THEATRE_PAGE);
                 }
             } else {
                 // Redirect to Home page for unauthorized access

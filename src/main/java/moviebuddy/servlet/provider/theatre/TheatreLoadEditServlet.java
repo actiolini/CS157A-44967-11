@@ -50,7 +50,7 @@ public class TheatreLoadEditServlet extends HttpServlet {
                     response.sendRedirect(S.THEATRE_EDIT_PAGE);
                 } else {
                     // Back to Manage Theatre page
-                    response.sendRedirect(S.MANAGE_THEATRE_PAGE);
+                    response.sendRedirect(S.THEATRE_PAGE);
                 }
             } else {
                 // Redirect to Home page for unauthorized access

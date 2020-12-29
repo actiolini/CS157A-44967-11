@@ -51,7 +51,7 @@ public class TheatreCreateServlet extends HttpServlet {
 
                 if (errorMessage.isEmpty()) {
                     // Redirect to Manage Theatre page
-                    response.sendRedirect(S.MANAGE_THEATRE_PAGE);
+                    response.sendRedirect(S.THEATRE_PAGE);
                 } else {
                     // Back to Create Theatre page with previous inputs
                     session.setAttribute(S.THEATRE_CREATE_NAME, theatreName);

@@ -56,7 +56,7 @@
                 <!-- Current theatre name -->
                 <h3>Theatre: ${theatreName}</h3>
                 <hr>
-                <a class="inputAsLink" href="./${S.MANAGE_THEATRE_PAGE}">&#8249;
+                <a class="inputAsLink" href="./${S.THEATRE_PAGE}">&#8249;
                     <span>Back</span>
                 </a>
                 <!-- Upload room information -->

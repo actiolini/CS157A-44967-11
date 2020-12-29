@@ -52,7 +52,7 @@ public class StaffDeleteServlet extends HttpServlet {
                 }
 
                 // Redirect Manage Staff page
-                response.sendRedirect(S.MANAGE_STAFF_PAGE);
+                response.sendRedirect(S.STAFF_PAGE);
             } else {
                 // Redirect to Home page for unauthorized access
                 response.sendRedirect(S.HOME_PAGE);

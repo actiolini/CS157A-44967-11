@@ -39,7 +39,7 @@ public class TheatreDeleteServlet extends HttpServlet {
                 }
 
                 // Redirect to Manage Theatre page
-                response.sendRedirect(S.MANAGE_THEATRE_PAGE);
+                response.sendRedirect(S.THEATRE_PAGE);
             } else {
                 // Redirect to Home page for unauthorized access
                 response.sendRedirect(S.HOME_PAGE);

@@ -62,7 +62,7 @@ public class TicketPriceGetServlet extends HttpServlet {
             }
 
             // Redirect to Manage Ticket Price page
-            response.sendRedirect(S.MANAGE_TICKET_PRICE_PAGE);
+            response.sendRedirect(S.TICKET_PRICE_PAGE);
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect(S.ERROR_PAGE);

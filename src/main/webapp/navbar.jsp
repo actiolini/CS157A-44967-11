@@ -58,10 +58,10 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <c:if test="${isAdmin}">
-                            <a class="dropdown-item" href="./${S.MANAGE_THEATRE_PAGE}">Theatre</a>
+                            <a class="dropdown-item" href="./${S.THEATRE_PAGE}">Theatre</a>
                         </c:if>
-                        <a class="dropdown-item" href="./${S.MANAGE_MOVIE_PAGE}">Movie</a>
-                        <a class="dropdown-item" href="./${S.MANAGE_STAFF_PAGE}">Staff</a>
+                        <a class="dropdown-item" href="./${S.MOVIE_PAGE}">Movie</a>
+                        <a class="dropdown-item" href="./${S.STAFF_PAGE}">Staff</a>
                     </div>
                 </li>
             </c:if>

@@ -13,8 +13,8 @@ import moviebuddy.dao.TheatreDAO;
 import moviebuddy.util.Validation;
 import moviebuddy.util.S;
 
-@WebServlet("/SignUpStaff")
-public class SignUpStaffServlet extends HttpServlet {
+@WebServlet("/StaffCreate")
+public class StaffCreateServlet extends HttpServlet {
     private static final long serialVersionUID = 6851275245718964069L;
 
     private UserDAO userDAO;
@@ -69,7 +69,7 @@ public class SignUpStaffServlet extends HttpServlet {
 
                 if (errorMessage.isEmpty()) {
                     // Redirect to Manage Staff page
-                    response.sendRedirect(S.MANAGE_STAFF_PAGE);
+                    response.sendRedirect(S.STAFF_PAGE);
                 } else {
                     // Back to Staff SignUp page with previous inputs
                     session.setAttribute(S.SIGN_UP_STAFF_ROLE, roleInput);
@@ -77,7 +77,7 @@ public class SignUpStaffServlet extends HttpServlet {
                     session.setAttribute(S.SIGN_UP_STAFF_USERNAME, userName);
                     session.setAttribute(S.SIGN_UP_STAFF_EMAIL, email);
                     session.setAttribute(S.ERROR_MESSAGE, errorMessage);
-                    response.sendRedirect(S.STAFF_SIGN_UP_PAGE);
+                    response.sendRedirect(S.STAFF_CREATE_PAGE);
                 }
             } else {
                 // Redirect to Home page for unauthorized access

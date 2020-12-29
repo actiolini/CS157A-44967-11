@@ -57,7 +57,7 @@ public class RoomGetServlet extends HttpServlet {
             session.setAttribute(S.ROOM_THEATRE_ID, theatreId);
 
             // Redirect to Manage Room page
-            response.sendRedirect(S.MANAGE_ROOM_PAGE);
+            response.sendRedirect(S.ROOM_PAGE);
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect(S.ERROR_PAGE);

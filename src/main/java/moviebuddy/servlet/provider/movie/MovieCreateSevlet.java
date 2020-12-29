@@ -55,7 +55,7 @@ public class MovieCreateSevlet extends HttpServlet {
 
                 if (errorMessage.isEmpty()) {
                     // Redirect to Manage Movie page
-                    response.sendRedirect(S.MANAGE_MOVIE_PAGE);
+                    response.sendRedirect(S.MOVIE_PAGE);
                 } else {
                     // Back to Upload Movie Information page
                     session.setAttribute(S.MOVIE_CREATE_TITLE, title);

@@ -48,7 +48,7 @@ public class MovieLoadEditServlet extends HttpServlet {
                     response.sendRedirect(S.MOVIE_EDIT_PAGE);
                 } else {
                     // Back to Manage Movie page
-                    response.sendRedirect(S.MANAGE_MOVIE_PAGE);
+                    response.sendRedirect(S.MOVIE_PAGE);
                 }
             } else {
                 // Redirect to Home page for unauthorized access

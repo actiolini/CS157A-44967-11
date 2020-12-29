@@ -41,7 +41,7 @@ public class TicketPriceDeleteServlet extends HttpServlet {
                 }
 
                 // Redirect to Manage Ticket Price page
-                response.sendRedirect(S.MANAGE_TICKET_PRICE_PAGE);
+                response.sendRedirect(S.TICKET_PRICE_PAGE);
             } else {
                 // Redirect to Home page for unauthorized access
                 response.sendRedirect(S.HOME_PAGE);
