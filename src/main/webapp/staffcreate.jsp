@@ -2,8 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="moviebuddy.util.Passwords" %>
 <%@ page import="moviebuddy.util.S" %>
-<jsp:include page="/RoleGet" />
-<jsp:include page="/TheatreGet" />
 <%
     response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
     response.setHeader("Pragma", "no-cache"); // HTTP 1.0
@@ -24,23 +22,16 @@
     Object staffId = session.getAttribute(S.STAFF_ID);
     Object role = session.getAttribute(S.ROLE);
     if(accountId == null || !currentSession.equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr())) || staffId == null || !(role.equals(S.ADMIN) || role.equals(S.MANAGER))){
-        response.sendRedirect(S.HOME_PAGE);
+        response.sendRedirect(S.HOME);
     }
 
-    request.setAttribute("roleList", session.getAttribute(S.ROLE_LIST));
-    request.setAttribute("theatreList", session.getAttribute(S.THEATRE_LIST));
-    request.setAttribute("roleInput", session.getAttribute(S.SIGN_UP_STAFF_ROLE));
-    request.setAttribute("locationInput", session.getAttribute(S.SIGN_UP_STAFF_LOCATION));
-    request.setAttribute("userNameInput", session.getAttribute(S.SIGN_UP_STAFF_USERNAME));
-    request.setAttribute("emailInput", session.getAttribute(S.SIGN_UP_STAFF_EMAIL));
-    request.setAttribute("errorMessage", session.getAttribute(S.ERROR_MESSAGE));
-    session.removeAttribute(S.ROLE_LIST);
-    session.removeAttribute(S.THEATRE_LIST);
-    session.removeAttribute(S.SIGN_UP_STAFF_ROLE);
-    session.removeAttribute(S.SIGN_UP_STAFF_LOCATION);
-    session.removeAttribute(S.SIGN_UP_STAFF_USERNAME);
-    session.removeAttribute(S.SIGN_UP_STAFF_EMAIL);
-    session.removeAttribute(S.ERROR_MESSAGE);
+    // ${theatreList}
+    // ${roleList}
+    // ${roleInput}
+    // ${locationInput}
+    // ${userNameInput}
+    // ${emailInput}
+    // ${errorMessage}
 %>
 <html lang="en">
 
@@ -63,8 +54,7 @@
             <div class="container">
                 <h1 class="display-3 text-center">Create Staff Account</h1>
                 <hr>
-                <a class="inputAsLink" href="./${S.STAFF_PAGE}">&#8249;
-                    <span>Back</span>
+                <a class="inputAsLink" href="./${S.STAFF}">&lsaquo;<span>Back</span>
                 </a>
                 <div class="row">
                     <div class="col-lg"></div>
@@ -72,13 +62,14 @@
                         <div class="card">
                             <div class="card-body">
                                 <!-- Create staff account form -->
-                                <form id="staffCreateForm" action="StaffCreate" method="POST" onsubmit="return validateStaffSignUp(this, '${isAdmin}')">
+                                <form id="staffCreateForm" action="${S.STAFF_CREATE}" method="POST"
+                                    onsubmit="return validateStaffSignUp(this, '${isAdmin}')">
                                     <c:if test="${isAdmin}">
                                         <!-- Input role -->
                                         <div class="form-group">
                                             <label>Role</label><br>
-                                            <select id="role" class="inputbox" name="role" form="staffCreateForm"
-                                                onchange="checkRole(this, 'roleError', 'theatreLocationInput')">
+                                            <select id="role" class="inputbox" name="${S.ROLE_PARAM}"
+                                                form="staffCreateForm" onchange="checkRole(this)">
                                                 <option id="defaultRole" hidden value="">Select a role</option>
                                                 <c:forEach items="${roleList}" var="role">
                                                     <option value="${role.getTitle()}">${role.getTitle()}</option>
@@ -88,25 +79,28 @@
                                             <span id="roleError" class="errormessage"></span>
                                         </div>
                                         <!-- Input location -->
-                                        <div class="form-group" id="theatreLocationInput">
+                                        <div class="form-group" id="locationForm">
                                             <label>Theatre Location</label><br>
-                                            <select id="theatreLocation" class="inputbox" name="theatreLocation" form="staffCreateForm"
-                                                onchange="checkTheatreLocation(this, 'theatreLocationError')">
+                                            <select id="theatreLocation" class="inputbox"
+                                                name="${S.THEATRE_LOCATION_PARAM}" form="staffCreateForm"
+                                                onchange="checkLocation(this)">
                                                 <option id="defaultLocation" hidden value="">Select a theatre location
                                                 </option>
                                                 <c:forEach items="${theatreList}" var="theatre">
-                                                    <option value="${theatre.getId()}">${theatre.getTheatreName()}</option>
+                                                    <option value="${theatre.getId()}">${theatre.getTheatreName()}
+                                                    </option>
                                                 </c:forEach>
                                             </select>
                                             <!-- Location error -->
-                                            <span id="theatreLocationError" class="errormessage"></span>
+                                            <span id="locationError" class="errormessage"></span>
                                         </div>
                                     </c:if>
                                     <!-- Input name -->
                                     <div class="form-group">
                                         <label>Name</label><br>
-                                        <input class="inputbox" type="text" name="userName" placeholder="Enter your name"
-                                            onkeyup="checkName(this, 'userNameError')" value="${userNameInput}">
+                                        <input class="inputbox" type="text" name="${S.USERNAME_PARAM}"
+                                            placeholder="Enter your name" onkeyup="checkName(this)"
+                                            value="${userNameInput}">
                                         <br>
                                         <!-- Name error -->
                                         <span id="userNameError" class="errormessage"></span>
@@ -114,8 +108,8 @@
                                     <!-- Input email -->
                                     <div class="form-group">
                                         <label>Email</label><br>
-                                        <input name="email" class="inputbox" type="text" placeholder="Enter email"
-                                            onkeyup="checkEmail(this, 'emailError')" value="${emailInput}">
+                                        <input name="${S.EMAIL_PARAM}" class="inputbox" type="text"
+                                            placeholder="Enter email" onkeyup="checkEmail(this)" value="${emailInput}">
                                         <br>
                                         <!-- Email error -->
                                         <span id="emailError" class="errormessage"></span>
@@ -123,8 +117,8 @@
                                     <!-- Input password -->
                                     <div class="form-group">
                                         <label>Password</label><br>
-                                        <input name="password" class="inputbox" type="password" placeholder="Enter password"
-                                            onkeyup="checkPassword(this, 'passwordError')">
+                                        <input name="${S.PASSWORD_PARAM}" class="inputbox" type="password"
+                                            placeholder="Enter password" onkeyup="checkPassword(this)">
                                         <br>
                                         <!-- Password error -->
                                         <span id="passwordError" class="errormessage"></span>
@@ -160,8 +154,8 @@
         <script>
             loadSelectedOption("defaultRole", "role", "${roleInput}");
             loadSelectedOption("defaultLocation", "theatreLocation", "${locationInput}");
-            if("${roleInput}" != "") {
-                checkRole(document.getElementById("role"), "roleError", "theatreLocationInput");
+            if ("${roleInput}" != "") {
+                checkRole(document.getElementById("role"));
             }
         </script>
     </c:if>

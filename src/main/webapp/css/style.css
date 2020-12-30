@@ -108,6 +108,13 @@ th {
     box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
 }
 
+.inputCell {
+    background-color: #dddddd;
+    position: sticky;
+    top: 41px;
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+}
+
 tr:nth-child(even) {
     background-color: #dddddd;
 }

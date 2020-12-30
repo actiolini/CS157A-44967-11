@@ -20,15 +20,12 @@
     Object accountId = session.getAttribute(S.ACCOUNT_ID);
     Object currentSession = session.getAttribute(S.CURRENT_SESSION);
     if(accountId != null && currentSession.equals(Passwords.applySHA256(session.getId() + request.getRemoteAddr()))) {
-        response.sendRedirect(S.HOME_PAGE);
+        response.sendRedirect(S.HOME);
     }
 
-    request.setAttribute("userNameInput", session.getAttribute(S.SIGN_UP_USERNAME));
-    request.setAttribute("emailInput", session.getAttribute(S.SIGN_UP_EMAIL));
-    request.setAttribute("errorMessage", session.getAttribute(S.ERROR_MESSAGE));
-    session.removeAttribute(S.SIGN_UP_USERNAME);
-    session.removeAttribute(S.SIGN_UP_EMAIL);
-    session.removeAttribute(S.ERROR_MESSAGE);
+    // ${userNameInput}
+    // ${emailInput}
+    // ${errorMessage}
 %>
 <html lang="en">
 
@@ -58,12 +55,14 @@
                         <div class="card">
                             <div class="card-body">
                                 <!-- Sign up form -->
-                                <form id="signUpForm" action="SignUp" method="POST" onsubmit="return validateSignUp(this)">
+                                <form id="signUpForm" action="${S.SIGN_UP}" method="POST"
+                                    onsubmit="return validateSignUp(this)">
                                     <!-- Input name -->
                                     <div class="form-group">
                                         <label>Name</label><br>
-                                        <input class="inputbox" type="text" name="userName" placeholder="Enter your name"
-                                            onkeyup="checkName(this, 'userNameError')" value="${userNameInput}">
+                                        <input class="inputbox" type="text" name="${S.USERNAME_PARAM}"
+                                            placeholder="Enter your name" onkeyup="checkName(this)"
+                                            value="${userNameInput}">
                                         <br>
                                         <!-- Name error -->
                                         <span id="userNameError" class="errormessage"></span>
@@ -71,8 +70,8 @@
                                     <!-- Input email -->
                                     <div class="form-group">
                                         <label>Email</label><br>
-                                        <input class="inputbox" type="text" name="email" placeholder="Enter email"
-                                            onkeyup="checkEmail(this, 'emailError')" value="${emailInput}">
+                                        <input class="inputbox" type="text" name="${S.EMAIL_PARAM}"
+                                            placeholder="Enter email" onkeyup="checkEmail(this)" value="${emailInput}">
                                         <br>
                                         <!-- Email error -->
                                         <span id="emailError" class="errormessage"></span>
@@ -80,8 +79,8 @@
                                     <!-- Input password -->
                                     <div class="form-group">
                                         <label>Password</label><br>
-                                        <input class="inputbox" type="password" name="password" placeholder="Enter password"
-                                            onkeyup="checkPassword(this, 'passwordError')">
+                                        <input class="inputbox" type="password" name="${S.PASSWORD_PARAM}"
+                                            placeholder="Enter password" onkeyup="checkPassword(this)">
                                         <br>
                                         <!-- Password error -->
                                         <span id="passwordError" class="errormessage"></span>
@@ -89,9 +88,8 @@
                                     <!-- Input Re-password -->
                                     <div class="form-group">
                                         <label>Confirm Password</label><br>
-                                        <input class="inputbox" type="password" name="rePassword"
-                                            placeholder="Re-enter password"
-                                            onkeyup="checkRePassword('signUpForm', 'rePasswordError')">
+                                        <input class="inputbox" type="password" name="${S.RE_PASSWORD_PARAM}"
+                                            placeholder="Re-enter password" onkeyup="checkRePassword('signUpForm')">
                                         <br>
                                         <!-- Re-password error -->
                                         <span id="rePasswordError" class="errormessage"></span>
@@ -102,7 +100,7 @@
                                 </form>
                                 <!-- Error message -->
                                 <p class="text-center errormessage">${errorMessage}</p>
-                                <a href="./${S.SIGN_IN_PAGE}">Already have an account? Sign in here</a>
+                                <a href="./${S.SIGN_IN}">Already have an account? Sign in here</a>
                             </div>
                         </div>
                     </div>
